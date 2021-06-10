@@ -1,0 +1,10 @@
+<mat-list role="list">
+  <mat-list-item *ngFor="let item of items">
+    <query-search-item [item]="item" (removed)="remove($event)"></query-search-item>
+    <mat-divider></mat-divider>
+  </mat-list-item>
+  <mat-list-item class="add-item">
+    <button mat-button (click)="addItem()">Add..</button>
+    <button mat-button (click)="generate()">Generate</button>
+  </mat-list-item>
+</mat-list>

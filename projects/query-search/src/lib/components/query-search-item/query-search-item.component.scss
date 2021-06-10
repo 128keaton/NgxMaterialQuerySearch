@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  align-items: center;
+  padding-top: 5px;
+
+  ::ng-deep {
+    .mat-form-field .mat-form-field-wrapper {
+      margin: 0!important;
+      padding-bottom: 5px;
+    }
+  }
+
+  .separate-fields {
+    position: relative!important;
+    min-width: 100px;
+    padding-bottom: 5px;
+  }
+
+  .separate-button {
+    position: relative!important;
+    min-width: 25px;
+    padding-bottom: 5px;
+  }
+
+  .delete-button {
+    margin-bottom: 5px;
+    box-shadow: none!important;
+  }
+}

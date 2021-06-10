@@ -1,0 +1,28 @@
+<button mat-mini-fab color="warn" class="delete-button" (click)="remove()">
+  <mat-icon>delete</mat-icon>
+</button>
+
+<mat-divider class="separate-button"></mat-divider>
+
+<mat-form-field appearance="outline">
+  <mat-label>Field Name</mat-label>
+  <mat-select [(ngModel)]="item.fieldName">
+    <mat-option *ngFor="let fieldName of fieldNames" name="fieldName" [value]="fieldName">
+      {{fieldName}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-divider class="separate-fields"></mat-divider>
+<mat-form-field appearance="outline">
+  <mat-label>Operator</mat-label>
+  <mat-select [(ngModel)]="item.condition">
+    <mat-option *ngFor="let operator of operators" name="operator" [value]="operator">
+      {{operator}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-divider class="separate-fields"></mat-divider>
+<mat-form-field appearance="outline">
+  <mat-label>Value</mat-label>
+  <input matInput [(ngModel)]="item.value">
+</mat-form-field>

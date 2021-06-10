@@ -3,5 +3,6 @@
   "dest": "../../dist/query-search",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": ["@nestjsx/crud-request", "uuid"]
 }

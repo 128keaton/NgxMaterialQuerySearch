@@ -7,6 +7,7 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
+    "strictPropertyInitialization": false,
     "types": [],
     "lib": [
       "dom",

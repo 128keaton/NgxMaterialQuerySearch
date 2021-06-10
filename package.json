@@ -6,20 +6,25 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-demo": "ng build demo-application --output-path docs --base-href /NgxMaterialQuerySearch/"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~12.0.4",
+    "@angular/cdk": "^12.0.4",
     "@angular/common": "~12.0.4",
     "@angular/compiler": "~12.0.4",
     "@angular/core": "~12.0.4",
     "@angular/forms": "~12.0.4",
+    "@angular/material": "^12.0.4",
     "@angular/platform-browser": "~12.0.4",
     "@angular/platform-browser-dynamic": "~12.0.4",
     "@angular/router": "~12.0.4",
+    "@nestjsx/crud-request": "~5.0.0-alpha.3",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
+    "uuid": "^8.3.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -28,6 +33,7 @@
     "@angular/compiler-cli": "~12.0.4",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
+    "@types/uuid": "^8.3.0",
     "jasmine-core": "~3.7.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
