@@ -2,6 +2,7 @@ import {Component, OnInit, Output} from '@angular/core';
 import {QueryItem} from "./models";
 import {RequestQueryBuilder, CondOperator, ComparisonOperator} from "@nestjsx/crud-request";
 import { EventEmitter } from '@angular/core';
+import {QueryGroup} from "./models/query-group.model";
 
 @Component({
   selector: 'ngx-query-search',
@@ -10,7 +11,7 @@ import { EventEmitter } from '@angular/core';
 })
 export class QuerySearchComponent implements OnInit {
 
-  items: QueryItem[] = [];
+  groups: QueryGroup[] = [];
 
   @Output()
   queryUpdated = new EventEmitter<any>();
@@ -23,15 +24,20 @@ export class QuerySearchComponent implements OnInit {
 
   addItem() {
     const newItem = new QueryItem();
-    this.items.push(newItem)
+  //  this.items.push(newItem)
+  }
+
+  addGroup() {
+    const newGroup = new QueryGroup('AND');
+    this.groups.push(newGroup);
   }
 
   remove(id: string) {
-    this.items = this.items.filter(i => i.id !== id);
+    this.groups = this.groups.filter(g => g.id !== id);
   }
 
   generate() {
-    const qb = RequestQueryBuilder.create();
+  /*  const qb = RequestQueryBuilder.create();
     this.items.filter(item => {
       return !!item.condition && !!item.fieldName
     }).forEach(item => {
@@ -45,6 +51,6 @@ export class QuerySearchComponent implements OnInit {
       }
     });
 
-    this.queryUpdated.emit(qb.queryObject);
+    this.queryUpdated.emit(qb.queryObject);*/
   }
 }

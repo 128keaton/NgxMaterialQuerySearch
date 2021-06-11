@@ -14,7 +14,7 @@ export class QuerySearchItemComponent implements OnInit {
   item: QueryItem;
 
   @Output()
-  removed = new EventEmitter<string>()
+  removed = new EventEmitter<string>();
 
   fieldNames: string[];
   operators: string[];

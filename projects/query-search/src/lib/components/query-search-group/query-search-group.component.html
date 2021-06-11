@@ -1,0 +1,24 @@
+<mat-toolbar>
+  <mat-button-toggle-group [(ngModel)]="group.type">
+    <mat-button-toggle value="AND">And</mat-button-toggle>
+    <mat-button-toggle value="OR">Or</mat-button-toggle>
+  </mat-button-toggle-group>
+  <span class="group-spacer"></span>
+  <button mat-button [matMenuTriggerFor]="menu">Add</button>
+  <button mat-icon-button (click)="remove()">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="addItem()">Item</button>
+    <button mat-menu-item (click)="addGroup()">Group</button>
+  </mat-menu>
+</mat-toolbar>
+<mat-list role="list" class="group-items-list">
+  <mat-list-item *ngFor="let item of group.items" class="group-item">
+    <query-search-item (removed)="removeItem($event)" [item]="item"></query-search-item>
+  </mat-list-item>
+  <mat-list-item *ngFor="let group of group.children" class="sub-group-item">
+    <mat-divider class="sub-group-divider"></mat-divider>
+    <query-search-group [group]="group" (removed)="removeChild($event)"></query-search-group>
+  </mat-list-item>
+</mat-list>

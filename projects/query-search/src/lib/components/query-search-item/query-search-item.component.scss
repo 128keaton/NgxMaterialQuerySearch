@@ -2,12 +2,28 @@
   display: flex;
   align-items: center;
   padding-top: 5px;
+  padding-left: 1em;
 
   ::ng-deep {
     .mat-form-field .mat-form-field-wrapper {
       margin: 0!important;
       padding-bottom: 5px;
     }
+  }
+
+  .notate-group {
+    top: 0;
+    width: 1px;
+    height: 100%;
+    flex: 1;
+    left: 1em;
+  }
+
+  .notate-group-after {
+    position: relative!important;
+    min-width: 30px;
+    padding-bottom: 5px;
+    margin-left: 2px;
   }
 
   .separate-fields {

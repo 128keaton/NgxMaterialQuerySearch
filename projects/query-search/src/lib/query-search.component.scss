@@ -1,3 +1,11 @@
-.mat-list-item {
-  height: auto!important;
+:host {
+  ::ng-deep {
+    .mat-list-item {
+      height: auto!important;
+    }
+
+    .mat-list-item-content {
+      padding: 0!important;
+    }
+  }
 }
