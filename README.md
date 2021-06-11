@@ -1,4 +1,6 @@
 # NgxMaterialQuerySearch [![npm version](https://badge.fury.io/js/ngx-mat-query-search.svg)](https://badge.fury.io/js/ngx-mat-query-search)
+An Angular 12 visual query builder component for use with [@nestjsx/crud](https://github.com/nestjsx/crud).
+
 [Demo](https://128keaton.github.io/NgxMaterialQuerySearch/)
 
 ```shell
