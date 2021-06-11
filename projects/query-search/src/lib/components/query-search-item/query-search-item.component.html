@@ -11,7 +11,7 @@
   <mat-label>Field Name</mat-label>
   <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldSelected($event)">
     <mat-option *ngFor="let field of (fields|async)" name="fieldName" [value]="field">
-      <pre>{{field.name}}</pre>
+      <pre>{{field.label || field.name}}</pre>
     </mat-option>
   </mat-select>
 </mat-form-field>
@@ -33,7 +33,8 @@
   <ng-container *ngIf="!isDate; else dateField">
     <mat-form-field appearance="outline" *ngIf="!hasValues">
       <mat-label>Value</mat-label>
-      <input autocomplete="off" matInput [(ngModel)]="item.value">
+      <input autocomplete="off" *ngIf="!isNumber" matInput [(ngModel)]="item.value">
+      <input autocomplete="off" *ngIf="isNumber" type="number" matInput [(ngModel)]="item.value">
     </mat-form-field>
 
     <mat-form-field appearance="outline" *ngIf="hasValues">

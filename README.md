@@ -19,14 +19,14 @@
 2. Use in a component template:
 
 ```html
-  <ngx-query-search>
-    <query-fields>
-      <query-field name="name" type="string"></query-field>
-      <query-field name="hasValues" type="string" [values]="['a', 'b']"></query-field>
-      <query-field name="birthday" type="date" format="dd/MM/yyyy"></query-field>
-      <query-field name="joinDay" type="date" format="MM/dd"></query-field>
-    </query-fields>
-  </ngx-query-search>
+<ngx-query-search>
+  <query-fields>
+    <query-field name="name" label="Full Name" type="string"></query-field>
+    <query-field name="hasValues" label="Has Values" type="string" [values]="['a', 'b']"></query-field>
+    <query-field name="birthday" label="Birthday" type="date" format="dd/MM/yyyy"></query-field>
+    <query-field name="joinDay" label="Join Date" type="date" format="MM/dd"></query-field>
+  </query-fields>
+</ngx-query-search>
 ```
 
 3. Use the service to consume the output:

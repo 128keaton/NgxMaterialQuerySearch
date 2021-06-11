@@ -15,7 +15,8 @@ export class QueryFieldsDirective {
         name: field.name,
         values: field.values,
         type: field.type,
-        format: field.format
+        format: field.format,
+        label: field.label
       }
     });
   }

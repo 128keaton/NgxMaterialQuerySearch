@@ -74,6 +74,14 @@ export class QuerySearchItemComponent implements OnInit {
     return false;
   }
 
+  get isNumber() {
+    if (!!this.selectedField) {
+      return this.selectedField.type === 'number';
+    }
+
+    return false;
+  }
+
   get showValueField(): boolean {
     if (!!this.item && !!this.item.condition) {
       return !this.item.condition.toLowerCase().includes('null');

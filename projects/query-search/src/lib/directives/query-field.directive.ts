@@ -17,6 +17,10 @@ export class QueryFieldDirective implements OnInit {
   @Input()
   format?: string;
 
+  @Input()
+  label?: string;
+
+
   constructor() { }
 
   ngOnInit(): void {

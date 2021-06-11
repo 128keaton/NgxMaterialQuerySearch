@@ -3,4 +3,5 @@ export interface QueryField {
   type: 'boolean' | 'date' | 'number' | 'string' | 'array';
   values?: any[];
   format?: string;
+  label?: string;
 }

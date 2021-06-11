@@ -1,7 +1,7 @@
 import {EventEmitter, Inject} from '@angular/core';
 import {Injectable} from '@angular/core';
 import {CondOperator, RequestQueryBuilder} from "@nestjsx/crud-request";
-import {QueryField} from "./models/query-field.model";
+import {QueryField} from "./models";
 import {BehaviorSubject} from "rxjs";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfig} from "./query-search.config";
 
@@ -15,7 +15,7 @@ export class QuerySearchService {
   operators: string[] = [];
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
 
-  private _fields: QueryField[];
+  private _fields: QueryField[] = [];
   private readonly _loggingCallback: (...args: any[]) => void = () => {
   };
 
@@ -42,7 +42,7 @@ export class QuerySearchService {
   }
 
   addFields(fields: QueryField[]) {
-    this._fields = fields || [];
+    this._fields.push(...fields);
     this.fields.next(this._fields);
   }
 
@@ -63,5 +63,61 @@ export class QuerySearchService {
 
     this.log('Emitting query string', queryString);
     this.queryStringUpdated.emit(queryString);
+  }
+
+  consumeModel<T>(instance: any, labels: {} = {}) {
+    const toConsume: T = new instance();
+
+    const fields = Object.getOwnPropertyNames(toConsume).map((propName: string) => {
+      let fieldType: any = typeof (toConsume as any)[propName];
+      let label = undefined;
+
+      if (fieldType === 'object') {
+        if (Object.prototype.toString.call((toConsume as any)[propName]) === '[object Date]') {
+          fieldType = 'date';
+        }
+      }
+
+
+      if (!!labels && labels.hasOwnProperty(propName)) {
+        label = (labels as any)[propName] as string;
+      }
+
+      return {
+        name: propName,
+        type: fieldType as 'boolean' | 'date' | 'number' | 'string' | 'array',
+        values: [],
+        label
+      }
+    });
+
+    this.addFields(fields);
+  }
+
+  consumeObject<T>(instance: any, labels: {} = {}) {
+    const fields = Object.getOwnPropertyNames(instance).map((propName: string) => {
+      let fieldType: any = typeof (instance as any)[propName];
+      let label = undefined;
+
+      if (fieldType === 'object') {
+        if (Object.prototype.toString.call((instance as any)[propName]) === '[object Date]') {
+          fieldType = 'date';
+        }
+      }
+
+
+      if (!!labels && labels.hasOwnProperty(propName)) {
+        label = (labels as any)[propName] as string;
+      }
+
+      return {
+        name: propName,
+        type: fieldType as 'boolean' | 'date' | 'number' | 'string' | 'array',
+        values: [],
+        label
+      }
+    });
+
+    this.addFields(fields);
   }
 }

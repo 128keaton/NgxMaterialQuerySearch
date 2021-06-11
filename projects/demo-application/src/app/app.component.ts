@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {QuerySearchService} from "ngx-mat-query-search";
 import packageData from '../../../query-search/package.json';
+import {Demo} from "./demo.model";
 
 @Component({
   selector: 'app-root',
@@ -20,5 +21,7 @@ export class AppComponent {
     this.querySearchService.queryStringUpdated.subscribe(newQueryString => this.queryString = newQueryString);
     this.version = packageData.version;
     this.githubRepo = packageData.repository;
+
+    this.querySearchService.consumeModel(Demo, {birthday: 'Birthday 2', count: 'Total Count', name: 'Other Name', isActive: 'Active'});
   }
 }
