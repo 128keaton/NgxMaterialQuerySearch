@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {QuerySearchComponent} from './query-search.component';
 import {MatListModule} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
@@ -12,14 +12,23 @@ import {CommonModule} from "@angular/common";
 import {QuerySearchGroupComponent} from './components/query-search-group/query-search-group.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatToolbarModule} from "@angular/material/toolbar";
-import {MatButtonToggleModule} from "@angular/material/button-toggle";
-
+import {GroupTypeSelectorComponent} from './components/group-type-selector/group-type-selector.component';
+import {QueryFieldDirective, QueryFieldsDirective} from "./directives/";
+import {QUERY_SEARCH_CONFIG, QuerySearchConfig} from "./query-search.config";
+import {OperatorPipe} from './pipes/operator.pipe';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 @NgModule({
   declarations: [
     QuerySearchComponent,
     QuerySearchItemComponent,
-    QuerySearchGroupComponent
+    QuerySearchGroupComponent,
+    GroupTypeSelectorComponent,
+    QueryFieldDirective,
+    QueryFieldsDirective,
+    OperatorPipe
   ],
   imports: [
     CommonModule,
@@ -32,11 +41,21 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
     MatIconModule,
     MatMenuModule,
     MatToolbarModule,
-    MatButtonToggleModule
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatDatepickerModule
   ],
   exports: [
-    QuerySearchComponent
-  ]
+    QuerySearchComponent,
+    QueryFieldDirective,
+    QueryFieldsDirective
+  ],
 })
 export class QuerySearchModule {
+  static forRoot(config: QuerySearchConfig): ModuleWithProviders<QuerySearchModule> {
+    return {
+      ngModule: QuerySearchModule,
+      providers: [{provide: QUERY_SEARCH_CONFIG, useValue: config}]
+    };
+  }
 }

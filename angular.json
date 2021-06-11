@@ -10,7 +10,12 @@
       "projectType": "library",
       "root": "projects/query-search",
       "sourceRoot": "projects/query-search/src",
-      "prefix": "Ngx",
+      "prefix": "",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -68,7 +73,10 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/demo-application/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "@nestjsx/crud-request"
+            ]
           },
           "configurations": {
             "production": {

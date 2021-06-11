@@ -45,7 +45,7 @@
   }
 }
 
-.group-item:last-child {
+.group-item:not(.collapsed):last-child {
  ::ng-deep {
    .notate-group {
      height: 50% !important;
@@ -78,4 +78,15 @@
     right: 0;
     left: auto;
   }
+}
+
+[class*='depth-']:not(.depth-0) {
+  .mat-toolbar {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+}
+
+.group-action-buttons {
+  margin-left: 1em;
 }

@@ -1,30 +1,25 @@
-import {Component, OnInit, Output} from '@angular/core';
-import {QueryItem} from "./models";
-import {RequestQueryBuilder, CondOperator, ComparisonOperator} from "@nestjsx/crud-request";
-import { EventEmitter } from '@angular/core';
-import {QueryGroup} from "./models/query-group.model";
+import {AfterContentInit, Component, ContentChild} from '@angular/core';
+import {QueryGroup} from "./models";
+import {QueryFieldsDirective} from "./directives";
+import {QuerySearchService} from "./query-search.service";
+import {RequestQueryBuilder} from "@nestjsx/crud-request";
 
 @Component({
   selector: 'ngx-query-search',
   templateUrl: 'query-search.component.html',
   styleUrls: ['query-search.component.scss']
 })
-export class QuerySearchComponent implements OnInit {
+export class QuerySearchComponent implements AfterContentInit {
+
+  @ContentChild(QueryFieldsDirective) queryFields: QueryFieldsDirective;
 
   groups: QueryGroup[] = [];
 
-  @Output()
-  queryUpdated = new EventEmitter<any>();
-
-  constructor() {
+  constructor(private querySearchService: QuerySearchService) {
   }
 
-  ngOnInit(): void {
-  }
-
-  addItem() {
-    const newItem = new QueryItem();
-  //  this.items.push(newItem)
+  ngAfterContentInit() {
+    this.querySearchService.addFields(this.queryFields.getFields());
   }
 
   addGroup() {
@@ -37,20 +32,34 @@ export class QuerySearchComponent implements OnInit {
   }
 
   generate() {
-  /*  const qb = RequestQueryBuilder.create();
-    this.items.filter(item => {
-      return !!item.condition && !!item.fieldName
-    }).forEach(item => {
-      console.log(item.condition);
+    const andFilters: any[]  = [];
+    const orFilters: any[] = [];
 
-      if (item.condition === 'IN' || item.condition === 'NOT_IN') {
-        console.log(`${item.value}`.split(','));
-        qb.setFilter({field: item.fieldName, operator: (CondOperator as any)[item.condition], value: `${item.value}`.split(',')})
-      } else {
-        qb.setFilter({field: item.fieldName, operator: (CondOperator as any)[item.condition], value: item.value})
+    this.groups.map(g => g.filterValue).forEach((filterValue: {$and: any, $or: any}) => {
+      if (filterValue.hasOwnProperty('$and')) {
+        andFilters.push(...filterValue.$and);
+      } else if (filterValue.hasOwnProperty('$or')) {
+        orFilters.push(...filterValue.$or)
       }
     });
 
-    this.queryUpdated.emit(qb.queryObject);*/
+    this.querySearchService.log('andFilters', andFilters);
+    this.querySearchService.log('orFilters', orFilters);
+
+    const queryBuilder = RequestQueryBuilder.create();
+
+    if (orFilters.length > 0) {
+      queryBuilder.search({
+        $or: orFilters,
+      });
+    } else if (andFilters.length > 0) {
+      queryBuilder.search({
+        $and: andFilters
+      });
+    }
+
+    this.querySearchService.emitQuery(queryBuilder);
   }
+
+
 }

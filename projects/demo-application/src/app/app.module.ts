@@ -7,6 +7,8 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {OutputComponent} from './components/output/output.component';
 import {MatCardModule} from "@angular/material/card";
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -17,11 +19,18 @@ import {MatCardModule} from "@angular/material/card";
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    QuerySearchModule,
+    QuerySearchModule.forRoot({
+      loggingCallback:  (...args) => {
+        console.log(...args);
+      },
+      debug: true,
+      encode: false
+    }),
     MatToolbarModule,
-    MatCardModule
+    MatCardModule,
+    MatNativeDateModule,
+    MatButtonModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

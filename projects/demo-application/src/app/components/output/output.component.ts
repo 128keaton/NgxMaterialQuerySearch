@@ -10,6 +10,9 @@ export class OutputComponent implements OnInit {
   @Input()
   queryObject: any = {};
 
+  @Input()
+  queryString: string = '';
+
   constructor() { }
 
   ngOnInit(): void {

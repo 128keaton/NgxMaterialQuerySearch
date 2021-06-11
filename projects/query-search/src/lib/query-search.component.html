@@ -4,7 +4,12 @@
     <mat-divider></mat-divider>
   </mat-list-item>
   <mat-list-item class="add-item">
-    <button mat-button (click)="addGroup()">Add..</button>
-    <button mat-button (click)="generate()">Generate</button>
+    <div class="global-actions">
+      <button mat-mini-fab color="primary" (click)="addGroup()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button class="generate-button" mat-button (click)="generate()">Generate</button>
+    </div>
   </mat-list-item>
 </mat-list>
+<mat-divider></mat-divider>

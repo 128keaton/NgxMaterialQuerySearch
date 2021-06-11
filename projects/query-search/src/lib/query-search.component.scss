@@ -1,11 +1,31 @@
 :host {
   ::ng-deep {
     .mat-list-item {
-      height: auto!important;
+      height: auto !important;
     }
 
     .mat-list-item-content {
-      padding: 0!important;
+      padding: 0 !important;
+    }
+
+    query-search-group, query-search-item {
+      transform: scaleY(1);
+      transform-origin: top;
+      transition: transform 300ms ease-in-out;
+
+      &.collapsed {
+        transform: scaleY(0);
+      }
+    }
+  }
+
+  .global-actions {
+    padding: 1.2em;
+    display: flex;
+    align-items: center;
+
+    .generate-button {
+      margin-left: 1.2em;
     }
   }
 }

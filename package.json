@@ -22,16 +22,19 @@
     "@angular/platform-browser-dynamic": "~12.0.4",
     "@angular/router": "~12.0.4",
     "@nestjsx/crud-request": "~5.0.0-alpha.3",
+    "ngx-mat-facet-search": "file:dist/ngx-query-search",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "uuid": "^8.3.2",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "luxon": "^1.27.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.0.4",
     "@angular/cli": "~12.0.4",
     "@angular/compiler-cli": "~12.0.4",
     "@types/jasmine": "~3.6.0",
+    "@types/luxon": "^1.27.0",
     "@types/node": "^12.11.1",
     "@types/uuid": "^8.3.0",
     "jasmine-core": "~3.7.0",

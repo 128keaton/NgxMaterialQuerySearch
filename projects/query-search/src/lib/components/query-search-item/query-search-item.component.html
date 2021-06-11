@@ -1,7 +1,7 @@
 <mat-divider class="notate-group" [vertical]="true"></mat-divider>
 <mat-divider class="notate-group-after"></mat-divider>
 
-<button mat-mini-fab color="warn" class="delete-button" (click)="remove()">
+<button mat-mini-fab color="warn" class="delete-button" (click)="remove()" [disabled]="disableDelete">
   <mat-icon>delete</mat-icon>
 </button>
 
@@ -9,23 +9,57 @@
 
 <mat-form-field appearance="outline">
   <mat-label>Field Name</mat-label>
-  <mat-select [(ngModel)]="item.fieldName">
-    <mat-option *ngFor="let fieldName of fieldNames" name="fieldName" [value]="fieldName">
-      {{fieldName}}
+  <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldSelected($event)">
+    <mat-option *ngFor="let field of (fields|async)" name="fieldName" [value]="field">
+      <pre>{{field.name}}</pre>
     </mat-option>
   </mat-select>
 </mat-form-field>
-<mat-divider class="separate-fields"></mat-divider>
-<mat-form-field appearance="outline">
-  <mat-label>Operator</mat-label>
-  <mat-select [(ngModel)]="item.condition">
-    <mat-option *ngFor="let operator of operators" name="operator" [value]="operator">
-      {{operator}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<mat-divider class="separate-fields"></mat-divider>
-<mat-form-field appearance="outline">
-  <mat-label>Value</mat-label>
-  <input matInput [(ngModel)]="item.value">
-</mat-form-field>
+<ng-container *ngIf="showOperatorField">
+  <mat-divider class="separate-fields"></mat-divider>
+  <mat-form-field appearance="outline">
+    <mat-label>Operator</mat-label>
+    <mat-select [(ngModel)]="item.condition">
+      <mat-option *ngFor="let operator of operators" name="operator" [value]="operator">
+        {{operator|operatorName}} <span [style]="operatorStyle"
+                                        *ngIf="(operator|operatorName: true)">{{operator|operatorName: true}}</span>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-container>
+
+<ng-container *ngIf="showValueField">
+  <mat-divider class="separate-fields"></mat-divider>
+  <ng-container *ngIf="!isDate; else dateField">
+    <mat-form-field appearance="outline" *ngIf="!hasValues">
+      <mat-label>Value</mat-label>
+      <input autocomplete="off" matInput [(ngModel)]="item.value">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="hasValues">
+      <mat-label>Value</mat-label>
+      <input matInput
+             [(ngModel)]="item.value"
+             [matAutocomplete]="valueAutoComplete">
+      <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
+        <mat-option *ngFor="let value of values" [value]="selectedValues">
+          <div (click)="optionClicked($event, value)">
+            <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
+                          (click)="$event.stopPropagation()">
+              <pre style="margin-left: 1em">{{value}}</pre>
+            </mat-checkbox>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </ng-container>
+  <ng-template #dateField>
+    <mat-form-field appearance="outline">
+      <mat-label>Value</mat-label>
+      <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="item.value"
+             (ngModelChange)="dateUpdated($event)">
+      <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
+      <mat-datepicker #valuePicker></mat-datepicker>
+    </mat-form-field>
+  </ng-template>
+</ng-container>

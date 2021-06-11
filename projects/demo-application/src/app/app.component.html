@@ -1,7 +1,16 @@
 <mat-toolbar>
-  <span>NgxMatQuerySearch</span>
+  <span>NgxMatQuerySearch - v{{version}}</span>
+  <span style="flex: 1 1 auto"></span>
+  <a mat-button [href]="githubRepo">GitHub</a>
 </mat-toolbar>
 <div class="wrapper">
-  <ngx-query-search (queryUpdated)="queryObject = $event"></ngx-query-search>
-  <app-output [queryObject]="queryObject"></app-output>
+  <ngx-query-search>
+    <query-fields>
+      <query-field name="name" type="string"></query-field>
+      <query-field name="hasValues" type="string" [values]="['a', 'b']"></query-field>
+      <query-field name="birthday" type="date" format="dd/MM/yyyy"></query-field>
+      <query-field name="joinDay" type="date" format="MM/dd"></query-field>
+    </query-fields>
+  </ngx-query-search>
+  <app-output [queryObject]="queryObject" [queryString]="queryString"></app-output>
 </div>

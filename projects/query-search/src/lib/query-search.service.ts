@@ -1,42 +1,67 @@
-import { Injectable } from '@angular/core';
-import {CondOperator, SFieldOperator} from "@nestjsx/crud-request";
+import {EventEmitter, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
+import {CondOperator, RequestQueryBuilder} from "@nestjsx/crud-request";
+import {QueryField} from "./models/query-field.model";
+import {BehaviorSubject} from "rxjs";
+import {QUERY_SEARCH_CONFIG, QuerySearchConfig} from "./query-search.config";
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuerySearchService {
 
-  fieldNames: string[] = [];
+  queryUpdated = new EventEmitter<any>();
+  queryStringUpdated = new EventEmitter<string>();
   operators: string[] = [];
+  fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
 
-  /**
-   *  $eq?: SFiledValues;
-   $ne?: SFiledValues;
-   $gt?: SFiledValues;
-   $lt?: SFiledValues;
-   $gte?: SFiledValues;
-   $lte?: SFiledValues;
-   $starts?: SFiledValues;
-   $ends?: SFiledValues;
-   $cont?: SFiledValues;
-   $excl?: SFiledValues;
-   $in?: SFiledValues;
-   $notin?: SFiledValues;
-   $between?: SFiledValues;
-   $isnull?: SFiledValues;
-   $notnull?: SFiledValues;
-   $eqL?: SFiledValues;
-   $neL?: SFiledValues;
-   $startsL?: SFiledValues;
-   $endsL?: SFiledValues;
-   $contL?: SFiledValues;
-   $exclL?: SFiledValues;
-   $inL?: SFiledValues;
-   $notinL?: SFiledValues;
-   $or?: SFieldOperator;
-   $and?: never;
-   */
-  constructor() {
-    this.operators = Object.keys(CondOperator);
+  private _fields: QueryField[];
+  private readonly _loggingCallback: (...args: any[]) => void = () => {
+  };
+
+  private readonly _debug: boolean = false;
+  private readonly _encode: boolean = false;
+
+  constructor(@Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfig) {
+    this.operators = Object.keys(CondOperator).filter(k => !k.includes('LOW'));
+
+    if (!!configuration) {
+      if (!!configuration.loggingCallback) {
+        this._loggingCallback = configuration.loggingCallback;
+      }
+
+      if (configuration.hasOwnProperty('debug')) {
+        this._debug = configuration.debug;
+      }
+
+      if (configuration.hasOwnProperty('encode')) {
+        this._encode = configuration.encode;
+      }
+
+    }
+  }
+
+  addFields(fields: QueryField[]) {
+    this._fields = fields || [];
+    this.fields.next(this._fields);
+  }
+
+  log(...args: any[]) {
+    if (!this._debug) {
+      return;
+    }
+
+    this._loggingCallback(...args);
+  }
+
+  emitQuery(queryBuilder: RequestQueryBuilder) {
+    const queryObject = queryBuilder.queryObject;
+    const queryString = queryBuilder.query(this._encode);
+
+    this.log('Emitting query', queryObject);
+    this.queryUpdated.emit(queryObject);
+
+    this.log('Emitting query string', queryString);
+    this.queryStringUpdated.emit(queryString);
   }
 }
