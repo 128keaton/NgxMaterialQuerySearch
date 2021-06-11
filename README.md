@@ -41,6 +41,9 @@ $ npm i --save ngx-mat-query-search
   }
 ```
 
+
+### Notes
+
 Alternatively, one could either pass a model class to the `consumeModel` function in `QuerySearchService` to automagically create fields:
 ```typescript
 this.querySearchService.consumeModel(Demo, {birthday: 'Birthday 2', count: 'Total Count', name: 'Other Name', isActive: 'Active'});
@@ -56,4 +59,14 @@ export class Demo {
 }
 ```
 
-One could also just pass an instantiated/populated model to the `consumeObject` function in `QuerySearchService` to produce similar results.
+One could also just pass an instantiated/populated model to the `consumeObject` function in `QuerySearchService` to produce similar results:
+```typescript
+const demo = new Demo();
+
+demo.birthday = new Date();
+demo.count = 25;
+demo.isActive = true;
+demo.name = 'Paul';
+
+this.querySearchService.consumeObject(demo, {birthday: 'Birthday 2', count: 'Total Count', name: 'Other Name', isActive: 'Active'});
+```
