@@ -1,6 +1,10 @@
 # NgxMaterialQuerySearch [![npm version](https://badge.fury.io/js/ngx-mat-query-search.svg)](https://badge.fury.io/js/ngx-mat-query-search)
 [Demo](https://128keaton.github.io/NgxMaterialQuerySearch/)
 
+```shell
+$ npm i --save ngx-mat-query-search
+```
+
 ## Usage
 
 1. Import the module:
