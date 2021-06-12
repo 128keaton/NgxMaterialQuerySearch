@@ -4,7 +4,7 @@ An Angular 12 visual query builder component for use with [@nestjsx/crud](https:
 [Demo](https://128keaton.github.io/NgxMaterialQuerySearch/)
 
 ```shell
-$ npm i --save ngx-mat-query-search
+npm i --save ngx-mat-query-search
 ```
 
 ## Usage
