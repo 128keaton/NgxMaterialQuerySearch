@@ -7,7 +7,7 @@ export interface QuerySearchConfig {
 }
 
 export const QUERY_SEARCH_CONFIG = new InjectionToken<QuerySearchConfig>('Query Search Configuration', {
-  providedIn: 'root',
+  providedIn: 'any',
   factory: () => {
     return {
       loggingCallback: () => {
