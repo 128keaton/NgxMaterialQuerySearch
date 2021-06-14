@@ -12,12 +12,13 @@ npm i --save ngx-mat-query-search
 1. Import the module:
 ```typescript
   imports: [
-        QuerySearchModule.forRoot({
+     QuerySearchModule.forRoot({
             loggingCallback:  (...args) => {
                 console.log(...args);
             },
-            debug: true,
-            encode: false
+            debug: true, // Call the loggingCallback function
+            generateButtonText: 'Do The Magic', // Button name, default 'Generate'
+            appearance: 'standard' // MatFormFieldAppearance
         }),
     ]
 ```
@@ -39,7 +40,6 @@ npm i --save ngx-mat-query-search
 ```typescript
  constructor(private querySearchService: QuerySearchService) {
     this.querySearchService.queryUpdated.subscribe(newQueryObject => this.queryObject = newQueryObject);
-    this.querySearchService.queryStringUpdated.subscribe(newQueryString => this.queryString = newQueryString);
   }
 ```
 
