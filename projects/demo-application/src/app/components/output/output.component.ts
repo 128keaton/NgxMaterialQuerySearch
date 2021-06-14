@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {QueryRuleGroup} from "../../../../../query-search/src/lib/models";
 
 @Component({
   selector: 'app-output',
@@ -8,10 +9,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class OutputComponent implements OnInit {
 
   @Input()
-  queryObject: any = {};
-
-  @Input()
-  queryString: string = '';
+  queryObject: QueryRuleGroup[] = [];
 
   constructor() { }
 

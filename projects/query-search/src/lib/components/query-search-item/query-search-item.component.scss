@@ -4,9 +4,14 @@
   padding-top: 10px;
   padding-left: 1em;
   padding-bottom: 5px;
+  position: relative;
+
+  .name-field, .operator-field, .value-field {
+    min-width: 200px;
+  }
 
   ::ng-deep {
-    .mat-form-field .mat-form-field-wrapper {
+    .mat-form-field-appearance-outline .mat-form-field-wrapper {
       margin: 0!important;
       padding-bottom: 5px;
     }
@@ -16,7 +21,7 @@
     top: 0;
     width: 1px;
     height: 100%;
-    flex: 1;
+    position: absolute;
     left: 1em;
   }
 
@@ -31,6 +36,10 @@
     position: relative!important;
     min-width: 100px;
     padding-bottom: 5px;
+
+    @media screen and (max-width: 1024px){
+      min-width: 50px;
+    }
   }
 
   .separate-button {
@@ -43,4 +52,13 @@
     margin-bottom: 5px;
     box-shadow: none!important;
   }
+}
+
+.pad-dividers {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.separate-button.pad-dividers {
+  margin-left: 0;
 }

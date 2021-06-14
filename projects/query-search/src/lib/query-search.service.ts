@@ -1,35 +1,32 @@
 import {EventEmitter, Inject} from '@angular/core';
 import {Injectable} from '@angular/core';
-import {CondOperator, RequestQueryBuilder} from "@nestjsx/crud-request";
 import {QueryField} from "./models";
 import {BehaviorSubject} from "rxjs";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfig} from "./query-search.config";
-import {QuerySortOperator} from "@nestjsx/crud-request/lib/types/request-query.types";
+import {ConditionOperator} from "./enums";
+import {QueryRuleGroup} from "./models";
+import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuerySearchService {
 
-  queryUpdated = new EventEmitter<any>();
-  queryStringUpdated = new EventEmitter<string>();
+  queryUpdated = new EventEmitter<QueryRuleGroup[]>();
   operators: string[] = [];
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
 
-  private _sortBy: string | null;
-  private _sortDirection: QuerySortOperator | null;
-  private _pageNumber: number = 0;
-  private _pageSize: number = 0;
 
   private _fields: QueryField[] = [];
   private readonly _loggingCallback: (...args: any[]) => void = () => {
   };
 
   private readonly _debug: boolean = false;
-  private readonly _encode: boolean = false;
+  private readonly _generateButtonText: string = 'Generate';
+  private readonly _appearance: MatFormFieldAppearance = 'outline';
 
   constructor(@Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfig) {
-    this.operators = Object.keys(CondOperator).filter(k => !k.includes('LOW'));
+    this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
 
     if (!!configuration) {
       if (!!configuration.loggingCallback) {
@@ -40,10 +37,13 @@ export class QuerySearchService {
         this._debug = configuration.debug;
       }
 
-      if (configuration.hasOwnProperty('encode')) {
-        this._encode = configuration.encode;
+      if (!!configuration.generateButtonText) {
+        this._generateButtonText = configuration.generateButtonText;
       }
 
+      if (!!configuration.appearance) {
+        this._appearance = configuration.appearance;
+      }
     }
   }
 
@@ -60,27 +60,9 @@ export class QuerySearchService {
     this._loggingCallback(...args);
   }
 
-  emitQuery(queryBuilder: RequestQueryBuilder) {
-    if (!!this._sortBy) {
-      queryBuilder.sortBy({field: this._sortBy, order: (this._sortDirection || 'DESC')})
-    }
-
-    if (!!this._pageNumber) {
-      queryBuilder.setPage(this._pageNumber)
-    }
-
-    if (!!this._pageSize) {
-      queryBuilder.setLimit(this._pageSize);
-    }
-
-    const queryObject = queryBuilder.queryObject;
-    const queryString = queryBuilder.query(this._encode);
-
-    this.log('Emitting query', queryObject);
-    this.queryUpdated.emit(queryObject);
-
-    this.log('Emitting query string', queryString);
-    this.queryStringUpdated.emit(queryString);
+  emitQuery(rules: QueryRuleGroup[]) {
+    this.log('Emitting rules', rules);
+    this.queryUpdated.emit(rules);
   }
 
   /**
@@ -126,19 +108,11 @@ export class QuerySearchService {
     this.addFields(fields);
   }
 
-  set pageNumber(newValue: number) {
-    this._pageNumber = newValue;
+  get generateButtonText(): string {
+    return this._generateButtonText;
   }
 
-  set pageSize(newValue: number) {
-    this._pageSize = newValue;
-  }
-
-  set sortBy(fieldName: string) {
-    this._sortBy = fieldName;
-  }
-
-  set sortDirection(direction: 'ASC' | 'DESC') {
-    this._sortDirection = direction;
+  get formFieldAppearance() {
+    return this._appearance;
   }
 }

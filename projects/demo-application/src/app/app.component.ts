@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {QuerySearchService} from "ngx-mat-query-search";
 import packageData from '../../../query-search/package.json';
 import {Demo} from "./demo.model";
+import {QueryRuleGroup} from "../../../query-search/src/lib/models";
 
 @Component({
   selector: 'app-root',
@@ -11,14 +12,12 @@ import {Demo} from "./demo.model";
 export class AppComponent {
   title = 'demo-application';
 
-  queryObject: any = {};
-  queryString: string = '';
+  queryObject: QueryRuleGroup[] = [];
   version: string;
   githubRepo: string;
 
   constructor(private querySearchService: QuerySearchService) {
     this.querySearchService.queryUpdated.subscribe(newQueryObject => this.queryObject = newQueryObject);
-    this.querySearchService.queryStringUpdated.subscribe(newQueryString => this.queryString = newQueryString);
     this.version = packageData.version;
     this.githubRepo = packageData.repository;
 

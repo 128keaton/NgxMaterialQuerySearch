@@ -1,5 +1,7 @@
+<mat-divider class="sub-group-divider" *ngIf="_showDivider"></mat-divider>
 <mat-toolbar [color]="toolbarColor">
-  <group-type-selector [disabled]="disableTypeButtons" [groupColor]="toolbarColor" [(ngModel)]="groupType"></group-type-selector>
+  <group-type-selector [disabled]="disableTypeButtons" [groupColor]="toolbarColor"
+                       [(ngModel)]="groupType"></group-type-selector>
   <div class="group-action-buttons">
     <button mat-icon-button [matMenuTriggerFor]="actionMenu">
       <mat-icon>add</mat-icon>
@@ -13,12 +15,11 @@
     </button>
   </div>
 </mat-toolbar>
-<mat-list role="list" class="group-items-list">
-  <mat-list-item  *ngFor="let item of group.items" class="group-item">
-    <query-search-item [@inOut] (removed)="removeItem($event)" [item]="item" [disableDelete]="group.items.length === 1"></query-search-item>
-  </mat-list-item>
-  <mat-list-item *ngFor="let group of group.children" class="sub-group-item">
-    <mat-divider class="sub-group-divider"></mat-divider>
-    <query-search-group  [@inOut] [group]="group" (removed)="removeChild($event)"></query-search-group>
-  </mat-list-item>
-</mat-list>
+<div class="group-items-list">
+  <query-search-item class="group-item" [@inOut] *ngFor="let item of group.items" (removed)="removeItem($event)"
+                     [item]="item" [disableDelete]="group.items.length === 1"></query-search-item>
+
+  <query-search-group *ngFor="let group of group.children" class="sub-group-item" [@inOut] [group]="group"
+                      (removed)="removeChild($event)" [showDivider]="true"></query-search-group>
+</div>
+<mat-divider></mat-divider>

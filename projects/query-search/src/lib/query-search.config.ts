@@ -1,9 +1,11 @@
 import {InjectionToken} from "@angular/core";
+import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
 
 export interface QuerySearchConfig {
   loggingCallback: () => void;
   debug: boolean;
-  encode: boolean;
+  generateButtonText?: string;
+  appearance?: MatFormFieldAppearance
 }
 
 export const QUERY_SEARCH_CONFIG = new InjectionToken<QuerySearchConfig>('Query Search Configuration', {
@@ -13,7 +15,8 @@ export const QUERY_SEARCH_CONFIG = new InjectionToken<QuerySearchConfig>('Query 
       loggingCallback: () => {
       },
       debug: false,
-      encode: false
+      generateButtonText: 'Generate',
+      appearance: 'outline'
     }
   }
 });

@@ -1,4 +1,4 @@
-import {EventEmitter, HostBinding} from '@angular/core';
+import {EventEmitter} from '@angular/core';
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {QueryItem, QueryField} from "../../models";
 import {QuerySearchService} from "../../query-search.service";
@@ -25,8 +25,6 @@ export class QuerySearchItemComponent implements OnInit {
   @Output()
   removed = new EventEmitter<string>();
 
-  @HostBinding('class.collapsed') collapsed: boolean = false;
-
   selectedValues: any[] = [];
   operators: string[];
   fields: Observable<QueryField[]>;
@@ -46,9 +44,8 @@ export class QuerySearchItemComponent implements OnInit {
   }
 
   remove() {
-    this.collapsed = true;
     this.querySearchService.log('Removing field item', this, this.selectedField);
-    setTimeout(() => this.removed.emit(this.item.id), 50);
+    this.removed.emit(this.item.id);
   }
 
   fieldSelected(field: QueryField) {
@@ -128,6 +125,14 @@ export class QuerySearchItemComponent implements OnInit {
     }
 
     this.item.value = this.selectedValues.join(',');
+  }
+
+  get formFieldAppearance() {
+    return this.querySearchService.formFieldAppearance;
+  }
+
+  get padDividers(): boolean {
+    return this.querySearchService.formFieldAppearance !== 'outline';
   }
 
   private updateDateFormat() {

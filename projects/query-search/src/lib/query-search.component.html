@@ -1,15 +1,10 @@
-<mat-list role="list">
-  <mat-list-item *ngFor="let group of groups">
-    <query-search-group [group]="group" (removed)="remove($event)"></query-search-group>
-    <mat-divider></mat-divider>
-  </mat-list-item>
-  <mat-list-item class="add-item">
-    <div class="global-actions">
-      <button mat-mini-fab color="primary" (click)="addGroup()">
-        <mat-icon>add</mat-icon>
-      </button>
-      <button class="generate-button" mat-button (click)="generate()">Generate</button>
-    </div>
-  </mat-list-item>
-</mat-list>
+<div class="rules-list">
+  <query-search-group *ngFor="let group of groups" [@inOut] [group]="group" (removed)="remove($event)"></query-search-group>
+</div>
+<div class="global-actions">
+  <button mat-mini-fab color="primary" (click)="addGroup()" *ngIf="canAddGroup">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button class="generate-button" mat-button (click)="generate()" *ngIf="canGenerate">{{generateButtonText}}</button>
+</div>
 <mat-divider></mat-divider>

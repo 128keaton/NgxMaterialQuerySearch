@@ -24,7 +24,8 @@ import {MatButtonModule} from "@angular/material/button";
         console.log(...args);
       },
       debug: true,
-      encode: false
+      generateButtonText: 'Do The Magic',
+      appearance: 'standard'
     }),
     MatToolbarModule,
     MatCardModule,

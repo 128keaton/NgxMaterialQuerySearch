@@ -5,9 +5,9 @@
   <mat-icon>delete</mat-icon>
 </button>
 
-<mat-divider class="separate-button"></mat-divider>
+<mat-divider class="separate-button" [class.pad-dividers]="padDividers"></mat-divider>
 
-<mat-form-field appearance="outline">
+<mat-form-field [appearance]="formFieldAppearance" class="name-field">
   <mat-label>Field Name</mat-label>
   <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldSelected($event)">
     <mat-option *ngFor="let field of (fields|async)" name="fieldName" [value]="field">
@@ -16,8 +16,8 @@
   </mat-select>
 </mat-form-field>
 <ng-container *ngIf="showOperatorField">
-  <mat-divider class="separate-fields"></mat-divider>
-  <mat-form-field appearance="outline">
+  <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
+  <mat-form-field [appearance]="formFieldAppearance" class="operator-field">
     <mat-label>Operator</mat-label>
     <mat-select [(ngModel)]="item.condition">
       <mat-option *ngFor="let operator of operators" name="operator" [value]="operator">
@@ -29,15 +29,15 @@
 </ng-container>
 
 <ng-container *ngIf="showValueField">
-  <mat-divider class="separate-fields"></mat-divider>
+  <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
   <ng-container *ngIf="!isDate; else dateField">
-    <mat-form-field appearance="outline" *ngIf="!hasValues">
+    <mat-form-field [appearance]="formFieldAppearance" *ngIf="!hasValues" class="value-field">
       <mat-label>Value</mat-label>
       <input autocomplete="off" *ngIf="!isNumber" matInput [(ngModel)]="item.value">
       <input autocomplete="off" *ngIf="isNumber" type="number" matInput [(ngModel)]="item.value">
     </mat-form-field>
 
-    <mat-form-field appearance="outline" *ngIf="hasValues">
+    <mat-form-field [appearance]="formFieldAppearance" *ngIf="hasValues" class="value-field">
       <mat-label>Value</mat-label>
       <input matInput
              [(ngModel)]="item.value"
@@ -55,7 +55,7 @@
     </mat-form-field>
   </ng-container>
   <ng-template #dateField>
-    <mat-form-field appearance="outline">
+    <mat-form-field [appearance]="formFieldAppearance" class="value-field">
       <mat-label>Value</mat-label>
       <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="item.value"
              (ngModelChange)="dateUpdated($event)">

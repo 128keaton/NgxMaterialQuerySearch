@@ -1,6 +1,5 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {QuerySearchComponent} from './query-search.component';
-import {MatListModule} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
 import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -19,6 +18,7 @@ import {OperatorPipe} from './pipes/operator.pipe';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
@@ -33,7 +33,6 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
   imports: [
     CommonModule,
     FormsModule,
-    MatListModule,
     MatSelectModule,
     MatInputModule,
     MatFormFieldModule,
@@ -43,7 +42,8 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     MatToolbarModule,
     MatAutocompleteModule,
     MatCheckboxModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatDividerModule
   ],
   exports: [
     QuerySearchComponent,

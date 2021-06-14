@@ -1,5 +1,6 @@
 import {QueryItem} from "./query-item.model";
 import {QueryBase} from "./query-base.model";
+import {QueryRuleGroup} from "./rules/query-rule-group.model";
 
 export class QueryGroup extends QueryBase {
   type: 'AND' | 'OR';
@@ -32,12 +33,10 @@ export class QueryGroup extends QueryBase {
     this.children = this.children.filter(c => c.id !== id);
   }
 
-  get filterValue () {
-    const filterObject: any = {};
-    const rawType = this.type === 'AND' ? '$and' : '$or';
+  get filterValue (): QueryRuleGroup {
+    const itemRules = this.items.map(i => i.filterValue).filter(i => i.valid);
+    const childRules = this.children.map(i => i.filterValue).filter(i => !!i);
 
-    filterObject[rawType] = [...this.items.map(i => i.filterValue).filter(v => !!v), ...this.children.map(i => i.filterValue)];
-
-    return filterObject;
+    return new QueryRuleGroup(this.type, [...itemRules, ...childRules]);
   }
 }

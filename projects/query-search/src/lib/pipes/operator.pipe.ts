@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {CondOperator} from "@nestjsx/crud-request";
+import {ConditionOperator} from "../enums/condition-operator.enum";
 
 @Pipe({
   name: 'operatorName'
@@ -9,7 +9,7 @@ export class OperatorPipe implements PipeTransform {
   private readonly operators: string[] = [];
 
   constructor() {
-    this.operators = Object.keys(CondOperator).filter(k => !k.includes('LOW'));
+    this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
   }
 
   /**

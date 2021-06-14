@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "watch": "ng build --watch QuerySearch",
     "test": "ng test",
     "build-demo": "ng build demo-application --output-path docs --base-href /NgxMaterialQuerySearch/"
   },
@@ -22,7 +22,6 @@
     "@angular/platform-browser-dynamic": "~12.0.4",
     "@angular/router": "~12.0.4",
     "@nestjsx/crud-request": "~5.0.0-alpha.3",
-    "ngx-mat-facet-search": "file:dist/ngx-query-search",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "uuid": "^8.3.2",

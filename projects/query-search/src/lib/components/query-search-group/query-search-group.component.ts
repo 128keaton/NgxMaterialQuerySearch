@@ -1,29 +1,19 @@
-import {Component, EventEmitter, HostBinding, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostBinding, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {QueryGroup} from "../../models";
 import {isEven} from "../../query-search.helpers";
 import {QuerySearchService} from "../../query-search.service";
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {inOutAnimations} from "../../animations";
+import {QuerySearchItemComponent} from "../query-search-item/query-search-item.component";
 
 @Component({
   selector: 'query-search-group',
   templateUrl: './query-search-group.component.html',
   styleUrls: ['./query-search-group.component.scss'],
   animations: [
-    trigger('inOut', [
-      state('in', style({ height: 'auto' })),
-      transition('void => *', [
-        style({ height: 0 }),
-        animate(100)
-      ]),
-      transition('* => void', [
-        animate(100, style({ height: 0 }))
-      ])
-    ]),
+    ...inOutAnimations
   ]
 })
 export class QuerySearchGroupComponent implements OnInit {
-
-  @HostBinding('class.collapsed') collapsed: boolean = false;
 
   @Input()
   set group(newValue: QueryGroup) {
@@ -32,6 +22,10 @@ export class QuerySearchGroupComponent implements OnInit {
       this.class = `depth-${this._group.depth}`;
     }
   }
+
+
+  @ViewChildren(QuerySearchItemComponent) items: QueryList<QuerySearchItemComponent>;
+  @ViewChildren(QuerySearchGroupComponent) children: QueryList<QuerySearchGroupComponent>;
 
   get group() {
     return this._group;
@@ -51,7 +45,12 @@ export class QuerySearchGroupComponent implements OnInit {
 
   @HostBinding('class') class = 'depth-0';
 
+  @Input()
+  set showDivider(newValue: any) {
+    this._showDivider = `${newValue}` === 'true';
+  }
 
+  _showDivider = false;
   private _group: QueryGroup;
 
   constructor(private querySearchService: QuerySearchService) {
@@ -82,9 +81,10 @@ export class QuerySearchGroupComponent implements OnInit {
   }
 
   remove() {
-    this.collapsed = true;
     this.querySearchService.log('Removing group', this.group.id, this);
-    setTimeout(() => this.removed.emit(this.group.id), 50);
+    this.children.forEach(child => child.remove());
+    this.items.forEach(item => item.remove());
+    this.removed.emit(this.group.id);
   }
 
 

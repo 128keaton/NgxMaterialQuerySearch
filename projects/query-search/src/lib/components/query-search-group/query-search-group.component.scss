@@ -4,6 +4,7 @@
   padding-top: 5px;
   flex-direction: column;
   width: 100%;
+  position: relative;
 
   .mat-list {
     width: 100%;
@@ -14,7 +15,7 @@
   }
 
   ::ng-deep {
-    .mat-form-field .mat-form-field-wrapper {
+    .mat-form-field-appearance-outline .mat-form-field-wrapper {
       margin: 0 !important;
       padding-bottom: 5px;
     }
@@ -66,22 +67,21 @@
 }
 
 .sub-group-item {
-  ::ng-deep {
-    .mat-list-item-content {
-      margin-left: 1.5em;
-    }
-  }
+  margin-left: 1.5em;
 
   .sub-group-divider {
     top: 0;
-    width: 99%;
+    width: 100%;
     right: 0;
-    left: auto;
+    left: -6px;
+    position: absolute;
+    margin-bottom: 1em;
   }
 }
 
 [class*='depth-']:not(.depth-0) {
   .mat-toolbar {
+    margin-top: 6px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
@@ -89,4 +89,8 @@
 
 .group-action-buttons {
   margin-left: 1em;
+}
+
+.group-items-list {
+  width: 100%;
 }
