@@ -33,10 +33,16 @@ export class QueryGroup extends QueryBase {
     this.children = this.children.filter(c => c.id !== id);
   }
 
-  get filterValue (): QueryRuleGroup {
+  get filterValue (): QueryRuleGroup | any {
     const itemRules = this.items.map(i => i.filterValue).filter(i => i.valid);
     const childRules = this.children.map(i => i.filterValue).filter(i => !!i);
 
-    return new QueryRuleGroup(this.type, [...itemRules, ...childRules]);
+    const ruleGroup = new QueryRuleGroup(this.type, [...itemRules, ...childRules]);
+
+    if (ruleGroup.rules.length === 0) {
+      return {}
+    }
+
+    return ruleGroup;
   }
 }
