@@ -12,7 +12,7 @@ import {QueryRuleGroup} from "./models";
 })
 export class QuerySearchService {
 
-  queryUpdated = new EventEmitter<QueryRuleGroup[]>();
+  queryUpdated = new EventEmitter<any>();
   operators: string[] = [];
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
 

@@ -1,5 +1,5 @@
 import {QueryBase} from "./query-base.model";
-import {isDefined, transformValue} from "../query-search.helpers";
+import {getEnumKeyByEnumValue, isDefined, transformValue} from "../query-search.helpers";
 import {ConditionOperator} from "../enums";
 import {QueryRule} from "./rules";
 
@@ -9,6 +9,17 @@ export class QueryItem extends QueryBase {
   value: any;
   type: string;
   active = true;
+
+
+  static apply(fieldName: string, operator: ConditionOperator, value: any): QueryItem {
+    const newItem = new QueryItem();
+
+    newItem.fieldName = fieldName;
+    newItem.condition = (getEnumKeyByEnumValue(ConditionOperator, operator) || '');
+    newItem.value = value;
+
+    return newItem;
+  }
 
   get filterValue(): QueryRule {
     if (isDefined(this.fieldName) && isDefined(this.type) && isDefined(this.condition) && this.checkNullCondition()) {

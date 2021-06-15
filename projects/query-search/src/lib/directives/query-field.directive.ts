@@ -1,4 +1,5 @@
 import {Directive, Input, OnInit} from '@angular/core';
+import {Observable} from "rxjs";
 
 @Directive({
   selector: 'query-field',
@@ -12,7 +13,7 @@ export class QueryFieldDirective implements OnInit {
   type: 'boolean' | 'date' | 'number' | 'string' | 'array';
 
   @Input()
-  values: any[];
+  values: any[] | Observable<any[]>;
 
   @Input()
   format?: string;

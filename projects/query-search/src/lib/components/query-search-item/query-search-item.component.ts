@@ -2,7 +2,7 @@ import {EventEmitter} from '@angular/core';
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {QueryItem, QueryField} from "../../models";
 import {QuerySearchService} from "../../query-search.service";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
 import {CustomDateAdapter} from "../../adapters";
 
@@ -17,7 +17,10 @@ import {CustomDateAdapter} from "../../adapters";
 export class QuerySearchItemComponent implements OnInit {
 
   @Input()
-  item: QueryItem;
+  set item(newValue: QueryItem) {
+    this._item = newValue;
+    this.loadFieldFromItem();
+  }
 
   @Input()
   disableDelete = false;
@@ -35,6 +38,8 @@ export class QuerySearchItemComponent implements OnInit {
    color: gray
    `;
 
+  private _item: QueryItem;
+
   constructor(private querySearchService: QuerySearchService, private dateAdapter: DateAdapter<any>) {
     this.operators = querySearchService.operators;
     this.fields = querySearchService.fields;
@@ -48,16 +53,18 @@ export class QuerySearchItemComponent implements OnInit {
     this.removed.emit(this.item.id);
   }
 
+
   fieldSelected(field: QueryField) {
     this.item.fieldName = field.name;
     this.item.type = field.type;
     this.querySearchService.log('Field selected', field);
     this.updateDateFormat();
+    this.item.value = null;
   }
 
   get hasValues(): boolean {
     if (!!this.selectedField) {
-      return !!this.selectedField.values && this.selectedField.values.length > 0;
+      return !!this.selectedField.values;
     }
 
     return false;
@@ -95,12 +102,16 @@ export class QuerySearchItemComponent implements OnInit {
     return false;
   }
 
-  get values(): any[] {
+  get values(): Observable<any[]> {
     if (!!this.selectedField && !!this.selectedField.values) {
-      return this.selectedField.values;
+      if (this.selectedField.values instanceof Observable) {
+        return this.selectedField.values;
+      } else {
+        return of(this.selectedField.values);
+      }
     }
 
-    return [];
+    return of([])
   }
 
   dateUpdated(newDate: Date) {
@@ -133,6 +144,24 @@ export class QuerySearchItemComponent implements OnInit {
 
   get padDividers(): boolean {
     return this.querySearchService.formFieldAppearance !== 'outline';
+  }
+
+  get item(): QueryItem {
+    return this._item;
+  }
+
+  private loadFieldFromItem() {
+    if (!!this.item && !!this.item.fieldName && !this.selectedField) {
+      this.querySearchService.fields.subscribe(fields => {
+        const field = fields.find(f => f.name === this.item.fieldName);
+        if (!!field) {
+          this.selectedField = field;
+          this.item.type = field.type;
+          this.querySearchService.log('Field loaded', field);
+          this.updateDateFormat();
+        }
+      })
+    }
   }
 
   private updateDateFormat() {

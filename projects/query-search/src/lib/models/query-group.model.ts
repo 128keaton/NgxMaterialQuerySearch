@@ -22,6 +22,14 @@ export class QueryGroup extends QueryBase {
     this.items.push(new QueryItem());
   }
 
+  loadItem(fieldName: string, operator: ConditionOperator, value: any) {
+    if (this.items.length === 1 && !this.items[0].fieldName) {
+      this.items = [QueryItem.apply(fieldName, operator,value)];
+    } else {
+      this.items.push(QueryItem.apply(fieldName, operator,value));
+    }
+  }
+
   applyRule(rule: QueryRule) {
     const newItem = new QueryItem();
     newItem.condition = (rule.operator as ConditionOperator)
@@ -47,8 +55,6 @@ export class QueryGroup extends QueryBase {
     const childRules = this.children.map(i => i.filterValue).filter(i => !!i);
 
     const ruleGroup = new QueryRuleGroup(this.type, [...itemRules, ...childRules]);
-
-    console.log('ruleGroup', ruleGroup);
 
     if (ruleGroup.rules.length === 0) {
       return {}

@@ -46,7 +46,7 @@
              [(ngModel)]="item.value"
              [matAutocomplete]="valueAutoComplete">
       <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
-        <mat-option *ngFor="let value of values" [value]="selectedValues">
+        <mat-option *ngFor="let value of values|async" [value]="selectedValues">
           <div (click)="optionClicked($event, value)">
             <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
                           (click)="$event.stopPropagation()">

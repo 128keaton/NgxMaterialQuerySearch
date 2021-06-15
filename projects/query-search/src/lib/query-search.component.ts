@@ -3,6 +3,7 @@ import {QueryGroup, QueryRule, QueryRuleGroup} from "./models";
 import {QueryFieldsDirective} from "./directives";
 import {QuerySearchService} from "./query-search.service";
 import {inOutAnimations} from "./animations";
+import {ConditionOperator} from "./enums";
 
 @Component({
   selector: 'ngx-query-search',
@@ -40,12 +41,15 @@ export class QuerySearchComponent implements AfterContentInit {
     this.querySearchService.emitQuery(this.groups.map(g => g.filterValue));
   }
 
+
   /**
-   * Apply a prebuilt query to the component
-   * @param rule - A single QueryRole
+   * Load a saved rule
+   * @param fieldName - Field name
+   * @param operator - ConditionOperator
+   * @param value - Any sort of dumb value you want
    */
-  applyRule(rule: QueryRule) {
-      this.groups.forEach(g => g.applyRule(rule));
+  load(fieldName: string, operator: ConditionOperator, value: any) {
+      this.groups[0].loadItem(fieldName, operator, value);
   }
 
   get generateButtonText(): string {
