@@ -2,11 +2,10 @@ import {EventEmitter, Inject} from '@angular/core';
 import {Injectable} from '@angular/core';
 import {QueryField} from "./models";
 import {BehaviorSubject} from "rxjs";
-import {QuerySearchConfig} from "./query-search.config";
+import {QuerySearchConfiguration} from "./query-search.config";
 import {ConditionOperator} from "./enums";
 import {QueryRuleGroup} from "./models";
 import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
-import {QUERY_SEARCH_CONFIG, querySearchDefaultConfig} from "./tokens";
 
 @Injectable({
   providedIn: 'root'
@@ -25,34 +24,16 @@ export class QuerySearchService {
   private readonly _debug: boolean = false;
   private readonly _generateButtonText: string = 'Generate';
   private readonly _appearance: MatFormFieldAppearance = 'outline';
-  private readonly _transform:  (rules: QueryRuleGroup[]) => any;
+  private readonly _transform: (rules: QueryRuleGroup[]) => any;
 
-  constructor(@Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfig) {
+  constructor(@Inject(QuerySearchConfiguration) configuration: QuerySearchConfiguration) {
     this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
+    this._loggingCallback = configuration.loggingCallback;
+    this._debug = configuration.debug;
+    this._generateButtonText = configuration.generateButtonText;
+    this._appearance = configuration.appearance;
+    this._transform = configuration.transform;
 
-    const config: QuerySearchConfig = {...querySearchDefaultConfig, ...configuration};
-
-    if (!!config) {
-      if (!!config.loggingCallback) {
-        this._loggingCallback = config.loggingCallback;
-      }
-
-      if (config.hasOwnProperty('debug')) {
-        this._debug = config.debug;
-      }
-
-      if (!!config.generateButtonText) {
-        this._generateButtonText = config.generateButtonText;
-      }
-
-      if (!!config.appearance) {
-        this._appearance = config.appearance;
-      }
-
-      if (!!config.transform) {
-        this._transform = config.transform;
-      }
-    }
   }
 
   addFields(fields: QueryField[]) {
