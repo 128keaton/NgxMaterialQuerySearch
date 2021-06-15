@@ -1,22 +1,23 @@
 import {QueryBase} from "./query-base.model";
-import {transformValue} from "../query-search.helpers";
-import {ConditionOperator} from "../enums/condition-operator.enum";
-import {QueryRule} from "./rules/query-rule.model";
+import {isDefined, transformValue} from "../query-search.helpers";
+import {ConditionOperator} from "../enums";
+import {QueryRule} from "./rules";
 
 export class QueryItem extends QueryBase {
   fieldName: string;
   condition: string;
   value: any;
   type: string;
+  active = true;
 
   get filterValue(): QueryRule {
-    if (!!this.fieldName && !!this.condition && this.value !== undefined && !!this.type) {
+    if (isDefined(this.fieldName) && isDefined(this.type) && isDefined(this.condition) && this.checkNullCondition()) {
       return {
         field: this.fieldName,
         operator: (ConditionOperator as any)[this.condition],
         value: transformValue(this.value, this.type),
         type: this.type,
-        active: true,
+        active: this.active,
         valid: true
       }
     }
@@ -24,5 +25,13 @@ export class QueryItem extends QueryBase {
       active: false,
       valid: false
     };
+  }
+
+  private checkNullCondition() {
+    if (this.condition.toLowerCase().includes('null')) {
+      return true;
+    }
+
+    return false;
   }
 }

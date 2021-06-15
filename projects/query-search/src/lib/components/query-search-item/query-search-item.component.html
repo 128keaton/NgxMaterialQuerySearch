@@ -5,6 +5,9 @@
   <mat-icon>delete</mat-icon>
 </button>
 
+<mat-divider class="separate-button"></mat-divider>
+
+<mat-checkbox class="disable-checkbox" [(ngModel)]="item.active"></mat-checkbox>
 <mat-divider class="separate-button" [class.pad-dividers]="padDividers"></mat-divider>
 
 <mat-form-field [appearance]="formFieldAppearance" class="name-field">

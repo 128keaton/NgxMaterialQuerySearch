@@ -16,3 +16,6 @@ export * from './lib/directives/';
 
 // Enums
 export * from './lib/enums';
+
+// DI Tokens
+export * from './lib/tokens';

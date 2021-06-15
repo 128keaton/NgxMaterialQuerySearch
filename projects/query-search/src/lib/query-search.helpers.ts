@@ -9,8 +9,16 @@ export function transformValue(value: any, type: string) {
     case 'number':
       return Number(value)
     case 'date':
-      return new Date(value).toISOString();
+      try {
+        return new Date(value).toISOString();
+      } catch (e) {
+        return undefined;
+      }
     default:
       return `${value}`;
   }
+}
+
+export function isDefined(value: any): boolean {
+  return value !== undefined;
 }

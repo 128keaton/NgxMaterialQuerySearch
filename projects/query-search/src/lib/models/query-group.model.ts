@@ -1,6 +1,6 @@
 import {QueryItem} from "./query-item.model";
 import {QueryBase} from "./query-base.model";
-import {QueryRuleGroup} from "./rules/query-rule-group.model";
+import {QueryRuleGroup} from "./rules";
 
 export class QueryGroup extends QueryBase {
   type: 'AND' | 'OR';

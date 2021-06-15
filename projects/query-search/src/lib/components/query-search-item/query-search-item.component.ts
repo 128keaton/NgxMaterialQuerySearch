@@ -4,7 +4,7 @@ import {QueryItem, QueryField} from "../../models";
 import {QuerySearchService} from "../../query-search.service";
 import {Observable} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
-import {CustomDateAdapter} from "../../adapters/custom-date.adapter";
+import {CustomDateAdapter} from "../../adapters";
 
 @Component({
   selector: 'query-search-item',

@@ -24,15 +24,19 @@ import {MatButtonModule} from "@angular/material/button";
         console.log(...args);
       },
       debug: true,
-      generateButtonText: 'Do The Magic',
-      appearance: 'standard'
+      generateButtonText: 'Query',
+      appearance: 'outline',
+      transform: rules => {
+        console.log('Transform me', rules);
+        return rules;
+      }
     }),
     MatToolbarModule,
     MatCardModule,
     MatNativeDateModule,
     MatButtonModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

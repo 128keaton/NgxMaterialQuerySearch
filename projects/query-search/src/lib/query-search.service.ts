@@ -2,10 +2,11 @@ import {EventEmitter, Inject} from '@angular/core';
 import {Injectable} from '@angular/core';
 import {QueryField} from "./models";
 import {BehaviorSubject} from "rxjs";
-import {QUERY_SEARCH_CONFIG, QuerySearchConfig} from "./query-search.config";
+import {QuerySearchConfig} from "./query-search.config";
 import {ConditionOperator} from "./enums";
 import {QueryRuleGroup} from "./models";
 import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
+import {QUERY_SEARCH_CONFIG, querySearchDefaultConfig} from "./tokens";
 
 @Injectable({
   providedIn: 'root'
@@ -24,25 +25,32 @@ export class QuerySearchService {
   private readonly _debug: boolean = false;
   private readonly _generateButtonText: string = 'Generate';
   private readonly _appearance: MatFormFieldAppearance = 'outline';
+  private readonly _transform:  (rules: QueryRuleGroup[]) => any;
 
   constructor(@Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfig) {
     this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
 
-    if (!!configuration) {
-      if (!!configuration.loggingCallback) {
-        this._loggingCallback = configuration.loggingCallback;
+    const config: QuerySearchConfig = {...querySearchDefaultConfig, ...configuration};
+
+    if (!!config) {
+      if (!!config.loggingCallback) {
+        this._loggingCallback = config.loggingCallback;
       }
 
-      if (configuration.hasOwnProperty('debug')) {
-        this._debug = configuration.debug;
+      if (config.hasOwnProperty('debug')) {
+        this._debug = config.debug;
       }
 
-      if (!!configuration.generateButtonText) {
-        this._generateButtonText = configuration.generateButtonText;
+      if (!!config.generateButtonText) {
+        this._generateButtonText = config.generateButtonText;
       }
 
-      if (!!configuration.appearance) {
-        this._appearance = configuration.appearance;
+      if (!!config.appearance) {
+        this._appearance = config.appearance;
+      }
+
+      if (!!config.transform) {
+        this._transform = config.transform;
       }
     }
   }
@@ -62,7 +70,12 @@ export class QuerySearchService {
 
   emitQuery(rules: QueryRuleGroup[]) {
     this.log('Emitting rules', rules);
-    this.queryUpdated.emit(rules);
+
+    if (!!this._transform) {
+      this.queryUpdated.emit(this._transform(rules));
+    } else {
+      this.queryUpdated.emit(rules);
+    }
   }
 
   /**
