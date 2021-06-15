@@ -23,7 +23,7 @@
   <mat-form-field [appearance]="formFieldAppearance" class="operator-field">
     <mat-label>Operator</mat-label>
     <mat-select [(ngModel)]="item.condition">
-      <mat-option *ngFor="let operator of operators" name="operator" [value]="operator">
+      <mat-option *ngFor="let operator of operators" [value]="operator">
         {{operator|operatorName}} <span [style]="operatorStyle"
                                         *ngIf="(operator|operatorName: true)">{{operator|operatorName: true}}</span>
       </mat-option>

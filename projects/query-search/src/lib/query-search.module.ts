@@ -13,12 +13,13 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {GroupTypeSelectorComponent} from './components/group-type-selector/group-type-selector.component';
 import {QueryFieldDirective, QueryFieldsDirective} from "./directives/";
-import {QuerySearchConfig, QuerySearchConfiguration} from "./query-search.config";
+import {QUERY_SEARCH_CONFIG, QuerySearchConfig, QuerySearchConfiguration} from "./query-search.config";
 import {OperatorPipe} from './pipes/operator.pipe';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatDividerModule} from "@angular/material/divider";
+import {QuerySearchService} from "./query-search.service";
 
 @NgModule({
   declarations: [
@@ -52,15 +53,16 @@ import {MatDividerModule} from "@angular/material/divider";
   ],
 })
 export class QuerySearchModule {
-  static forRoot(config: QuerySearchConfig): ModuleWithProviders<QuerySearchModule> {
+  static forRoot(config?: QuerySearchConfig): ModuleWithProviders<QuerySearchModule> {
     const configuration = new QuerySearchConfiguration(config);
 
     return {
       ngModule: QuerySearchModule,
       providers: [
         {
-          provide: QuerySearchConfiguration, useValue: configuration
+          provide: QUERY_SEARCH_CONFIG, useValue: configuration
         },
+        QuerySearchService
       ]
     };
   }

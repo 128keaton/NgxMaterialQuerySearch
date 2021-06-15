@@ -1,11 +1,11 @@
-import {EventEmitter, Inject} from '@angular/core';
+import {EventEmitter, Inject, Optional} from '@angular/core';
 import {Injectable} from '@angular/core';
 import {QueryField} from "./models";
 import {BehaviorSubject} from "rxjs";
-import {QuerySearchConfiguration} from "./query-search.config";
+import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from "./query-search.config";
 import {ConditionOperator} from "./enums";
 import {QueryRuleGroup} from "./models";
-import {MatFormFieldAppearance} from "@angular/material/form-field/form-field";
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +23,10 @@ export class QuerySearchService {
 
   private readonly _debug: boolean = false;
   private readonly _generateButtonText: string = 'Generate';
-  private readonly _appearance: MatFormFieldAppearance = 'outline';
+  private readonly _appearance: 'legacy' | 'standard' | 'fill' | 'outline' = 'outline';
   private readonly _transform: (rules: QueryRuleGroup[]) => any;
 
-  constructor(@Inject(QuerySearchConfiguration) configuration: QuerySearchConfiguration) {
+  constructor(@Optional() @Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfiguration) {
     this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
     this._loggingCallback = configuration.loggingCallback;
     this._debug = configuration.debug;

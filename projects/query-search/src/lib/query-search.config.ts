@@ -1,4 +1,7 @@
 import {QueryRuleGroup} from "./models";
+import {InjectionToken} from "@angular/core";
+
+export const QUERY_SEARCH_CONFIG = new InjectionToken<QuerySearchConfiguration>('QUERY_SEARCH_CONFIG');
 
 const querySearchDefaultConfig: QuerySearchConfig = {
   loggingCallback: () => {
@@ -27,7 +30,7 @@ export class QuerySearchConfiguration implements QuerySearchConfig {
   loggingCallback: () => void;
   transform: (rules: QueryRuleGroup[]) => any;
 
-  constructor(config: QuerySearchConfig) {
+  constructor(config?: QuerySearchConfig) {
     const correctedConfig = {...querySearchDefaultConfig, ...config};
     const defaultTransform =  (rules: QueryRuleGroup[]) => {
       return rules;
