@@ -32,6 +32,6 @@ export class QueryItem extends QueryBase {
       return true;
     }
 
-    return false;
+    return !!this.value;
   }
 }

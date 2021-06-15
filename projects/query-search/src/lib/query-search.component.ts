@@ -36,6 +36,7 @@ export class QuerySearchComponent implements AfterContentInit {
   }
 
   generate() {
+    this.querySearchService.log('Generating...', this.groups);
     this.querySearchService.emitQuery(this.groups.map(g => g.filterValue));
   }
 

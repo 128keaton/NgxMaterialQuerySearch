@@ -42,11 +42,13 @@ export class QueryGroup extends QueryBase {
     this.children = this.children.filter(c => c.id !== id);
   }
 
-  get filterValue (): QueryRuleGroup | any {
+  get filterValue(): QueryRuleGroup | any {
     const itemRules = this.items.map(i => i.filterValue).filter(i => i.valid);
     const childRules = this.children.map(i => i.filterValue).filter(i => !!i);
 
     const ruleGroup = new QueryRuleGroup(this.type, [...itemRules, ...childRules]);
+
+    console.log('ruleGroup', ruleGroup);
 
     if (ruleGroup.rules.length === 0) {
       return {}
