@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {QuerySearchService} from "ngx-mat-query-search";
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {QuerySearchService, QuerySearchComponent, ConditionOperator} from "ngx-mat-query-search";
 import packageData from '../../../query-search/package.json';
 import {Demo} from "./demo.model";
 import {QueryRuleGroup} from "../../../query-search/src/lib/models";
@@ -9,8 +9,8 @@ import {QueryRuleGroup} from "../../../query-search/src/lib/models";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'demo-application';
+export class AppComponent implements AfterViewInit {
+  @ViewChild(QuerySearchComponent) querySearchComponent: QuerySearchComponent
 
   queryObject: QueryRuleGroup[] = [];
   version: string;
@@ -22,5 +22,9 @@ export class AppComponent {
     this.githubRepo = packageData.repository;
 
     this.querySearchService.consumeModel(Demo, {birthday: 'Birthday 2', count: 'Total Count', name: 'Other Name', isActive: 'Active'});
+  }
+
+  ngAfterViewInit() {
+    this.querySearchComponent.load('name', ConditionOperator.EQUALS, 'paul');
   }
 }
