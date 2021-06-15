@@ -1,5 +1,5 @@
 import {AfterContentInit, Component, ContentChild} from '@angular/core';
-import {QueryGroup} from "./models";
+import {QueryGroup, QueryRule, QueryRuleGroup} from "./models";
 import {QueryFieldsDirective} from "./directives";
 import {QuerySearchService} from "./query-search.service";
 import {inOutAnimations} from "./animations";
@@ -37,6 +37,14 @@ export class QuerySearchComponent implements AfterContentInit {
 
   generate() {
     this.querySearchService.emitQuery(this.groups.map(g => g.filterValue));
+  }
+
+  /**
+   * Apply a prebuilt query to the component
+   * @param rule - A single QueryRole
+   */
+  applyRule(rule: QueryRule) {
+      this.groups.forEach(g => g.applyRule(rule));
   }
 
   get generateButtonText(): string {

@@ -1,6 +1,7 @@
 import {QueryItem} from "./query-item.model";
 import {QueryBase} from "./query-base.model";
-import {QueryRuleGroup} from "./rules";
+import {QueryRule, QueryRuleGroup} from "./rules";
+import {ConditionOperator} from "../enums";
 
 export class QueryGroup extends QueryBase {
   type: 'AND' | 'OR';
@@ -19,6 +20,14 @@ export class QueryGroup extends QueryBase {
 
   addItem() {
     this.items.push(new QueryItem());
+  }
+
+  applyRule(rule: QueryRule) {
+    const newItem = new QueryItem();
+    newItem.condition = (rule.operator as ConditionOperator)
+    newItem.fieldName = rule.field || 'unknown';
+    newItem.type = rule.type || 'string';
+    newItem.value = rule.value;
   }
 
   removeItem(id: string) {
