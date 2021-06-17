@@ -15,6 +15,9 @@ import {QuerySearchItemComponent} from "../query-search-item/query-search-item.c
 })
 export class QuerySearchGroupComponent implements OnInit {
 
+  @Output()
+  generateClicked = new EventEmitter<boolean>(true);
+
   @Input()
   set group(newValue: QueryGroup) {
     if (!!newValue) {
@@ -57,6 +60,7 @@ export class QuerySearchGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.group);
   }
 
 
@@ -103,4 +107,13 @@ export class QuerySearchGroupComponent implements OnInit {
   get disableTypeButtons() {
     return this.group.children.length < 1 && this.group.items.length < 2;
   }
+
+  get generateButtonText(): string {
+    return this.querySearchService.generateButtonText;
+  }
+
+  get isTopLevel(): boolean {
+    return this.group.depth === 0;
+  }
+
 }

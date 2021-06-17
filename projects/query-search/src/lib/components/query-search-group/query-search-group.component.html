@@ -10,10 +10,13 @@
       <button mat-menu-item (click)="addItem()">Item</button>
       <button mat-menu-item (click)="addGroup()">Group</button>
     </mat-menu>
-    <button mat-icon-button (click)="remove()">
+    <button mat-icon-button (click)="remove()" *ngIf="!isTopLevel">
       <mat-icon>delete</mat-icon>
     </button>
   </div>
+
+  <span class="group-spacer"></span>
+  <button class="generate-button" mat-flat-button color="accent" *ngIf="isTopLevel" (click)="generateClicked.emit(true)">{{generateButtonText}}</button>
 </mat-toolbar>
 <div class="group-items-list">
   <query-search-item class="group-item" [@inOut] *ngFor="let item of group.items" (removed)="removeItem($event)"

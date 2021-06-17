@@ -1,5 +1,5 @@
 import {AfterContentInit, Component, ContentChild} from '@angular/core';
-import {QueryGroup, QueryRule, QueryRuleGroup} from "./models";
+import {QueryGroup} from "./models";
 import {QueryFieldsDirective} from "./directives";
 import {QuerySearchService} from "./query-search.service";
 import {inOutAnimations} from "./animations";
@@ -50,17 +50,5 @@ export class QuerySearchComponent implements AfterContentInit {
    */
   load(fieldName: string, operator: ConditionOperator, value: any) {
       this.groups[0].loadItem(fieldName, operator, value);
-  }
-
-  get generateButtonText(): string {
-    return this.querySearchService.generateButtonText;
-  }
-
-  get canAddGroup(): boolean {
-    return this.groups.length === 0;
-  }
-
-  get canGenerate(): boolean {
-    return this.groups.length > 0;
   }
 }

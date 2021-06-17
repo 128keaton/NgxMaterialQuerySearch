@@ -1,9 +1,3 @@
 <div class="rules-list">
-  <query-search-group *ngFor="let group of groups" [@inOut] [group]="group" (removed)="remove($event)"></query-search-group>
-</div>
-<div class="global-actions">
-  <button mat-mini-fab color="primary" (click)="addGroup()" *ngIf="canAddGroup">
-    <mat-icon>add</mat-icon>
-  </button>
-  <button class="generate-button" mat-button (click)="generate()" *ngIf="canGenerate">{{generateButtonText}}</button>
+  <query-search-group (generateClicked)="generate()" *ngFor="let group of groups" [@inOut] [group]="group" (removed)="remove($event)"></query-search-group>
 </div>
