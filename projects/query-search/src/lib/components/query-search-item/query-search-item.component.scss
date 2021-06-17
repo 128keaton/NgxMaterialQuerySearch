@@ -68,3 +68,15 @@
   padding: 0;
   height: 27px;
 }
+
+
+.input-spinner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  position: absolute;
+  right: 1rem;
+  top: -9px;
+  bottom: 0;
+}

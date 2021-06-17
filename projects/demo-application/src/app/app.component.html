@@ -10,6 +10,7 @@
       <query-field name="hasValues" label="Has Values" type="string" [values]="['a', 'b']"></query-field>
       <query-field name="birthday" label="Birthday" type="date" format="dd/MM/yyyy"></query-field>
       <query-field name="joinDay" label="Join Date" type="date" format="MM/dd"></query-field>
+      <query-field name="slow" label="Slow" type="string" [values]="observableValues"></query-field>
     </query-fields>
   </ngx-query-search>
   <app-output [queryObject]="queryObject"></app-output>

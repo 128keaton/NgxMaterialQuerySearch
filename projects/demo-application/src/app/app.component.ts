@@ -3,6 +3,8 @@ import {QuerySearchService, QuerySearchComponent, ConditionOperator} from "ngx-m
 import packageData from '../../../query-search/package.json';
 import {Demo} from "./demo.model";
 import {QueryRuleGroup} from "../../../query-search/src/lib/models";
+import {Observable, of} from "rxjs";
+import {delay} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
@@ -16,12 +18,18 @@ export class AppComponent implements AfterViewInit {
   version: string;
   githubRepo: string;
 
+  observableValues: Observable<string[]>
+
   constructor(private querySearchService: QuerySearchService) {
     this.querySearchService.queryUpdated.subscribe(newQueryObject => this.queryObject = newQueryObject);
     this.version = packageData.version;
     this.githubRepo = packageData.repository;
 
     this.querySearchService.consumeModel(Demo, {birthday: 'Birthday 2', count: 'Total Count', name: 'Other Name', isActive: 'Active'});
+
+    this.observableValues = of(['A', 'B', 'C']).pipe(
+      delay(2000)
+    )
   }
 
   ngAfterViewInit() {

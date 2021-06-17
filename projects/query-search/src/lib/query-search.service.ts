@@ -5,6 +5,7 @@ import {BehaviorSubject} from "rxjs";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from "./query-search.config";
 import {ConditionOperator} from "./enums";
 import {QueryRuleGroup} from "./models";
+import {ValueNotification} from "./models/value-notification.model";
 
 
 @Injectable({
@@ -15,7 +16,7 @@ export class QuerySearchService {
   queryUpdated = new EventEmitter<any>();
   operators: string[] = [];
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
-
+  valueFieldDidChange: EventEmitter<ValueNotification> = new EventEmitter<ValueNotification>(true);
 
   private _fields: QueryField[] = [];
   private readonly _loggingCallback: (...args: any[]) => void = () => {
@@ -34,6 +35,9 @@ export class QuerySearchService {
     this._appearance = configuration.appearance;
     this._transform = configuration.transform;
 
+    this.valueFieldDidChange.subscribe(value => {
+      this.log('Value field changed', value);
+    })
   }
 
   addFields(fields: QueryField[]) {
@@ -47,6 +51,10 @@ export class QuerySearchService {
     }
 
     this._loggingCallback(...args);
+  }
+
+  valueFieldChanged(field: QueryField, partialValue: string) {
+    this.valueFieldDidChange.emit({field, partialValue});
   }
 
   emitQuery(rules: QueryRuleGroup[]) {

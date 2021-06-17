@@ -24,7 +24,6 @@ import {MatButtonModule} from "@angular/material/button";
         console.log(...args);
       },
       debug: true,
-      generateButtonText: 'Query 2',
       appearance: 'outline',
       transform: rules => {
         console.log('Transform me', rules);
