@@ -21,6 +21,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatDividerModule} from "@angular/material/divider";
 import {QuerySearchService} from "./query-search.service";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -32,22 +33,23 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     QueryFieldsDirective,
     OperatorPipe
   ],
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatSelectModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatToolbarModule,
-        MatAutocompleteModule,
-        MatCheckboxModule,
-        MatDatepickerModule,
-        MatDividerModule,
-        MatProgressSpinnerModule
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatSelectModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule
+  ],
   exports: [
     QuerySearchComponent,
     QueryFieldDirective,

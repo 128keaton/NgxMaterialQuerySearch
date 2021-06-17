@@ -1,4 +1,5 @@
 import {Observable} from "rxjs";
+import {ProvidedValue} from "./provided-value.model";
 
 export interface QueryField {
   name: string;
@@ -6,4 +7,5 @@ export interface QueryField {
   values: any[] | Observable<any[]>;
   format?: string;
   label?: string;
+  tooltip?: string;
 }

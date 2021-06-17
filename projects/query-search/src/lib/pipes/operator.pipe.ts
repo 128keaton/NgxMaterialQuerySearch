@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {ConditionOperator} from "../enums/condition-operator.enum";
+import {ConditionOperator} from "../enums";
 
 @Pipe({
   name: 'operatorName'
@@ -41,11 +41,11 @@ export class OperatorPipe implements PipeTransform {
         return '!=';
       case 'GREATER_THAN':
         return '>';
-      case 'LOWER_THAN':
+      case 'LESS_THAN':
         return '<';
       case 'GREATER_THAN_EQUALS':
         return '>=';
-      case 'LOWER_THAN_EQUALS':
+      case 'LESS_THAN_EQUALS':
         return '<=';
       default:
         return null;

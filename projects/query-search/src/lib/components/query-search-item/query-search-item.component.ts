@@ -12,6 +12,7 @@ import {BehaviorSubject, fromEvent, Observable, of, Subscription} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
 import {CustomDateAdapter} from "../../adapters";
 import {debounceTime, distinctUntilChanged, filter, map, tap} from "rxjs/operators";
+import {ProvidedValue} from "../../models/provided-value.model";
 
 @Component({
   selector: 'query-search-item',
@@ -121,7 +122,7 @@ export class QuerySearchItemComponent implements AfterViewInit {
     return false;
   }
 
-  get values(): Observable<any[]> {
+  get values(): Observable<any[] | ProvidedValue[]> {
     if (!!this.selectedField && !!this.selectedField.values) {
       if (this.selectedField.values instanceof Observable) {
         return this._valuesObservable;
@@ -138,7 +139,11 @@ export class QuerySearchItemComponent implements AfterViewInit {
     this.querySearchService.log('Formatted date', this.item.value);
   }
 
-  valueSelected(value: any) {
+  valueSelected(value: any | ProvidedValue) {
+    if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
+      return this.selectedValues.includes(value.value);
+    }
+
     return this.selectedValues.includes(value);
   }
 
@@ -147,11 +152,19 @@ export class QuerySearchItemComponent implements AfterViewInit {
     this.toggleSelection(value);
   }
 
-  toggleSelection(value: any) {
+  toggleSelection(value: any|ProvidedValue) {
     if (!this.valueSelected(value)) {
-      this.selectedValues.push(value)
+        if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
+          this.selectedValues.push(value.value);
+        } else {
+          this.selectedValues.push(value)
+        }
     } else {
-      this.selectedValues = this.selectedValues.filter(v => v !== value);
+      if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
+        this.selectedValues = this.selectedValues.filter(v => v !== value.value);
+      } else {
+        this.selectedValues = this.selectedValues.filter(v => v !== value);
+      }
     }
 
     this.item.value = this.selectedValues.join(',');

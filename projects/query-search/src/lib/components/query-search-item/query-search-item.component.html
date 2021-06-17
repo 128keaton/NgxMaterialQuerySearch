@@ -14,7 +14,8 @@
   <mat-label>Field Name</mat-label>
   <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldSelected($event)">
     <mat-option *ngFor="let field of (fields|async)" [value]="field">
-      <pre>{{field.label || field.name}}</pre>
+      <pre *ngIf="field.tooltip" [matTooltip]="field.tooltip" matTooltipPosition="right">{{field.label || field.name}}</pre>
+      <pre *ngIf="!field.tooltip">{{field.label || field.name}}</pre>
     </mat-option>
   </mat-select>
 </mat-form-field>
@@ -54,7 +55,7 @@
           <div (click)="optionClicked($event, value)">
             <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
                           (click)="$event.stopPropagation()">
-              <pre style="margin-left: 1em">{{value}}</pre>
+              <pre style="margin-left: 1em">{{value['displayValue'] || value}}</pre>
             </mat-checkbox>
           </div>
         </mat-option>

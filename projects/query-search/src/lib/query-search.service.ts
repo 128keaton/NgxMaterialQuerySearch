@@ -42,7 +42,7 @@ export class QuerySearchService {
 
   addFields(fields: QueryField[]) {
     fields.forEach(field => {
-      const existingField = this._fields.find(f => f.name === field.name);
+      const existingField = this._fields.find(f => f.name === field.name && f.label === field.label);
       if (!existingField) {
         this._fields.push(field);
       }
