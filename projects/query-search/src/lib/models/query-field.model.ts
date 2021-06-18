@@ -1,5 +1,4 @@
 import {Observable} from "rxjs";
-import {ProvidedValue} from "./provided-value.model";
 
 export interface QueryField {
   name: string;

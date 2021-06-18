@@ -1,12 +1,9 @@
 import {EventEmitter, Inject, Optional} from '@angular/core';
 import {Injectable} from '@angular/core';
-import {QueryField} from "./models";
+import {QueryField, ValueNotification, QueryRuleGroup} from "./models";
 import {BehaviorSubject} from "rxjs";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from "./query-search.config";
 import {ConditionOperator} from "./enums";
-import {QueryRuleGroup} from "./models";
-import {ValueNotification} from "./models/value-notification.model";
-
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +14,7 @@ export class QuerySearchService {
   operators: string[] = [];
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
   valueFieldDidChange: EventEmitter<ValueNotification> = new EventEmitter<ValueNotification>(true);
+  searchValueFieldDidChange: EventEmitter<ValueNotification> = new EventEmitter<ValueNotification>(true);
 
   private _fields: QueryField[] = [];
   private readonly _loggingCallback: (...args: any[]) => void = () => {
@@ -60,7 +58,11 @@ export class QuerySearchService {
   }
 
   valueFieldChanged(field: QueryField, partialValue: string) {
-    this.valueFieldDidChange.emit({field, partialValue});
+    this.valueFieldDidChange.emit({field, partialValue: partialValue.toLowerCase()});
+  }
+
+  searchValueFieldChanged(field: QueryField, partialValue: string) {
+    this.searchValueFieldDidChange.emit({field, partialValue: partialValue.toLowerCase()});
   }
 
   emitQuery(rules: QueryRuleGroup[]) {

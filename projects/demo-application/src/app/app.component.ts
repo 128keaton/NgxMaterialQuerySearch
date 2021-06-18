@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {QuerySearchService, QuerySearchComponent, ProvidedValue, QueryRuleGroup} from "ngx-mat-query-search";
 import packageData from '../../../query-search/package.json';
 import {Demo} from "./demo.model";
@@ -10,7 +10,7 @@ import {delay} from "rxjs/operators";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent{
   @ViewChild(QuerySearchComponent) querySearchComponent: QuerySearchComponent
 
   queryObject: QueryRuleGroup[] = [];
@@ -24,13 +24,26 @@ export class AppComponent implements AfterViewInit {
     this.version = packageData.version;
     this.githubRepo = packageData.repository;
 
-    this.querySearchService.consumeModel(Demo, {birthday: 'Birthday 2', count: 'Total Count', isActive: 'Active', name: 'Other Name'});
+    this.querySearchService.consumeModel(Demo, {
+      birthday: 'Birthday 2',
+      count: 'Total Count',
+      isActive: 'Active',
+      name: 'Other Name'
+    });
 
-    this.observableValues = of([{displayValue: 'Value A', value: 'A'}, {displayValue: 'Value B', value: 'B'}]).pipe(
+    this.observableValues = of([
+      {
+        displayValue: 'Value A',
+        value: 'A',
+        description: 'This isn\'t very long'
+      },
+      {
+        displayValue: 'Value B',
+        value: 'B',
+        description: 'This is kinda long, but only kinda'
+      }
+    ]).pipe(
       delay(2000)
     )
-  }
-
-  ngAfterViewInit() {
   }
 }

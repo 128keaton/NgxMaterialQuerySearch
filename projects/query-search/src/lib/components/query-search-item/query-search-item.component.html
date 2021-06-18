@@ -14,8 +14,9 @@
   <mat-label>Field Name</mat-label>
   <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldSelected($event)">
     <mat-option *ngFor="let field of (fields|async)" [value]="field">
-      <pre *ngIf="field.tooltip" [matTooltip]="field.tooltip" matTooltipPosition="right">{{field.label || field.name}}</pre>
-      <pre *ngIf="!field.tooltip">{{field.label || field.name}}</pre>
+      <span class="field-value" *ngIf="field.tooltip" [matTooltip]="field.tooltip"
+            matTooltipPosition="right">{{field.label || field.name}}</span>
+      <span class="field-value" *ngIf="!field.tooltip">{{field.label || field.name}}</span>
     </mat-option>
   </mat-select>
 </mat-form-field>
@@ -51,11 +52,20 @@
         <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
       </div>
       <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
+        <mat-option *ngIf="false">
+          <div (click)="searchOptionClicked($event)" class="search-options-wrapper">
+            <mat-icon>search</mat-icon>
+            <input class="search-options" #searchInput placeholder="Search values" (keydown)="searchValues($event)">
+          </div>
+        </mat-option>
         <mat-option *ngFor="let value of values|async" [value]="selectedValues">
           <div (click)="optionClicked($event, value)">
             <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
                           (click)="$event.stopPropagation()">
-              <pre style="margin-left: 1em">{{value['displayValue'] || value}}</pre>
+              <span class="value-option">
+                <span class="option-label">{{value['displayValue'] || value}}</span>
+                <span class="option-description" *ngIf="value['description'] as description">{{description}}</span>
+              </span>
             </mat-checkbox>
           </div>
         </mat-option>

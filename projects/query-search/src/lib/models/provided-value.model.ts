@@ -1,4 +1,5 @@
 export interface ProvidedValue {
   value: any;
-  displayValue: any;
+  displayValue: string;
+  description?: string;
 }

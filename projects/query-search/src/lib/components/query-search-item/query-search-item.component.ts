@@ -6,13 +6,12 @@ import {
   ViewChildren
 } from '@angular/core';
 import {Component, Input, Output} from '@angular/core';
-import {QueryItem, QueryField} from "../../models";
+import {QueryItem, QueryField, ProvidedValue} from "../../models";
 import {QuerySearchService} from "../../query-search.service";
 import {BehaviorSubject, fromEvent, Observable, of, Subscription} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
 import {CustomDateAdapter} from "../../adapters";
 import {debounceTime, distinctUntilChanged, filter, map, tap} from "rxjs/operators";
-import {ProvidedValue} from "../../models/provided-value.model";
 
 @Component({
   selector: 'query-search-item',
@@ -40,6 +39,9 @@ export class QuerySearchItemComponent implements AfterViewInit {
   @ViewChildren('valueInput')
   valueInputs: QueryList<ElementRef>;
 
+  @ViewChildren('searchInput')
+  searchInputs: QueryList<ElementRef>;
+
   selectedValues: any[] = [];
   operators: string[];
   fields: Observable<QueryField[]>;
@@ -54,6 +56,7 @@ export class QuerySearchItemComponent implements AfterViewInit {
   private _item: QueryItem;
   private _valuesObservable: Observable<any[]>;
   private _fieldValueSubscription: Subscription;
+  private _searchValueSubscription: Subscription;
 
   constructor(private querySearchService: QuerySearchService, private dateAdapter: DateAdapter<any>) {
     this.operators = querySearchService.operators;
@@ -62,9 +65,22 @@ export class QuerySearchItemComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
+    // Listen for input changes on an autocomplete input
     this.valueInputs.changes.subscribe((changes: QueryList<ElementRef>) => {
       this.setupFieldValueListener(changes.first);
     });
+
+    // Remove the stupid ripple
+    this.searchInputs.changes.subscribe((changes: QueryList<ElementRef>) => {
+      this.setupSearchValueListener(changes.first);
+
+      const matOption = changes.first.nativeElement.parentElement.parentElement.parentElement
+      const matRipple = matOption.querySelector('.mat-ripple');
+
+      if (!!matRipple) {
+        matRipple.remove();
+      }
+    })
   }
 
   remove() {
@@ -152,13 +168,17 @@ export class QuerySearchItemComponent implements AfterViewInit {
     this.toggleSelection(value);
   }
 
-  toggleSelection(value: any|ProvidedValue) {
+  searchOptionClicked(event: Event) {
+    event.stopImmediatePropagation();
+  }
+
+  toggleSelection(value: any | ProvidedValue) {
     if (!this.valueSelected(value)) {
-        if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
-          this.selectedValues.push(value.value);
-        } else {
-          this.selectedValues.push(value)
-        }
+      if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
+        this.selectedValues.push(value.value);
+      } else {
+        this.selectedValues.push(value)
+      }
     } else {
       if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
         this.selectedValues = this.selectedValues.filter(v => v !== value.value);
@@ -192,6 +212,10 @@ export class QuerySearchItemComponent implements AfterViewInit {
 
   operatorSelected() {
     setTimeout(this.setupFieldValueListener, 300);
+  }
+
+  searchValues(event: Event) {
+    event.stopImmediatePropagation();
   }
 
   private loadFieldFromItem() {
@@ -231,10 +255,39 @@ export class QuerySearchItemComponent implements AfterViewInit {
     if (!!field) {
       this._fieldValueSubscription = fromEvent(field.nativeElement, 'keyup').pipe(
         filter(Boolean),
-        debounceTime(300),
         distinctUntilChanged(),
-        map(() => field.nativeElement.value)
-      ).subscribe(inputValue => this.querySearchService.valueFieldChanged(this.selectedField, inputValue));
+        map(() => field.nativeElement.value),
+        tap(inputValue => this.processValuesSelected(inputValue)),
+        debounceTime(300),
+      ).subscribe(inputValue => {
+        this.querySearchService.valueFieldChanged(this.selectedField, inputValue);
+      });
+    }
+  }
+
+  private setupSearchValueListener(field: ElementRef) {
+    if (this._searchValueSubscription) {
+      this._searchValueSubscription.unsubscribe();
+    }
+
+    if (!!field) {
+      this._searchValueSubscription = fromEvent(field.nativeElement, 'keyup').pipe(
+        filter(Boolean),
+        distinctUntilChanged(),
+        map(() => field.nativeElement.value),
+        tap(inputValue => this.processValuesSelected(inputValue)),
+        debounceTime(300),
+      ).subscribe(inputValue => {
+        this.querySearchService.searchValueFieldChanged(this.selectedField, inputValue);
+      });
+    }
+  }
+
+  private processValuesSelected(inputValue: string) {
+    if (!!inputValue && inputValue.length) {
+      this.selectedValues = inputValue.split(',');
+    } else {
+      this.selectedValues = [];
     }
   }
 }
