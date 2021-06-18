@@ -11,15 +11,14 @@
   }
 
   ::ng-deep {
-    .value-field {
-      .mat-option {
-        height: auto!important;
-        padding-top: 5px!important;
-        padding-bottom: 5px!important;
-      }
+    .mat-option {
+      height: auto !important;
+      padding-top: 5px !important;
+      padding-bottom: 5px !important;
     }
+
     .mat-form-field-appearance-outline .mat-form-field-wrapper {
-      margin: 0!important;
+      margin: 0 !important;
       padding-bottom: 5px;
     }
   }
@@ -33,31 +32,31 @@
   }
 
   .notate-group-after {
-    position: relative!important;
+    position: relative !important;
     min-width: 30px;
     padding-bottom: 5px;
     margin-left: 2px;
   }
 
   .separate-fields {
-    position: relative!important;
+    position: relative !important;
     min-width: 100px;
     padding-bottom: 5px;
 
-    @media screen and (max-width: 1024px){
+    @media screen and (max-width: 1024px) {
       min-width: 50px;
     }
   }
 
   .separate-button {
-    position: relative!important;
+    position: relative !important;
     min-width: 25px;
     padding-bottom: 5px;
   }
 
   .delete-button {
     margin-bottom: 5px;
-    box-shadow: none!important;
+    box-shadow: none !important;
   }
 }
 
@@ -121,16 +120,16 @@ span.value-option {
   input.search-options {
     flex: 1;
     height: 24px;
-    border: none!important;
-    border-bottom: 1px solid!important;
-    outline: none!important;
+    border: none !important;
+    border-bottom: 1px solid !important;
+    outline: none !important;
     background: transparent;
     font-size: 16px;
     padding-left: 2px;
   }
 
   mat-icon {
-    border-bottom: 1px solid!important;
+    border-bottom: 1px solid !important;
     margin-right: 0;
     padding-bottom: 1px;
     margin-left: -3px;
