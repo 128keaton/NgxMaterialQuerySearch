@@ -11,6 +11,13 @@
   }
 
   ::ng-deep {
+    .value-field {
+      .mat-option {
+        height: auto!important;
+        padding-top: 5px!important;
+        padding-bottom: 5px!important;
+      }
+    }
     .mat-form-field-appearance-outline .mat-form-field-wrapper {
       margin: 0!important;
       padding-bottom: 5px;
@@ -100,7 +107,6 @@ span.value-option {
     font-size: 10px;
     line-height: 10px;
     white-space: break-spaces;
-    color: gray;
   }
 }
 
