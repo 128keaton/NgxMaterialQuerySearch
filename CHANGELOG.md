@@ -1,4 +1,8 @@
 # 0.2.8
+- Improved:
+  - Fixes some spacing issues with between date fields
+
+# 0.2.8
 - Fixed:
   - Reverts color changes on search dropdown
   

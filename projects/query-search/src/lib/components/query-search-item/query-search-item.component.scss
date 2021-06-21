@@ -48,6 +48,10 @@
     }
   }
 
+  .between-date-separator {
+    min-width: 90px!important;
+  }
+
   .separate-button {
     position: relative !important;
     min-width: 25px;
@@ -163,6 +167,7 @@ span.value-option {
 
     &:first-child {
       transform: translateY(26px);
+      margin-bottom: 5px;
     }
 
     &:last-child {
