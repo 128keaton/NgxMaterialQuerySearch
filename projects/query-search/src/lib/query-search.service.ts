@@ -21,6 +21,7 @@ export class QuerySearchService {
   };
 
   private readonly _debug: boolean = false;
+  private readonly _sortFields: boolean = true;
   private readonly _generateButtonText: string = 'Generate';
   private readonly _appearance: 'legacy' | 'standard' | 'fill' | 'outline' = 'outline';
   private readonly _transform: (rules: QueryRuleGroup[]) => any;
@@ -29,6 +30,7 @@ export class QuerySearchService {
     this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
     this._loggingCallback = configuration.loggingCallback;
     this._debug = configuration.debug;
+    this._sortFields = configuration.sortFields;
     this._generateButtonText = configuration.generateButtonText;
     this._appearance = configuration.appearance;
     this._transform = configuration.transform;
@@ -39,7 +41,8 @@ export class QuerySearchService {
   }
 
   addFields(fields: QueryField[]) {
-    fields.forEach(field => {
+    const sortedFields = (this._sortFields ? fields.sort((a, b) => a.name.localeCompare(b.name)) : fields);
+    sortedFields.forEach(field => {
       const existingField = this._fields.find(f => f.name === field.name && f.label === field.label);
       if (!existingField) {
         this._fields.push(field);

@@ -1,3 +1,7 @@
+# 0.2.6
+- New:
+  - Added `sortFields` boolean option to config.
+  
 # 0.2.5
 - New:
   - Fields are now sorted alphabetically by their name
