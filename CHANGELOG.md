@@ -1,3 +1,7 @@
+# 0.2.7
+- Fixed:
+  - Colors on search dropdown
+  
 # 0.2.6
 - New:
   - Added `sortFields` boolean option to config.

@@ -129,7 +129,8 @@ span.value-option {
     padding-bottom: 5px;
     padding-top: 5px;
     @media (prefers-color-scheme: dark) {
-      border-bottom-color: white;
+      border-bottom-color: white!important;
+      color: white!important;
     }
   }
 
@@ -137,10 +138,9 @@ span.value-option {
     border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
     margin-right: 0;
     padding-bottom: 5px;
-    padding-top: 5px;
     margin-left: -3px;
     @media (prefers-color-scheme: dark) {
-      border-bottom-color: white;
+      border-bottom-color: white!important;
     }
   }
 }
