@@ -1,3 +1,7 @@
+# 0.2.4
+- Fixed:
+  - Minimum width on fields not being set
+  
 # 0.2.3
 - New:
   - Between date fields now show start/end date fields
