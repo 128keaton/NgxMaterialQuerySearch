@@ -41,6 +41,11 @@ export class AppComponent{
         displayValue: 'Value B',
         value: 'B',
         description: 'This is kinda long, but only kinda'
+      },
+      {
+        displayValue: 'Value 1',
+        value: '1',
+        description: 'This is kinda long, but only kinda. Actually, never mind, its very long. I am writing this because I need a long string here to test. But who knows? I could be typing forever!'
       }
     ]).pipe(
       delay(2000)

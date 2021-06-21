@@ -42,6 +42,9 @@ export class QuerySearchItemComponent implements AfterViewInit {
   @ViewChildren('searchInput')
   searchInputs: QueryList<ElementRef>;
 
+  allValues: any[] | ProvidedValue[] = [];
+  visibleValues: any[] | ProvidedValue[] = [];
+  searchValue: string = '';
   selectedValues: any[] = [];
   operators: string[];
   fields: Observable<QueryField[]>;
@@ -56,7 +59,6 @@ export class QuerySearchItemComponent implements AfterViewInit {
   private _item: QueryItem;
   private _valuesObservable: Observable<any[]>;
   private _fieldValueSubscription: Subscription;
-  private _searchValueSubscription: Subscription;
 
   constructor(private querySearchService: QuerySearchService, private dateAdapter: DateAdapter<any>) {
     this.operators = querySearchService.operators;
@@ -72,8 +74,6 @@ export class QuerySearchItemComponent implements AfterViewInit {
 
     // Remove the stupid ripple
     this.searchInputs.changes.subscribe((changes: QueryList<ElementRef>) => {
-      this.setupSearchValueListener(changes.first);
-
       const matOption = changes.first.nativeElement.parentElement.parentElement.parentElement
       const matRipple = matOption.querySelector('.mat-ripple');
 
@@ -141,8 +141,11 @@ export class QuerySearchItemComponent implements AfterViewInit {
   get values(): Observable<any[] | ProvidedValue[]> {
     if (!!this.selectedField && !!this.selectedField.values) {
       if (this.selectedField.values instanceof Observable) {
-        return this._valuesObservable;
+        return this._valuesObservable.pipe(
+          tap(values => this.updateValues(values))
+        )
       } else {
+        this.updateValues(this.selectedField.values);
         return of(this.selectedField.values)
       }
     }
@@ -218,6 +221,25 @@ export class QuerySearchItemComponent implements AfterViewInit {
     event.stopImmediatePropagation();
   }
 
+  searchValueChanged(partialValue: string) {
+    if (partialValue.trim().length) {
+      this.visibleValues = this.allValues.filter((value: any | ProvidedValue) => {
+        const lowerValue = partialValue.toLowerCase();
+        if (value.hasOwnProperty('displayValue')) {
+          if (value.hasOwnProperty('description') && value.description) {
+            return value.value.toLowerCase().includes(lowerValue) || value.displayValue.toLowerCase().includes(lowerValue) || value.description.toLowerCase().includes(lowerValue)
+          }
+
+          return value.value.toLowerCase().includes(lowerValue) || value.displayValue.toLowerCase().includes(lowerValue)
+        }
+
+        return `${value}`.includes(lowerValue);
+      })
+    } else {
+      this.visibleValues = this.allValues;
+    }
+  }
+
   private loadFieldFromItem() {
     if (!!this.item && !!this.item.fieldName && !this.selectedField) {
       this.querySearchService.fields.subscribe(fields => {
@@ -265,29 +287,19 @@ export class QuerySearchItemComponent implements AfterViewInit {
     }
   }
 
-  private setupSearchValueListener(field: ElementRef) {
-    if (this._searchValueSubscription) {
-      this._searchValueSubscription.unsubscribe();
-    }
-
-    if (!!field) {
-      this._searchValueSubscription = fromEvent(field.nativeElement, 'keyup').pipe(
-        filter(Boolean),
-        distinctUntilChanged(),
-        map(() => field.nativeElement.value),
-        tap(inputValue => this.processValuesSelected(inputValue)),
-        debounceTime(300),
-      ).subscribe(inputValue => {
-        this.querySearchService.searchValueFieldChanged(this.selectedField, inputValue);
-      });
-    }
-  }
-
   private processValuesSelected(inputValue: string) {
     if (!!inputValue && inputValue.length) {
       this.selectedValues = inputValue.split(',');
     } else {
       this.selectedValues = [];
     }
+  }
+
+  private updateValues(values: any[] | ProvidedValue[]) {
+    if (this.searchValue.length === 0) {
+      this.visibleValues = values;
+    }
+
+    this.allValues = values;
   }
 }

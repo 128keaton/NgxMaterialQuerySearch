@@ -52,23 +52,25 @@
         <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
       </div>
       <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
-        <mat-option *ngIf="false">
+        <mat-option>
           <div (click)="searchOptionClicked($event)" class="search-options-wrapper">
             <mat-icon>search</mat-icon>
-            <input class="search-options" #searchInput placeholder="Search values" (keydown)="searchValues($event)">
+            <input class="search-options" #searchInput placeholder="Search values" (keydown)="searchValues($event)" [(ngModel)]="searchValue" (ngModelChange)="searchValueChanged($event)">
           </div>
         </mat-option>
-        <mat-option *ngFor="let value of values|async" [value]="selectedValues">
-          <div (click)="optionClicked($event, value)">
-            <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
-                          (click)="$event.stopPropagation()">
+        <ng-container *ngFor="let value of values|async">
+          <mat-option class="ngx-mat-query-search-autocomplete-option"  [value]="selectedValues" *ngIf="visibleValues.includes(value)">
+            <div (click)="optionClicked($event, value)">
+              <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
+                            (click)="$event.stopPropagation()" disableRipple>
               <span class="value-option">
                 <span class="option-label">{{value['displayValue'] || value}}</span>
                 <span class="option-description" *ngIf="value['description'] as description">{{description}}</span>
               </span>
-            </mat-checkbox>
-          </div>
-        </mat-option>
+              </mat-checkbox>
+            </div>
+          </mat-option>
+        </ng-container>
       </mat-autocomplete>
     </mat-form-field>
   </ng-container>

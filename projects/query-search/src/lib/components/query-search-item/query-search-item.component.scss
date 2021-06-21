@@ -11,12 +11,6 @@
   }
 
   ::ng-deep {
-    .mat-option {
-      height: auto !important;
-      padding-top: 5px !important;
-      padding-bottom: 5px !important;
-    }
-
     .mat-form-field-appearance-outline .mat-form-field-wrapper {
       margin: 0 !important;
       padding-bottom: 5px;
@@ -121,17 +115,20 @@ span.value-option {
     flex: 1;
     height: 24px;
     border: none !important;
-    border-bottom: 1px solid !important;
+    border-bottom: 1px solid!important;
     outline: none !important;
     background: transparent;
-    font-size: 16px;
     padding-left: 2px;
+    font-size: 14px;
+    padding-bottom: 5px;
+    padding-top: 5px;
   }
 
   mat-icon {
-    border-bottom: 1px solid !important;
+    border-bottom: 1px solid gray !important;
     margin-right: 0;
-    padding-bottom: 1px;
+    padding-bottom: 5px;
+    padding-top: 5px;
     margin-left: -3px;
   }
 }

@@ -9,3 +9,11 @@
     }
   }
 }
+
+::ng-deep {
+  .ngx-mat-query-search-autocomplete-option {
+    height: auto !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+}
