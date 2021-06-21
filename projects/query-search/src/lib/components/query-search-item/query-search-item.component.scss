@@ -128,10 +128,6 @@ span.value-option {
     font-size: 14px;
     padding-bottom: 5px;
     padding-top: 5px;
-    @media (prefers-color-scheme: dark) {
-      border-bottom-color: white!important;
-      color: white!important;
-    }
   }
 
   mat-icon {
@@ -139,9 +135,6 @@ span.value-option {
     margin-right: 0;
     padding-bottom: 5px;
     margin-left: -3px;
-    @media (prefers-color-scheme: dark) {
-      border-bottom-color: white!important;
-    }
   }
 }
 

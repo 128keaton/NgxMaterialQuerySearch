@@ -1,3 +1,7 @@
+# 0.2.8
+- Fixed:
+  - Reverts color changes on search dropdown
+  
 # 0.2.7
 - Fixed:
   - Colors on search dropdown
