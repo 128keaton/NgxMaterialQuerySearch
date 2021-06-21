@@ -29,7 +29,7 @@ export class QueryFieldsDirective {
         label: field.label,
         tooltip: field.tooltip
       }
-    });
+    }).sort((a, b) => a.name.localeCompare(b.name))
   }
 
 }
