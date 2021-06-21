@@ -10,37 +10,14 @@
 <mat-checkbox class="disable-checkbox" [(ngModel)]="item.active"></mat-checkbox>
 <mat-divider class="separate-button" [class.pad-dividers]="padDividers"></mat-divider>
 
-<mat-form-field [appearance]="formFieldAppearance" class="name-field">
-  <mat-label>Field Name</mat-label>
-  <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldSelected($event)">
-    <mat-option *ngFor="let field of (fields|async)" [value]="field">
-      <span class="field-value" *ngIf="field.tooltip" [matTooltip]="field.tooltip"
-            matTooltipPosition="right">{{field.label || field.name}}</span>
-      <span class="field-value" *ngIf="!field.tooltip">{{field.label || field.name}}</span>
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<ng-container *ngIf="showOperatorField">
-  <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
-  <mat-form-field id="operatorField" [appearance]="formFieldAppearance" class="operator-field">
-    <mat-label>Operator</mat-label>
-    <mat-select [(ngModel)]="item.condition" (ngModelChange)="operatorSelected()">
-      <mat-option *ngFor="let operator of operators" [value]="operator">
-        {{operator|operatorName}} <span [style]="operatorStyle"
-                                        *ngIf="(operator|operatorName: true)">{{operator|operatorName: true}}</span>
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-</ng-container>
+<name-field [(selectedField)]="selectedField" (selectedFieldChange)="fieldSelected($event)"></name-field>
+
+<operator-field *ngIf="showOperatorField" [item]="item" (operatorSelected)="operatorSelected($event)"></operator-field>
 
 <ng-container *ngIf="showValueField">
   <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
   <ng-container *ngIf="!isDate; else dateField">
-    <mat-form-field [appearance]="formFieldAppearance" *ngIf="!hasValues" class="value-field">
-      <mat-label>Value</mat-label>
-      <input autocomplete="off" *ngIf="!isNumber" matInput [(ngModel)]="item.value">
-      <input autocomplete="off" *ngIf="isNumber" type="number" matInput [(ngModel)]="item.value">
-    </mat-form-field>
+    <plain-value-field [item]="item" [isNumber]="isNumber" *ngIf="!hasValues"></plain-value-field>
 
     <mat-form-field [appearance]="formFieldAppearance" *ngIf="hasValues" class="value-field">
       <mat-label>Value</mat-label>
@@ -52,14 +29,16 @@
         <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
       </div>
       <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
-        <mat-option>
+        <mat-option *ngIf="!($loading|async) && (totalValues|async)">
           <div (click)="searchOptionClicked($event)" class="search-options-wrapper">
-            <mat-icon>search</mat-icon>
-            <input class="search-options" #searchInput placeholder="Search values" (keydown)="searchValues($event)" [(ngModel)]="searchValue" (ngModelChange)="searchValueChanged($event)">
+            <mat-icon (click)="clearSearch()" matTooltip="Clear Search">search</mat-icon>
+            <input class="search-options" #searchInput placeholder="Search values" (keydown)="searchValues($event)"
+                   [(ngModel)]="searchValue" (ngModelChange)="searchValueChanged($event)">
           </div>
         </mat-option>
         <ng-container *ngFor="let value of values|async">
-          <mat-option class="ngx-mat-query-search-autocomplete-option"  [value]="selectedValues" *ngIf="visibleValues.includes(value)">
+          <mat-option class="ngx-mat-query-search-autocomplete-option" [value]="selectedValues"
+                      *ngIf="visibleValues.includes(value)">
             <div (click)="optionClicked($event, value)">
               <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
                             (click)="$event.stopPropagation()" disableRipple>
@@ -75,12 +54,39 @@
     </mat-form-field>
   </ng-container>
   <ng-template #dateField>
-    <mat-form-field [appearance]="formFieldAppearance" class="value-field">
-      <mat-label>Value</mat-label>
-      <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="item.value"
-             (ngModelChange)="dateUpdated($event)">
-      <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
-      <mat-datepicker #valuePicker></mat-datepicker>
-    </mat-form-field>
+    <div class="between-dates" *ngIf="isBetweenDate; else singleDateField">
+      <mat-divider vertical class="between-dates-outer"></mat-divider>
+      <div class="between-dates-fields" [class.show]="showBetweenDateFields">
+        <div class="between-date-field">
+          <mat-divider></mat-divider>
+          <mat-form-field [appearance]="formFieldAppearance" class="value-field">
+            <mat-label>Start Date</mat-label>
+            <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="leftDate"
+                   (ngModelChange)="betweenDateUpdated()">
+            <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
+            <mat-datepicker #valuePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="between-date-field">
+          <mat-divider></mat-divider>
+          <mat-form-field [appearance]="formFieldAppearance" class="value-field" *ngIf="isBetweenDate">
+            <mat-label>End Date</mat-label>
+            <input matInput autocomplete="off" [matDatepicker]="secondValuePicker" [(ngModel)]="rightDate"
+                   (ngModelChange)="betweenDateUpdated()">
+            <mat-datepicker-toggle matSuffix [for]="secondValuePicker"></mat-datepicker-toggle>
+            <mat-datepicker #secondValuePicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <ng-template #singleDateField>
+      <mat-form-field [appearance]="formFieldAppearance" class="value-field">
+        <mat-label>Value</mat-label>
+        <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="item.value"
+               (ngModelChange)="dateUpdated($event)">
+        <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
+        <mat-datepicker #valuePicker></mat-datepicker>
+      </mat-form-field>
+    </ng-template>
   </ng-template>
 </ng-container>

@@ -9,7 +9,7 @@ export function getEnumKeyByEnumValue(myEnum: any, enumValue: string) {
   return keys.length > 0 ? keys[0] : null;
 }
 
-export function transformValue(value: any, type: string, operator: ConditionOperator) {
+export function transformValue(value: any, type: string) {
   let returnValue;
 
   switch (type) {
@@ -23,7 +23,12 @@ export function transformValue(value: any, type: string, operator: ConditionOper
      returnValue = transformToDate(value);
      break;
     default:
-      returnValue = `${value}`;
+      if (`${value}`.includes(',')) {
+        returnValue = `${value}`.split(',')
+      } else {
+        returnValue = `${value}`;
+      }
+
       break;
   }
 
@@ -64,10 +69,14 @@ export function transformToBoolean(value: any) {
   }
 }
 
-export function transformToDate(value: any) {
-  try {
-    return new Date(value).toISOString();
-  } catch (e) {
-    return undefined;
+export function transformToDate(value: any): string | string[] | undefined {
+  if (value instanceof Array) {
+    return value.map(v => transformToDate(v)) as string[];
+  } else {
+    try {
+      return new Date(value).toISOString();
+    } catch (e) {
+      return undefined;
+    }
   }
 }

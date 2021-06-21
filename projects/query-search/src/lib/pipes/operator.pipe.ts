@@ -27,7 +27,8 @@ export class OperatorPipe implements PipeTransform {
         .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
         .join(' ')
         .replace('Lower Than', 'Less Than')
-        .replace('Null', 'NULL');
+        .replace('Not Null', 'Is Not Null')
+        .replace('Null', '<pre class="null-class">NULL</pre>')
     }
 
     return value;

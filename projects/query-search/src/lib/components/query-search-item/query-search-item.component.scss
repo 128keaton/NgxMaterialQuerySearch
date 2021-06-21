@@ -5,6 +5,12 @@
   padding-left: 1em;
   padding-bottom: 5px;
   position: relative;
+  transition: min-height 300ms ease-in-out;
+  min-height: 72px;
+
+  &.double-height {
+    min-height: 128px;
+  }
 
   .name-field, .operator-field, .value-field {
     min-width: 220px;
@@ -115,7 +121,7 @@ span.value-option {
     flex: 1;
     height: 24px;
     border: none !important;
-    border-bottom: 1px solid rgba(0,0,0,.12)!important;
+    border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
     outline: none !important;
     background: transparent;
     padding-left: 2px;
@@ -128,13 +134,51 @@ span.value-option {
   }
 
   mat-icon {
-    border-bottom: 1px solid rgba(0,0,0,.12) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
     margin-right: 0;
     padding-bottom: 5px;
     padding-top: 5px;
     margin-left: -3px;
     @media (prefers-color-scheme: dark) {
       border-bottom-color: white;
+    }
+  }
+}
+
+.between-dates {
+  position: relative;
+
+  .between-dates-outer {
+    position: absolute;
+    left: 0;
+    top: 2em;
+    bottom: 2em;
+  }
+
+  .between-dates-fields {
+    &.show {
+      .between-date-field {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .between-date-field {
+    display: flex;
+    align-items: center;
+    transition: transform 300ms ease-in-out;
+
+    &:first-child {
+      transform: translateY(26px);
+    }
+
+    &:last-child {
+      transform: translateY(-26px);
+    }
+
+    mat-divider {
+      width: 7px;
+      margin-left: 1px;
     }
   }
 }

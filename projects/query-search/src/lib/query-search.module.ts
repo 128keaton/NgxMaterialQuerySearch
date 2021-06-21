@@ -22,6 +22,9 @@ import {MatDividerModule} from "@angular/material/divider";
 import {QuerySearchService} from "./query-search.service";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {OperatorFieldComponent} from './components/fields/operator-field/operator-field.component';
+import {NameFieldComponent} from './components/fields/name-field/name-field.component';
+import {PlainValueFieldComponent} from './components/fields/plain-value-field/plain-value-field.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     GroupTypeSelectorComponent,
     QueryFieldDirective,
     QueryFieldsDirective,
-    OperatorPipe
+    OperatorPipe,
+    OperatorFieldComponent,
+    NameFieldComponent,
+    PlainValueFieldComponent,
   ],
   imports: [
     CommonModule,

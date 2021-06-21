@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
+  EventEmitter, HostBinding,
   Input,
   Output,
   QueryList,
@@ -46,10 +46,16 @@ export class QuerySearchItemComponent implements AfterViewInit {
   @ViewChildren('searchInput')
   searchInputs: QueryList<ElementRef>;
 
+  @HostBinding('class.double-height')
+  doubleHeight = false;
+
+  totalValues: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   allValues: any[] | ProvidedValue[] = [];
   visibleValues: any[] | ProvidedValue[] = [];
   searchValue: string = '';
   selectedValues: any[] = [];
+  leftDate: Date;
+  rightDate: Date;
   operators: string[];
   fields: Observable<QueryField[]>;
   selectedField: QueryField;
@@ -61,7 +67,9 @@ export class QuerySearchItemComponent implements AfterViewInit {
    `;
 
   values: Observable<any[]>;
+  showBetweenDateFields = false;
 
+  private _currentOperator: string;
   private _item: QueryItem;
   private _valuesObservable: Observable<any[]>;
   private _fieldValueSubscription: Subscription;
@@ -77,16 +85,20 @@ export class QuerySearchItemComponent implements AfterViewInit {
   ngAfterViewInit() {
     // Listen for input changes on an autocomplete input
     this.valueInputs.changes.subscribe((changes: QueryList<ElementRef>) => {
-      this.setupFieldValueListener(changes.first);
+      if (!!changes && !!changes.first) {
+        this.setupFieldValueListener(changes.first);
+      }
     });
 
     // Remove the stupid ripple
     this.searchInputs.changes.subscribe((changes: QueryList<ElementRef>) => {
-      const matOption = changes.first.nativeElement.parentElement.parentElement.parentElement
-      const matRipple = matOption.querySelector('.mat-ripple');
+      if (!!changes && !!changes.first) {
+        const matOption = changes.first.nativeElement.parentElement.parentElement.parentElement
+        const matRipple = matOption.querySelector('.mat-ripple');
 
-      if (!!matRipple) {
-        matRipple.remove();
+        if (!!matRipple) {
+          matRipple.remove();
+        }
       }
     })
   }
@@ -124,6 +136,14 @@ export class QuerySearchItemComponent implements AfterViewInit {
     return false;
   }
 
+  get isBetweenDate(): boolean {
+    if (!!this.selectedField && !!this._currentOperator) {
+      return this.isDate && this._currentOperator === 'BETWEEN';
+    }
+
+    return false;
+  }
+
   get isNumber() {
     if (!!this.selectedField) {
       return this.selectedField.type === 'number';
@@ -152,10 +172,14 @@ export class QuerySearchItemComponent implements AfterViewInit {
     if (!!this.selectedField && !!this.selectedField.values) {
       if (this.selectedField.values instanceof Observable) {
         return this._valuesObservable.pipe(
-          tap(values => this.updateValues(values))
+          tap(values => {
+            this.updateValues(values);
+            this.totalValues.next(values.length);
+          })
         )
       } else if (this.selectedField.values.length > 0) {
         this.updateValues(this.selectedField.values);
+        this.totalValues.next(this.selectedField.values.length);
         return of(this.selectedField.values)
       }
     }
@@ -172,17 +196,25 @@ export class QuerySearchItemComponent implements AfterViewInit {
         }
       ];
 
+      this.totalValues.next(2);
       this.updateValues(booleanValues);
       return of(booleanValues).pipe(
         shareReplay(1)
       )
     }
 
-    return of([])
+    this.totalValues.next(0);
+    return of([]);
   }
 
   dateUpdated(newDate: Date) {
     this.querySearchService.log('Date updated', newDate);
+    this.querySearchService.log('Formatted date', this.item.value);
+  }
+
+  betweenDateUpdated() {
+    this.item.value = [this.leftDate, this.rightDate];
+    this.querySearchService.log('Date updated', this.leftDate, this.rightDate);
     this.querySearchService.log('Formatted date', this.item.value);
   }
 
@@ -242,11 +274,20 @@ export class QuerySearchItemComponent implements AfterViewInit {
     return false;
   }
 
-  operatorSelected() {
+  operatorSelected(operator: any) {
     setTimeout(this.setupFieldValueListener, 300);
     this.selectedValues = [];
+    this._currentOperator = operator;
     this.item.value = null;
     this.querySearchService.log('Clearing selected values for', this);
+
+    if (this.isBetweenDate) {
+      this.doubleHeight = true;
+      setTimeout(() => this.showBetweenDateFields = true, 100);
+    } else {
+      this.doubleHeight = false;
+      this.showBetweenDateFields = false;
+    }
   }
 
   searchValues(event: Event) {
@@ -269,6 +310,13 @@ export class QuerySearchItemComponent implements AfterViewInit {
       })
     } else {
       this.visibleValues = this.allValues;
+    }
+  }
+
+  clearSearch() {
+    this.searchValueChanged('');
+    if (!!this.searchInputs.first) {
+      this.searchInputs.first.nativeElement.value = '';
     }
   }
 

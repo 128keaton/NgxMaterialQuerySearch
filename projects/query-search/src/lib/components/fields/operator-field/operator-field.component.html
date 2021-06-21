@@ -1,0 +1,10 @@
+<mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
+<mat-form-field id="operatorField" [appearance]="formFieldAppearance" class="operator-field">
+  <mat-label>Operator</mat-label>
+  <mat-select [(ngModel)]="item.condition" (ngModelChange)="operatorSelected.emit($event)">
+    <mat-option *ngFor="let operator of operators" [value]="operator">
+     <span [innerHTML]="operator|operatorName"></span> <span [style]="operatorStyle"
+                                      *ngIf="(operator|operatorName: true)">{{operator|operatorName: true}}</span>
+    </mat-option>
+  </mat-select>
+</mat-form-field>

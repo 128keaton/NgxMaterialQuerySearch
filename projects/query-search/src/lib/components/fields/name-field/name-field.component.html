@@ -1,0 +1,10 @@
+<mat-form-field [appearance]="formFieldAppearance" class="name-field">
+  <mat-label>Field Name</mat-label>
+  <mat-select [(ngModel)]="selectedField" (ngModelChange)="selectedFieldChange.emit($event)">
+    <mat-option *ngFor="let field of (fields|async)" [value]="field">
+      <span class="field-value" *ngIf="field.tooltip" [matTooltip]="field.tooltip"
+            matTooltipPosition="right">{{field.label || field.name}}</span>
+      <span class="field-value" *ngIf="!field.tooltip">{{field.label || field.name}}</span>
+    </mat-option>
+  </mat-select>
+</mat-form-field>

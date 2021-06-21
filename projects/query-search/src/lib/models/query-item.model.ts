@@ -28,7 +28,7 @@ export class QueryItem extends QueryBase {
       return {
         field: this.fieldName,
         operator,
-        value: transformValue(this.value, this.type, operator),
+        value: transformValue(this.value, this.type),
         type: this.type,
         active: this.active,
         valid: true
