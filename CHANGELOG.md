@@ -1,3 +1,7 @@
+# 0.2.5
+- New:
+  - Fields are now sorted alphabetically by their name
+  
 # 0.2.4
 - Fixed:
   - Minimum width on fields not being set
