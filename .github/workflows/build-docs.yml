@@ -20,6 +20,10 @@ jobs:
         run: npm i
       - name: Build Library
         run: npm run build
+      - name: Link Library
+        run: cd dist/ngx-query-search && npm link
+      - name: Link Library to root
+        run: npm link ngx-mat-query-search
       - name: Build Demo 1
         run: npm run build-demo
       - name: Build Demo 2
