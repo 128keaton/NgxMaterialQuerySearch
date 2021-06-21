@@ -23,10 +23,12 @@ export class QueryItem extends QueryBase {
 
   get filterValue(): QueryRule {
     if (isDefined(this.fieldName) && isDefined(this.type) && isDefined(this.condition) && this.checkNullCondition()) {
+      const operator = (ConditionOperator as any)[this.condition];
+
       return {
         field: this.fieldName,
-        operator: (ConditionOperator as any)[this.condition],
-        value: transformValue(this.value, this.type),
+        operator,
+        value: transformValue(this.value, this.type, operator),
         type: this.type,
         active: this.active,
         valid: true

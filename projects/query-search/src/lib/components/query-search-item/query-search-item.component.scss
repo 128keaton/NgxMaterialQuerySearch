@@ -115,20 +115,26 @@ span.value-option {
     flex: 1;
     height: 24px;
     border: none !important;
-    border-bottom: 1px solid!important;
+    border-bottom: 1px solid rgba(0,0,0,.12)!important;
     outline: none !important;
     background: transparent;
     padding-left: 2px;
     font-size: 14px;
     padding-bottom: 5px;
     padding-top: 5px;
+    @media (prefers-color-scheme: dark) {
+      border-bottom-color: white;
+    }
   }
 
   mat-icon {
-    border-bottom: 1px solid gray !important;
+    border-bottom: 1px solid rgba(0,0,0,.12) !important;
     margin-right: 0;
     padding-bottom: 5px;
     padding-top: 5px;
     margin-left: -3px;
+    @media (prefers-color-scheme: dark) {
+      border-bottom-color: white;
+    }
   }
 }

@@ -1,17 +1,20 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
   ElementRef,
   EventEmitter,
+  Input,
+  Output,
   QueryList,
   ViewChildren
 } from '@angular/core';
-import {Component, Input, Output} from '@angular/core';
-import {QueryItem, QueryField, ProvidedValue} from "../../models";
+import {ProvidedValue, QueryField, QueryItem} from "../../models";
 import {QuerySearchService} from "../../query-search.service";
 import {BehaviorSubject, fromEvent, Observable, of, Subscription} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
 import {CustomDateAdapter} from "../../adapters";
-import {debounceTime, distinctUntilChanged, filter, map, tap} from "rxjs/operators";
+import {distinctUntilChanged, filter, map, shareReplay, tap} from "rxjs/operators";
 
 @Component({
   selector: 'query-search-item',
@@ -19,7 +22,8 @@ import {debounceTime, distinctUntilChanged, filter, map, tap} from "rxjs/operato
   styleUrls: ['./query-search-item.component.scss'],
   viewProviders: [
     {provide: DateAdapter, useClass: CustomDateAdapter}
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuerySearchItemComponent implements AfterViewInit {
 
@@ -56,11 +60,15 @@ export class QuerySearchItemComponent implements AfterViewInit {
    color: gray
    `;
 
+  values: Observable<any[]>;
+
   private _item: QueryItem;
   private _valuesObservable: Observable<any[]>;
   private _fieldValueSubscription: Subscription;
 
-  constructor(private querySearchService: QuerySearchService, private dateAdapter: DateAdapter<any>) {
+  constructor(private querySearchService: QuerySearchService,
+              private changeDetectorRef: ChangeDetectorRef,
+              private dateAdapter: DateAdapter<any>) {
     this.operators = querySearchService.operators;
     this.fields = querySearchService.fields;
   }
@@ -96,6 +104,8 @@ export class QuerySearchItemComponent implements AfterViewInit {
     this.updateDateFormat();
     this.checkForObservable();
     this.item.value = null;
+    this.selectedValues = [];
+    this.values = this.getValues();
   }
 
   get hasValues(): boolean {
@@ -138,16 +148,34 @@ export class QuerySearchItemComponent implements AfterViewInit {
     return false;
   }
 
-  get values(): Observable<any[] | ProvidedValue[]> {
+  getValues(): Observable<any[] | ProvidedValue[]> {
     if (!!this.selectedField && !!this.selectedField.values) {
       if (this.selectedField.values instanceof Observable) {
         return this._valuesObservable.pipe(
           tap(values => this.updateValues(values))
         )
-      } else {
+      } else if (this.selectedField.values.length > 0) {
         this.updateValues(this.selectedField.values);
         return of(this.selectedField.values)
       }
+    }
+
+    if (this.selectedField.type === 'boolean') {
+      const booleanValues = [
+        {
+          value: 'true',
+          displayValue: 'True'
+        },
+        {
+          value: 'false',
+          displayValue: 'False'
+        }
+      ];
+
+      this.updateValues(booleanValues);
+      return of(booleanValues).pipe(
+        shareReplay(1)
+      )
     }
 
     return of([])
@@ -191,6 +219,7 @@ export class QuerySearchItemComponent implements AfterViewInit {
     }
 
     this.item.value = this.selectedValues.join(',');
+    this.changeDetectorRef.detectChanges();
   }
 
   get formFieldAppearance() {
@@ -215,6 +244,9 @@ export class QuerySearchItemComponent implements AfterViewInit {
 
   operatorSelected() {
     setTimeout(this.setupFieldValueListener, 300);
+    this.selectedValues = [];
+    this.item.value = null;
+    this.querySearchService.log('Clearing selected values for', this);
   }
 
   searchValues(event: Event) {
@@ -280,7 +312,6 @@ export class QuerySearchItemComponent implements AfterViewInit {
         distinctUntilChanged(),
         map(() => field.nativeElement.value),
         tap(inputValue => this.processValuesSelected(inputValue)),
-        debounceTime(300),
       ).subscribe(inputValue => {
         this.querySearchService.valueFieldChanged(this.selectedField, inputValue);
       });
@@ -293,6 +324,8 @@ export class QuerySearchItemComponent implements AfterViewInit {
     } else {
       this.selectedValues = [];
     }
+
+    this.changeDetectorRef.detectChanges();
   }
 
   private updateValues(values: any[] | ProvidedValue[]) {
