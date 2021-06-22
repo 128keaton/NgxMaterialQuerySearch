@@ -31,7 +31,7 @@ export class AppComponent{
       name: 'Other Name'
     });
 
-    let alphabet = 'abcdefghijklmnopqrstuv';
+    let alphabet = 'abcdefghijklmnopqrstuvwzyz123456789';
     let values = alphabet.split('').map(letter => {
       return {
         displayValue: `Value ${letter.toUpperCase()}`,
