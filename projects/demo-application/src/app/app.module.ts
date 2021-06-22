@@ -25,6 +25,7 @@ import {MatButtonModule} from "@angular/material/button";
       },
       debug: true,
       appearance: 'outline',
+      limitResults: 20,
       transform: rules => {
         console.log('Transform me', rules);
         return rules;
