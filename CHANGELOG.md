@@ -1,3 +1,7 @@
+# 0.3.2
+- Fixed:
+  - All search options not displaying in results
+  
 # 0.3.1
 - Fixed:
   - Field/operator suffixes being crammed in the select

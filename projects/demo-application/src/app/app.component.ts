@@ -31,7 +31,7 @@ export class AppComponent{
       name: 'Other Name'
     });
 
-    let alphabet = 'abcdefghijklmnopqrstuvwzyz123456789';
+    let alphabet = 'abcdefghijklmnopqrstuvwxyz123456789';
     let values = alphabet.split('').map(letter => {
       return {
         displayValue: `Value ${letter.toUpperCase()}`,
@@ -39,6 +39,7 @@ export class AppComponent{
         description: `This is value ${letter.toUpperCase()}`
       }
     });
+
 
     this.observableValues = of(values).pipe(
       delay(2000)

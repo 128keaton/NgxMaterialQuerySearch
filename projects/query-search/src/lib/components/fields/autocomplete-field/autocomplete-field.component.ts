@@ -231,24 +231,31 @@ export class AutocompleteFieldComponent implements AfterViewInit {
       startWith(null),
       switchMap(searchValue => {
         return this.values.pipe(
-          map(values => {
+          map(rawValues => {
+            const values = Object.assign([], rawValues);
             const lowerValue = (searchValue || '').trim().toLowerCase();
 
             if (lowerValue.length > 0) {
               return this.mapSearchValues(lowerValue, values)
             }
 
-
             return values;
           }),
-          map(values => {
-            if (!!this.maxResults && values.length > this.maxResults) {
-              return values.splice(0, this.maxResults);
-            }
-
-            return values;
-          })
         );
+      }),
+      map(values => {
+        if (!!this.maxResults && values.length > this.maxResults && (!this.currentSearchValue || this.currentSearchValue.trim().length === 0)) {
+          const returnedValues: any[] = [];
+          values.forEach((value, index) => {
+            if (index + 1 < (this.maxResults || 50)) {
+              returnedValues.push(value);
+            }
+          });
+
+          return [...new Set(returnedValues)];
+        }
+
+        return values;
       })
     )
   }
