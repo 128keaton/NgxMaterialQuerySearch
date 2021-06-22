@@ -1,3 +1,12 @@
+# 0.3.0
+- Improved:
+  - Search performance on a list of large values.
+  
+- New:
+  - Switched to `ngx-mat-select-search` to handle selects (field name and operator).
+  - All operators have a sign now.
+  - Field Name and Operator selects render properly.
+  
 # 0.2.8
 - Improved:
   - Fixes some spacing issues with between date fields

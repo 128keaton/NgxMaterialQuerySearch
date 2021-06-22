@@ -1,10 +1,18 @@
 <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
 <mat-form-field id="operatorField" [appearance]="formFieldAppearance" class="operator-field">
   <mat-label>Operator</mat-label>
-  <mat-select [(ngModel)]="item.condition" (ngModelChange)="operatorSelected.emit($event)">
-    <mat-option *ngFor="let operator of operators" [value]="operator">
-     <span [innerHTML]="operator|operatorName"></span> <span [style]="operatorStyle"
-                                      *ngIf="(operator|operatorName: true)">{{operator|operatorName: true}}</span>
+  <mat-select [(ngModel)]="item.condition" (ngModelChange)="fieldChanged($event)">
+    <mat-select-trigger>
+      <span class="operator-field-trigger" [innerHTML]="operatorFieldTrigger"></span>
+    </mat-select-trigger>
+    <mat-option>
+      <ngx-mat-select-search ngModel placeholderLabel="Search operators..."
+                             noEntriesFoundLabel="No operators found"
+                             (ngModelChange)="searchValueChanged($event)"></ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngFor="let operator of filteredOperators" [value]="operator">
+      <span [innerHTML]="operator|operatorName"></span> <span [style]="operatorStyle"
+                                                              *ngIf="(operator|operatorName: true)">{{operator|operatorName: true}}</span>
     </mat-option>
   </mat-select>
 </mat-form-field>

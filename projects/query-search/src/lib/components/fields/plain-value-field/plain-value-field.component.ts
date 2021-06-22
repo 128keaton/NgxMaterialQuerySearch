@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {QuerySearchService} from "../../../query-search.service";
 import {QueryItem} from "../../../models";
 
@@ -7,7 +7,7 @@ import {QueryItem} from "../../../models";
   templateUrl: './plain-value-field.component.html',
   styleUrls: ['./plain-value-field.component.scss']
 })
-export class PlainValueFieldComponent implements OnInit {
+export class PlainValueFieldComponent {
 
   @Input()
   item: QueryItem;
@@ -16,9 +16,6 @@ export class PlainValueFieldComponent implements OnInit {
   isNumber: boolean = false;
 
   constructor(private querySearchService: QuerySearchService) {}
-
-  ngOnInit(): void {
-  }
 
   get formFieldAppearance() {
     return this.querySearchService.formFieldAppearance;

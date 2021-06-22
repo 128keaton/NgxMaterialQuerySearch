@@ -25,6 +25,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {OperatorFieldComponent} from './components/fields/operator-field/operator-field.component';
 import {NameFieldComponent} from './components/fields/name-field/name-field.component';
 import {PlainValueFieldComponent} from './components/fields/plain-value-field/plain-value-field.component';
+import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
+import { AutocompleteFieldComponent } from './components/fields/autocomplete-field/autocomplete-field.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import {PlainValueFieldComponent} from './components/fields/plain-value-field/pl
     OperatorFieldComponent,
     NameFieldComponent,
     PlainValueFieldComponent,
+    AutocompleteFieldComponent,
   ],
   imports: [
     CommonModule,
@@ -54,7 +57,8 @@ import {PlainValueFieldComponent} from './components/fields/plain-value-field/pl
     MatDatepickerModule,
     MatDividerModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgxMatSelectSearchModule
   ],
   exports: [
     QuerySearchComponent,
@@ -72,6 +76,7 @@ export class QuerySearchModule {
         {
           provide: QUERY_SEARCH_CONFIG, useValue: configuration
         },
+        OperatorPipe,
         QuerySearchService
       ]
     };

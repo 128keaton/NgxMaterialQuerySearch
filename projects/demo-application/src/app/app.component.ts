@@ -31,23 +31,16 @@ export class AppComponent{
       name: 'Other Name'
     });
 
-    this.observableValues = of([
-      {
-        displayValue: 'Value A',
-        value: 'A',
-        description: 'This isn\'t very long'
-      },
-      {
-        displayValue: 'Value B',
-        value: 'B',
-        description: 'This is kinda long, but only kinda'
-      },
-      {
-        displayValue: 'Value 1',
-        value: '1',
-        description: 'This is kinda long, but only kinda. Actually, never mind, its very long. I am writing this because I need a long string here to test. But who knows? I could be typing forever!'
+    let alphabet = 'abcdefghijklmnopqrstuv';
+    let values = alphabet.split('').map(letter => {
+      return {
+        displayValue: `Value ${letter.toUpperCase()}`,
+        value: letter.toUpperCase(),
+        description: `This is value ${letter.toUpperCase()}`
       }
-    ]).pipe(
+    });
+
+    this.observableValues = of(values).pipe(
       delay(2000)
     )
   }

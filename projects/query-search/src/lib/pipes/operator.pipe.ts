@@ -48,6 +48,24 @@ export class OperatorPipe implements PipeTransform {
         return '>=';
       case 'LESS_THAN_EQUALS':
         return '<=';
+      case 'STARTS':
+        return '^';
+      case 'ENDS':
+        return '$';
+      case 'CONTAINS':
+        return '⊃';
+      case 'EXCLUDES':
+        return '!⊃';
+      case 'IN':
+        return '∈';
+      case 'NOT_IN':
+        return '∉';
+      case 'IS_NULL':
+        return '= NULL';
+      case 'NOT_NULL':
+        return '!= NULL';
+      case 'BETWEEN':
+        return '> <';
       default:
         return null;
     }

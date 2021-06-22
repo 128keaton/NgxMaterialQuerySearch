@@ -1,7 +1,16 @@
 <mat-form-field [appearance]="formFieldAppearance" class="name-field">
-  <mat-label>Field Name</mat-label>
-  <mat-select [(ngModel)]="selectedField" (ngModelChange)="selectedFieldChange.emit($event)">
-    <mat-option *ngFor="let field of (fields|async)" [value]="field">
+  <mat-label>Field</mat-label>
+
+  <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldChanged($event)">
+    <mat-select-trigger>
+      <span class="name-field-trigger" [innerHTML]="nameFieldTrigger"></span>
+    </mat-select-trigger>
+    <mat-option>
+      <ngx-mat-select-search ngModel placeholderLabel="Search fields..."
+                             noEntriesFoundLabel="No fields found"
+                             (ngModelChange)="searchValueChanged($event)"></ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngFor="let field of (visibleFields|async)" [value]="field">
       <span class="field-value" *ngIf="field.tooltip" [matTooltip]="field.tooltip"
             matTooltipPosition="right">{{field.label || field.name}}</span>
       <span class="field-value" *ngIf="!field.tooltip">{{field.label || field.name}}</span>

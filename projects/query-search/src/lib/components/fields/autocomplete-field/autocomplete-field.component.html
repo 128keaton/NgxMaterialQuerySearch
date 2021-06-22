@@ -1,0 +1,34 @@
+<mat-form-field [appearance]="formFieldAppearance" class="value-field">
+  <mat-label>Value</mat-label>
+  <input matInput
+         #valueInput
+         [(ngModel)]="item.value"
+         [matAutocomplete]="valueAutoComplete">
+  <div class="input-spinner-wrapper">
+    <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
+  </div>
+  <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
+    <mat-option *ngIf="!($loading|async) && (totalValues|async)" class="ngx-mat-query-search-autocomplete-option ngx-mat-query-search-autocomplete-search-option">
+      <div (click)="searchOptionClicked($event)" class="search-options-wrapper">
+        <mat-form-field class="search-options-field" appearance="standard">
+          <mat-icon matPrefix (click)="clearSearch()" matTooltip="Clear Search">search</mat-icon>
+          <input matInput autocomplete="off" class="search-options" #searchInput placeholder="Search values..." (keydown)="searchValues($event)"
+                 [(ngModel)]="currentSearchValue" (ngModelChange)="searchValueChanged($event)">
+        </mat-form-field>
+      </div>
+    </mat-option>
+    <ng-container *ngFor="let value of visibleValues|async">
+      <mat-option class="ngx-mat-query-search-autocomplete-option" [value]="selectedValues">
+        <div (click)="optionClicked($event, value)" class="ngx-mat-query-search-autocomplete-div">
+          <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
+                        (click)="$event.stopPropagation()" disableRipple>
+              <span class="value-option">
+                <span class="option-label">{{value['displayValue'] || value}}</span>
+                <span class="ngx-mat-query-search-style option-description" *ngIf="value['description'] as description">{{description}}</span>
+              </span>
+          </mat-checkbox>
+        </div>
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+</mat-form-field>

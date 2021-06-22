@@ -15,43 +15,12 @@
 <operator-field *ngIf="showOperatorField" [item]="item" (operatorSelected)="operatorSelected($event)"></operator-field>
 
 <ng-container *ngIf="showValueField">
-  <mat-divider class="separate-fields"  [class.between-date-separator]="isBetweenDate" [class.pad-dividers]="padDividers"></mat-divider>
+  <mat-divider class="separate-fields" [class.between-date-separator]="isBetweenDate"
+               [class.pad-dividers]="padDividers"></mat-divider>
   <ng-container *ngIf="!isDate; else dateField">
     <plain-value-field [item]="item" [isNumber]="isNumber" *ngIf="!hasValues"></plain-value-field>
 
-    <mat-form-field [appearance]="formFieldAppearance" *ngIf="hasValues" class="value-field">
-      <mat-label>Value</mat-label>
-      <input matInput
-             #valueInput
-             [(ngModel)]="item.value"
-             [matAutocomplete]="valueAutoComplete">
-      <div class="input-spinner-wrapper">
-        <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
-      </div>
-      <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
-        <mat-option *ngIf="!($loading|async) && (totalValues|async)">
-          <div (click)="searchOptionClicked($event)" class="search-options-wrapper">
-            <mat-icon (click)="clearSearch()" matTooltip="Clear Search">search</mat-icon>
-            <input class="search-options" #searchInput placeholder="Search values" (keydown)="searchValues($event)"
-                   [(ngModel)]="searchValue" (ngModelChange)="searchValueChanged($event)">
-          </div>
-        </mat-option>
-        <ng-container *ngFor="let value of values|async">
-          <mat-option class="ngx-mat-query-search-autocomplete-option" [value]="selectedValues"
-                      *ngIf="visibleValues.includes(value)">
-            <div (click)="optionClicked($event, value)">
-              <mat-checkbox [checked]="valueSelected(value)" (change)="toggleSelection(value)"
-                            (click)="$event.stopPropagation()" disableRipple>
-              <span class="value-option">
-                <span class="option-label">{{value['displayValue'] || value}}</span>
-                <span class="option-description" *ngIf="value['description'] as description">{{description}}</span>
-              </span>
-              </mat-checkbox>
-            </div>
-          </mat-option>
-        </ng-container>
-      </mat-autocomplete>
-    </mat-form-field>
+    <autocomplete-field [item]="item" [selectedField]="selectedField" *ngIf="hasValues"></autocomplete-field>
   </ng-container>
   <ng-template #dateField>
     <div class="between-dates" *ngIf="isBetweenDate; else singleDateField">
