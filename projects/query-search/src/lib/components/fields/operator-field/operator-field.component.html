@@ -1,7 +1,7 @@
 <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
 <mat-form-field id="operatorField" [appearance]="formFieldAppearance" class="operator-field">
   <mat-label>Operator</mat-label>
-  <mat-select [(ngModel)]="item.condition" (ngModelChange)="fieldChanged($event)">
+  <mat-select [(ngModel)]="item.condition" (ngModelChange)="fieldChanged($event)" class="ngx-mat-query-search-style">
     <mat-select-trigger>
       <span class="operator-field-trigger" [innerHTML]="operatorFieldTrigger"></span>
     </mat-select-trigger>

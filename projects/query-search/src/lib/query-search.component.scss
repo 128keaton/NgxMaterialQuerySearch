@@ -25,6 +25,12 @@
     }
   }
 
+  .ngx-mat-query-search-style {
+    .mat-select-value-text {
+      width: 100%;
+    }
+  }
+
   .ngx-mat-query-search-autocomplete-div {
     pointer-events: all!important;
     padding: 5px 1em;

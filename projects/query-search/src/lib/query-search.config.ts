@@ -10,6 +10,9 @@ const querySearchDefaultConfig: QuerySearchConfig = {
   generateButtonText: 'Generate',
   appearance: 'outline',
   sortFields: true,
+  limitResults: 50,
+  showFieldNameSuffix: true,
+  showOperatorSuffix: true,
   transform: (rules: QueryRuleGroup[]) => {
     return rules;
   }
@@ -21,6 +24,9 @@ export interface QuerySearchConfig {
   debug: boolean;
   generateButtonText?: string;
   sortFields?: boolean;
+  limitResults?: number;
+  showFieldNameSuffix?: boolean;
+  showOperatorSuffix?: boolean;
   appearance?: 'legacy' | 'standard' | 'fill' | 'outline';
   transform?: (rules: QueryRuleGroup[]) => any;
 }
@@ -30,6 +36,9 @@ export class QuerySearchConfiguration implements QuerySearchConfig {
   debug: boolean;
   sortFields: boolean;
   generateButtonText: string;
+  limitResults: number;
+  showFieldNameSuffix: boolean;
+  showOperatorSuffix: boolean;
   loggingCallback: () => void;
   transform: (rules: QueryRuleGroup[]) => any;
 
@@ -44,11 +53,24 @@ export class QuerySearchConfiguration implements QuerySearchConfig {
     this.generateButtonText = correctedConfig.generateButtonText || 'generate';
     this.loggingCallback = correctedConfig.loggingCallback;
     this.transform = correctedConfig.transform || defaultTransform;
+    this.limitResults = correctedConfig.limitResults || 50;
 
     if (correctedConfig.sortFields !== undefined) {
       this.sortFields = correctedConfig.sortFields;
     } else {
       this.sortFields = true;
+    }
+
+    if (correctedConfig.showFieldNameSuffix !== undefined) {
+      this.showFieldNameSuffix = correctedConfig.showFieldNameSuffix;
+    } else {
+      this.showFieldNameSuffix = true;
+    }
+
+    if (correctedConfig.showOperatorSuffix !== undefined) {
+      this.showOperatorSuffix = correctedConfig.showOperatorSuffix;
+    } else {
+      this.showOperatorSuffix = true;
     }
   }
 }

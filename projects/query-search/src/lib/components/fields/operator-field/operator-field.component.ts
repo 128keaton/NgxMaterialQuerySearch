@@ -38,10 +38,16 @@ export class OperatorFieldComponent {
     const displayOperator = this.operatorPipe.transform(event);
     const displaySignOperator = this.operatorPipe.transform(event, true);
 
-    this.operatorFieldTrigger = `
+    if (this.querySearchService.showOperatorSuffix) {
+      this.operatorFieldTrigger = `
         <span class="field-name">${displayOperator}</span>
         <span class="field-operator">${displaySignOperator || ''}</span>
     `;
+    } else {
+      this.operatorFieldTrigger = `
+        <span class="field-name">${displayOperator}</span>
+    `;
+    }
   }
 
   searchValueChanged(searchValue: string) {

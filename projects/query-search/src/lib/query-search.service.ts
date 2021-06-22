@@ -25,6 +25,9 @@ export class QuerySearchService {
   private readonly _generateButtonText: string = 'Generate';
   private readonly _appearance: 'legacy' | 'standard' | 'fill' | 'outline' = 'outline';
   private readonly _transform: (rules: QueryRuleGroup[]) => any;
+  private readonly _limitResults: number = 50;
+  private readonly _showFieldNameSuffix: boolean = true;
+  private readonly _showOperatorSuffix: boolean = true;
 
   constructor(@Optional() @Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfiguration) {
     this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
@@ -34,6 +37,9 @@ export class QuerySearchService {
     this._generateButtonText = configuration.generateButtonText;
     this._appearance = configuration.appearance;
     this._transform = configuration.transform;
+    this._limitResults = configuration.limitResults;
+    this._showFieldNameSuffix = configuration.showFieldNameSuffix;
+    this._showOperatorSuffix = configuration.showOperatorSuffix;
 
     this.valueFieldDidChange.subscribe(value => {
       this.log('Value field changed', value);
@@ -127,5 +133,21 @@ export class QuerySearchService {
 
   get formFieldAppearance() {
     return this._appearance;
+  }
+
+  get resultsLimit(): number | undefined {
+    if (!!this._limitResults) {
+      return this._limitResults === 0 ? undefined : this._limitResults;
+    }
+
+    return undefined;
+  }
+
+  get showFieldNameSuffix() {
+    return this._showFieldNameSuffix;
+  }
+
+  get showOperatorSuffix() {
+    return this._showOperatorSuffix;
   }
 }

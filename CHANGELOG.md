@@ -1,3 +1,11 @@
+# 0.3.1
+- Fixed:
+  - Field/operator suffixes being crammed in the select
+  
+- New:
+  - Configuration options for showing/hiding field/operator suffixes
+  - Configuration option for limiting initial results in the dropdown
+  
 # 0.3.0
 - Improved:
   - Search performance on a list of large values.

@@ -1,7 +1,7 @@
 <mat-form-field [appearance]="formFieldAppearance" class="name-field">
   <mat-label>Field</mat-label>
 
-  <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldChanged($event)">
+  <mat-select [(ngModel)]="selectedField" (ngModelChange)="fieldChanged($event)" class="ngx-mat-query-search-style">
     <mat-select-trigger>
       <span class="name-field-trigger" [innerHTML]="nameFieldTrigger"></span>
     </mat-select-trigger>

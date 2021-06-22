@@ -48,6 +48,11 @@ export class NameFieldComponent {
 
   fieldChanged(event: QueryField) {
     this.selectedFieldChange.emit(event);
-    this.nameFieldTrigger = `<span class="field-name">${event.label || event.name}</span><span class="field-suffix">Name</span>`;
+
+    if (this.querySearchService.showFieldNameSuffix) {
+      this.nameFieldTrigger = `<span class="field-name">${event.label || event.name}</span><span class="field-suffix">Name</span>`;
+    } else {
+      this.nameFieldTrigger = `<span class="field-name">${event.label || event.name}</span>`;
+    }
   }
 }

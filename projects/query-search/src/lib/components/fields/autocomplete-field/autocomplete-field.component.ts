@@ -83,6 +83,10 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     return this.querySearchService.formFieldAppearance;
   }
 
+  get maxResults() {
+    return this.querySearchService.resultsLimit;
+  }
+
   searchValues(event: Event) {
     event.stopImmediatePropagation();
   }
@@ -238,8 +242,8 @@ export class AutocompleteFieldComponent implements AfterViewInit {
             return values;
           }),
           map(values => {
-            if (values.length > 50) {
-              return values.splice(0, 50);
+            if (!!this.maxResults && values.length > this.maxResults) {
+              return values.splice(0, this.maxResults);
             }
 
             return values;
