@@ -1,3 +1,7 @@
+# 0.3.5
+- Fixed:
+  - `BETWEEN` operator in filters not applying to Datetime field
+  
 # 0.3.4
 - Fixed:
   - Button heights corrected

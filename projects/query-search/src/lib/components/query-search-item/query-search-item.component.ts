@@ -172,7 +172,10 @@ export class QuerySearchItemComponent {
     this.item.value = null;
     this.querySearchService.log('Clearing selected values for', this);
     this.operatorUpdated.emit(operator);
+    this.configureDateField();
+  }
 
+  private configureDateField() {
     if (this.isBetweenDate) {
       this.doubleHeight = true;
       setTimeout(() => this.showBetweenDateFields = true, 100);
@@ -181,7 +184,6 @@ export class QuerySearchItemComponent {
       this.showBetweenDateFields = false;
     }
   }
-
 
   private loadFieldFromItem() {
     if (!!this.item && !!this.item.fieldName && !this.selectedField) {
@@ -201,5 +203,6 @@ export class QuerySearchItemComponent {
     if (!!this.selectedField && !!this.selectedField.format) {
       (this.dateAdapter as CustomDateAdapter).setFormat(this.selectedField.format);
     }
+    this.configureDateField();
   }
 }
