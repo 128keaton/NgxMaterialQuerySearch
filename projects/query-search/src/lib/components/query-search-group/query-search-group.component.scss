@@ -110,6 +110,8 @@
 }
 
 .generate-button, .manage-button, .add-button, .clear-button {
+  min-height: 36px;
+
   .mat-icon {
     margin-right: 8px;
   }

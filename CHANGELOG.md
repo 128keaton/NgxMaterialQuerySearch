@@ -1,3 +1,7 @@
+# 0.3.4
+- Fixed:
+  - Button heights corrected
+  
 # 0.3.3
 - New:
   - Adds support for saving/loading/managing filters (provided by the containing application)
