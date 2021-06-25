@@ -61,6 +61,12 @@ export class AppComponent {
               field: 'slow',
               operator: ConditionOperator.IN,
               value: 'A,B,C,D',
+            },
+            {
+              field: 'birthday',
+              operator: ConditionOperator.BETWEEN,
+              value: ['06/21/2019','06/21/2021'],
+              type: 'date'
             }
           ]
         }

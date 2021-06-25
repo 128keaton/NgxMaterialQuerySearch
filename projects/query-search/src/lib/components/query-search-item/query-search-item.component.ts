@@ -13,6 +13,7 @@ import {QuerySearchService} from "../../query-search.service";
 import {Observable} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
 import {CustomDateAdapter} from "../../adapters";
+import {transformToDate} from "../../helpers/query-search.helpers";
 
 
 @Component({
@@ -176,13 +177,33 @@ export class QuerySearchItemComponent {
   }
 
   private configureDateField() {
+    this.querySearchService.log('Configuring date field. Is between date:', this.isBetweenDate, this.item);
+
     if (this.isBetweenDate) {
       this.doubleHeight = true;
-      setTimeout(() => this.showBetweenDateFields = true, 100);
+      this.showBetweenDateFields = true;
+
+      if (this.item.value) {
+        const dateStrings = transformToDate(this.item.value);
+        if (dateStrings instanceof Array) {
+          const leftDateString = dateStrings[0];
+          const rightDateString = dateStrings[1];
+
+          if (!!leftDateString) {
+            this.leftDate = new Date(leftDateString);
+          }
+
+          if (!!rightDateString) {
+            this.rightDate = new Date(rightDateString);
+          }
+        }
+      }
     } else {
       this.doubleHeight = false;
       this.showBetweenDateFields = false;
     }
+
+    this.changeDetectorRef.detectChanges();
   }
 
   private loadFieldFromItem() {
@@ -192,6 +213,14 @@ export class QuerySearchItemComponent {
         if (!!field) {
           this.selectedField = field;
           this.item.type = field.type;
+
+          if (this.item.condition) {
+            this._currentOperator = this.item.condition;
+            setTimeout(() => {
+              this.configureDateField();
+            }, 500);
+          }
+
           this.querySearchService.log('Field loaded', field);
           this.updateDateFormat();
         }
@@ -203,6 +232,5 @@ export class QuerySearchItemComponent {
     if (!!this.selectedField && !!this.selectedField.format) {
       (this.dateAdapter as CustomDateAdapter).setFormat(this.selectedField.format);
     }
-    this.configureDateField();
   }
 }

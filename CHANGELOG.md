@@ -1,4 +1,4 @@
-# 0.3.5
+# 0.3.5/0.3.6
 - Fixed:
   - `BETWEEN` operator in filters not applying to Datetime field
   
