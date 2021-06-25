@@ -1,3 +1,7 @@
+# 0.3.7
+- Fixed:
+  - Inactive rules are now no longer included with the query
+  
 # 0.3.5/0.3.6
 - Fixed:
   - `BETWEEN` operator in filters not applying to Datetime field

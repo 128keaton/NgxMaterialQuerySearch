@@ -1,6 +1,6 @@
 import {EventEmitter, Inject, Optional, TemplateRef} from '@angular/core';
 import {Injectable} from '@angular/core';
-import {QueryField, ValueNotification, QueryRuleGroup, SavedFilter} from "./models";
+import {QueryField, ValueNotification, QueryRuleGroup, SavedFilter, QueryRule} from "./models";
 import {BehaviorSubject, Observable} from "rxjs";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from "./query-search.config";
 import {ConditionOperator} from "./enums";
@@ -85,12 +85,23 @@ export class QuerySearchService {
   }
 
   emitQuery(rules: QueryRuleGroup[]) {
-    this.log('Emitting rules', rules);
+    const filteredRules = rules.map(ruleGroup => {
+      ruleGroup.rules = ruleGroup.rules.filter(rule => {
+        if (rule instanceof QueryRule || rule.hasOwnProperty('active')) {
+          return (rule as QueryRule).active;
+        }
+
+        return true;
+      });
+      return ruleGroup;
+    });
+
+    this.log('Emitting rules', filteredRules);
 
     if (!!this._transform) {
-      this.queryUpdated.emit(this._transform(rules));
+      this.queryUpdated.emit(this._transform(filteredRules));
     } else {
-      this.queryUpdated.emit(rules);
+      this.queryUpdated.emit(filteredRules);
     }
   }
 
