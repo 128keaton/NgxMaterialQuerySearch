@@ -1,9 +1,10 @@
-import {AfterContentInit, Component, ContentChild} from '@angular/core';
+import {AfterContentInit, Component, ContentChild, ViewContainerRef} from '@angular/core';
 import {QueryGroup} from "./models";
 import {QueryFieldsDirective} from "./directives";
 import {QuerySearchService} from "./query-search.service";
 import {inOutAnimations} from "./animations";
 import {ConditionOperator} from "./enums";
+import {VCRefInjector} from "./helpers/parent.helper";
 
 @Component({
   selector: 'ngx-query-search',
@@ -19,7 +20,11 @@ export class QuerySearchComponent implements AfterContentInit {
 
   groups: QueryGroup[] = [];
 
-  constructor(private querySearchService: QuerySearchService) {
+  private injectorRef: VCRefInjector;
+
+  constructor(private querySearchService: QuerySearchService,
+              private vcRef: ViewContainerRef) {
+    this.injectorRef = new VCRefInjector(this.vcRef.injector);
   }
 
   ngAfterContentInit() {
@@ -49,6 +54,11 @@ export class QuerySearchComponent implements AfterContentInit {
    * @param value - Any sort of dumb value you want
    */
   load(fieldName: string, operator: ConditionOperator, value: any) {
-      this.groups[0].loadItem(fieldName, operator, value);
+    this.querySearchService.log('Loading pre-selected filter', {fieldName, operator, value});
+    this.groups[0].loadItem(fieldName, operator, value);
+  }
+
+  get identity(): string {
+    return `${this.injectorRef.parentIdentifier}-query-search`;
   }
 }

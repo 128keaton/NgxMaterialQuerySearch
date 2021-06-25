@@ -20,4 +20,8 @@ export class PlainValueFieldComponent {
   get formFieldAppearance() {
     return this.querySearchService.formFieldAppearance;
   }
+
+  clear() {
+    this.item.value = null;
+  }
 }

@@ -4,7 +4,7 @@
   align-items: center;
   width: 20px;
   position: absolute;
-  right: 1rem;
+  right: -1.5em;
   top: -9px;
   bottom: 0;
 }
@@ -55,5 +55,16 @@ span.value-option {
 
   @media screen and (max-width: 1024px) {
     min-width: 50px;
+  }
+}
+
+.clear-field {
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 300ms ease-in-out;
+
+  &.clear-field-hidden {
+    opacity: 0;
+    cursor: unset!important;
   }
 }

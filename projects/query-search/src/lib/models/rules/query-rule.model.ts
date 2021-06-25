@@ -1,4 +1,4 @@
-import {ConditionOperator} from "../../enums/condition-operator.enum";
+import {ConditionOperator} from "../../enums";
 
 export class QueryRule {
   label?: string;
@@ -6,6 +6,6 @@ export class QueryRule {
   operator?: ConditionOperator;
   type?: string;
   value?: any;
-  active: boolean;
-  valid: boolean;
+  active?: boolean;
+  valid?: boolean;
 }

@@ -1,3 +1,13 @@
+# 0.3.3
+- New:
+  - Adds support for saving/loading/managing filters (provided by the containing application)
+    - The demo has a very limited example of this
+  - Better layout and animations
+  
+- Fixed:
+  - Equals limits to one value for provided values
+  - Between limits to two values for provided values
+  
 # 0.3.2
 - Fixed:
   - All search options not displaying in results

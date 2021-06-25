@@ -3,6 +3,7 @@ import {QuerySearchService} from "../../../query-search.service";
 import {BehaviorSubject, Observable} from "rxjs";
 import {QueryField} from "../../../models";
 import {map, startWith, switchMap} from "rxjs/operators";
+import {filterFieldNames, getFieldType} from "../../../helpers/query-search.helpers";
 
 @Component({
   selector: 'name-field',
@@ -14,12 +15,23 @@ export class NameFieldComponent {
   selectedFieldChange = new EventEmitter<QueryField>(true);
 
   @Input()
-  selectedField: QueryField;
+  set selectedField(newValue: QueryField) {
+    if (!!newValue) {
+      this._selectedField = newValue;
+      this.fieldChanged(newValue, false);
+    }
+  }
+
+  get selectedField() {
+    return this._selectedField;
+  }
 
   allFields: Observable<QueryField[]>;
   visibleFields: Observable<QueryField[]>;
   searchValue: BehaviorSubject<string> = new BehaviorSubject<string>('');
   nameFieldTrigger: string;
+
+  private _selectedField: QueryField;
 
   constructor(private querySearchService: QuerySearchService) {
     this.allFields = querySearchService.fields;
@@ -27,12 +39,7 @@ export class NameFieldComponent {
       startWith(null),
       switchMap(searchValue => {
         return this.allFields.pipe(
-          map(fields => {
-            if (!!searchValue && searchValue.trim().length > 0) {
-              return fields.filter(f => f.name.toLowerCase().includes(searchValue))
-            }
-            return fields;
-          })
+          map(fields => filterFieldNames(searchValue, fields))
         )
       })
     )
@@ -46,11 +53,14 @@ export class NameFieldComponent {
     this.searchValue.next(searchValue);
   }
 
-  fieldChanged(event: QueryField) {
-    this.selectedFieldChange.emit(event);
+  fieldChanged(event: QueryField, emit = true) {
+    if (emit) {
+      this.selectedFieldChange.emit(event);
+    }
 
+    this.querySearchService.log('Name field - fieldChanged', event);
     if (this.querySearchService.showFieldNameSuffix) {
-      this.nameFieldTrigger = `<span class="field-name">${event.label || event.name}</span><span class="field-suffix">Name</span>`;
+      this.nameFieldTrigger = `<span class="field-name">${event.label || event.name}</span><span class="field-suffix">${getFieldType(event)}</span>`;
     } else {
       this.nameFieldTrigger = `<span class="field-name">${event.label || event.name}</span>`;
     }

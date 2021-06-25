@@ -1,5 +1,5 @@
 import {QueryBase} from "./query-base.model";
-import {getEnumKeyByEnumValue, isDefined, transformValue} from "../query-search.helpers";
+import {getEnumKeyByEnumValue, isDefined, transformValue} from "../helpers/query-search.helpers";
 import {ConditionOperator} from "../enums";
 import {QueryRule} from "./rules";
 
@@ -15,7 +15,7 @@ export class QueryItem extends QueryBase {
     const newItem = new QueryItem();
 
     newItem.fieldName = fieldName;
-    newItem.condition = (getEnumKeyByEnumValue(ConditionOperator, operator) || '');
+    newItem.condition = operator;
     newItem.value = value;
 
     return newItem;

@@ -2,4 +2,5 @@
   <mat-label>Value</mat-label>
   <input autocomplete="off" *ngIf="!isNumber" matInput [(ngModel)]="item.value">
   <input autocomplete="off" *ngIf="isNumber" type="number" matInput [(ngModel)]="item.value">
+  <mat-icon matSuffix class="clear-field" (click)="clear()" [class.clear-field-hidden]="!!!item.value">cancel</mat-icon>
 </mat-form-field>

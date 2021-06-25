@@ -11,6 +11,12 @@
 }
 
 ::ng-deep {
+  .group-item-dragging {
+    .vert-notate-group {
+      opacity: 0;
+    }
+  }
+
   .ngx-mat-query-search-autocomplete-option {
     height: auto !important;
     padding: 0!important;

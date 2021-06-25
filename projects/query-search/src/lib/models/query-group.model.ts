@@ -2,18 +2,19 @@ import {QueryItem} from "./query-item.model";
 import {QueryBase} from "./query-base.model";
 import {QueryRule, QueryRuleGroup} from "./rules";
 import {ConditionOperator} from "../enums";
+import {getEnumKeyByEnumValue} from "../helpers/query-search.helpers";
 
 export class QueryGroup extends QueryBase {
   type: 'AND' | 'OR';
   items: QueryItem[] = [];
   children: QueryGroup[] = [];
 
-  constructor(type: 'AND' | 'OR', depth: number = 0) {
+  constructor(type: 'AND' | 'OR', depth: number = 0, autoInsertEmptyItem = true) {
     super();
     this.type = type;
     this.depth = depth;
 
-    if (this.items.length === 0 && this.children.length === 0) {
+    if (autoInsertEmptyItem && this.items.length === 0 && this.children.length === 0) {
       this.addItem();
     }
   }
@@ -24,18 +25,37 @@ export class QueryGroup extends QueryBase {
 
   loadItem(fieldName: string, operator: ConditionOperator, value: any) {
     if (this.items.length === 1 && !this.items[0].fieldName) {
-      this.items = [QueryItem.apply(fieldName, operator,value)];
+      this.items = [QueryItem.apply(fieldName, operator, value)];
     } else {
-      this.items.push(QueryItem.apply(fieldName, operator,value));
+      this.items.push(QueryItem.apply(fieldName, operator, value));
     }
   }
 
   applyRule(rule: QueryRule) {
-    const newItem = new QueryItem();
-    newItem.condition = (rule.operator as ConditionOperator)
-    newItem.fieldName = rule.field || 'unknown';
-    newItem.type = rule.type || 'string';
-    newItem.value = rule.value;
+   if (!!rule.operator) {
+     const newItem = new QueryItem();
+     newItem.condition = getEnumKeyByEnumValue(ConditionOperator, rule.operator) as ConditionOperator
+     newItem.fieldName = rule.field || 'unknown';
+     newItem.type = rule.type || 'string';
+     newItem.value = rule.value;
+     this.items.push(newItem);
+   }
+  }
+
+  apply(group: QueryRuleGroup) {
+    this.type = group.condition;
+    this.children = [];
+    this.items = [];
+
+    group.rules.forEach(ruleOrGroup => {
+      if (ruleOrGroup instanceof QueryRuleGroup) {
+        const subGroup = new QueryGroup(ruleOrGroup.condition, this.depth + 1, false);
+        subGroup.apply(ruleOrGroup);
+        this.children.push(subGroup)
+      } else {
+        this.applyRule(ruleOrGroup);
+      }
+    })
   }
 
   removeItem(id: string) {

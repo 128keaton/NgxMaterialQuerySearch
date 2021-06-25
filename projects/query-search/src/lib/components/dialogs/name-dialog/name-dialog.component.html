@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{dialogTitle}}</h2>
+
+<mat-dialog-content>
+  <mat-form-field class="filter-name-field" [appearance]="formFieldAppearance">
+    <mat-label>Filter Name</mat-label>
+    <input matInput autocomplete="off" [(ngModel)]="filter.name" (ngModelChange)="nameValueUpdated()">
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="name-dialog-actions">
+  <button mat-stroked-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="accent" [mat-dialog-close]="true" [disabled]="actionDisabled">{{actionButtonTitle}}</button>
+</mat-dialog-actions>

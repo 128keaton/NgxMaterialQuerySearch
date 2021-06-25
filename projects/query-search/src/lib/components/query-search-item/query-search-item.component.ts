@@ -38,7 +38,6 @@ export class QuerySearchItemComponent {
   @Output()
   removed = new EventEmitter<string>();
 
-
   @ViewChildren('valueInput')
   valueInputs: QueryList<ElementRef>;
 
@@ -54,6 +53,7 @@ export class QuerySearchItemComponent {
   fields: Observable<QueryField[]>;
   selectedField: QueryField;
   showBetweenDateFields = false;
+  operatorUpdated = new EventEmitter<any>(true);
 
   private _currentOperator: string;
   private _item: QueryItem;
@@ -159,10 +159,19 @@ export class QuerySearchItemComponent {
     return false;
   }
 
+  get flagType() {
+    return this.item.active ? 'flag' : 'outlined_flag';
+  }
+
+  get flagTooltip() {
+    return this.item.active ? 'Active' : 'Inactive';
+  }
+
   operatorSelected(operator: any) {
     this._currentOperator = operator;
     this.item.value = null;
     this.querySearchService.log('Clearing selected values for', this);
+    this.operatorUpdated.emit(operator);
 
     if (this.isBetweenDate) {
       this.doubleHeight = true;

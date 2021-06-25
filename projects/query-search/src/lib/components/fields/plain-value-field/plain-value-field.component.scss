@@ -24,3 +24,14 @@
     min-width: 50px;
   }
 }
+
+.clear-field {
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 300ms ease-in-out;
+
+  &.clear-field-hidden {
+    opacity: 0;
+    cursor: unset!important;
+  }
+}

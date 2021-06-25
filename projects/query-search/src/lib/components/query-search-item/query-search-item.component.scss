@@ -1,121 +1,143 @@
 :host {
-  display: flex;
-  align-items: center;
-  padding-top: 10px;
-  padding-left: 1em;
-  padding-bottom: 5px;
+  overflow: hidden;
+  display: block;
   position: relative;
-  transition: min-height 300ms ease-in-out;
-  min-height: 72px;
 
-  &.double-height {
-    min-height: 128px;
-  }
+  .query-search-item-wrapper {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    padding-left: 1em;
+    padding-bottom: 5px;
+    position: relative;
+    margin-left: 15px;
 
-  .name-field, .operator-field, .value-field {
-    min-width: 220px;
-  }
+    &.double-height {
+      min-height: 128px;
+    }
 
-  ::ng-deep {
-    .mat-form-field-appearance-outline .mat-form-field-wrapper {
-      margin: 0 !important;
+    .name-field, .operator-field, .value-field {
+      min-width: 220px;
+    }
+
+    ::ng-deep {
+      .mat-form-field-appearance-outline .mat-form-field-wrapper {
+        margin: 0 !important;
+        padding-bottom: 5px;
+      }
+    }
+
+    .notate-group {
+      top: 0;
+      width: 1px;
+      height: 100%;
+      position: absolute;
+      left: 1em;
+
+      &.hide-notate-group {
+        opacity: 0;
+      }
+    }
+
+    .notate-group-after {
+      position: relative !important;
+      min-width: 30px;
       padding-bottom: 5px;
+      margin-left: 2px;
     }
-  }
 
-  .notate-group {
-    top: 0;
-    width: 1px;
-    height: 100%;
-    position: absolute;
-    left: 1em;
-  }
+    .separate-fields {
+      position: relative !important;
+      min-width: 100px;
+      padding-bottom: 5px;
 
-  .notate-group-after {
-    position: relative !important;
-    min-width: 30px;
-    padding-bottom: 5px;
-    margin-left: 2px;
-  }
-
-  .separate-fields {
-    position: relative !important;
-    min-width: 100px;
-    padding-bottom: 5px;
-
-    @media screen and (max-width: 1024px) {
-      min-width: 50px;
+      @media screen and (max-width: 1024px) {
+        min-width: 50px;
+      }
     }
-  }
 
-  .between-date-separator {
-    min-width: 90px!important;
-  }
+    .between-date-separator {
+      min-width: 90px !important;
+    }
 
-  .separate-button {
-    position: relative !important;
-    min-width: 25px;
-    padding-bottom: 5px;
-  }
+    .separate-button {
+      position: relative !important;
+      min-width: 25px;
+      padding-bottom: 5px;
 
-  .delete-button {
-    margin-bottom: 5px;
-    box-shadow: none !important;
-  }
-}
+      &.between-order-delete {
+        min-width: 10px;
+      }
+    }
 
-.pad-dividers {
-  margin-left: 1em;
-  margin-right: 1em;
-}
+    .delete-button, .flag-button {
+      margin-bottom: 7px;
+      box-shadow: none !important;
+    }
 
-.separate-button.pad-dividers {
-  margin-left: 0;
-}
+    .flag-button {
+      &.flag-enabled {
+        color: #64DD17;
+      }
 
-.disable-checkbox {
-  margin: 0;
-  padding: 0;
-  height: 27px;
-}
-
-
-
-.between-dates {
-  position: relative;
-
-  .between-dates-outer {
-    position: absolute;
-    left: 0;
-    top: 2em;
-    bottom: 2em;
-  }
-
-  .between-dates-fields {
-    &.show {
-      .between-date-field {
-        transform: translateY(0);
+      &.flag-disabled {
+        color: #FF5252;
       }
     }
   }
 
-  .between-date-field {
-    display: flex;
-    align-items: center;
-    transition: transform 300ms ease-in-out;
+  .pad-dividers {
+    margin-left: 1em;
+    margin-right: 1em;
+  }
 
-    &:first-child {
-      transform: translateY(26px);
-      margin-bottom: 5px;
+  .separate-button.pad-dividers {
+    margin-left: 0;
+  }
+
+  .disable-checkbox {
+    margin: 0;
+    padding: 0;
+    height: 27px;
+  }
+
+
+  .between-dates {
+    position: relative;
+
+    .between-dates-outer {
+      position: absolute;
+      left: 0;
+      top: 2em;
+      bottom: 2em;
     }
 
-    &:last-child {
-      transform: translateY(-26px);
+    .between-dates-fields {
+      &.show {
+        .between-date-field {
+          transform: translateY(0);
+        }
+      }
     }
 
-    mat-divider {
-      width: 7px;
-      margin-left: 1px;
+    .between-date-field {
+      display: flex;
+      align-items: center;
+      transition: transform 300ms ease-in-out;
+
+      &:first-child {
+        transform: translateY(26px);
+        margin-bottom: 5px;
+      }
+
+      &:last-child {
+        transform: translateY(-26px);
+      }
+
+      mat-divider {
+        width: 7px;
+        margin-left: 1px;
+      }
     }
   }
 }

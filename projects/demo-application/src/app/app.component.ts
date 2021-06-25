@@ -1,5 +1,11 @@
 import {Component, ViewChild} from '@angular/core';
-import {QuerySearchService, QuerySearchComponent, ProvidedValue, QueryRuleGroup} from "ngx-mat-query-search";
+import {
+  QuerySearchService,
+  QuerySearchComponent,
+  ProvidedValue,
+  QueryRuleGroup,
+  ConditionOperator
+} from "ngx-mat-query-search";
 import packageData from '../../../query-search/package.json';
 import {Demo} from "./demo.model";
 import {Observable, of} from "rxjs";
@@ -10,7 +16,7 @@ import {delay} from "rxjs/operators";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
+export class AppComponent {
   @ViewChild(QuerySearchComponent) querySearchComponent: QuerySearchComponent
 
   queryObject: QueryRuleGroup[] = [];
@@ -40,6 +46,26 @@ export class AppComponent{
       }
     });
 
+    this.querySearchService.provideSavedFilters([
+      {
+        name: 'Test Filter',
+        ruleGroup: {
+          condition: 'AND',
+          rules: [
+            {
+              field: 'fullName',
+              operator: ConditionOperator.EQUALS,
+              value: 'Grant',
+            },
+            {
+              field: 'slow',
+              operator: ConditionOperator.IN,
+              value: 'A,B,C,D',
+            }
+          ]
+        }
+      }
+    ]);
 
     this.observableValues = of(values).pipe(
       delay(2000)

@@ -12,7 +12,18 @@ import {OperatorPipe} from "../../../pipes/operator.pipe";
 export class OperatorFieldComponent {
 
   @Input()
-  item: QueryItem;
+  set item(newValue: QueryItem) {
+    if (!!newValue) {
+      this._item = newValue;
+      if (!!this._item.condition) {
+        this.fieldChanged(this._item.condition, false);
+      }
+    }
+  }
+
+  get item() {
+    return this._item;
+  }
 
   @Output()
   operatorSelected = new EventEmitter<string>(true);
@@ -26,14 +37,20 @@ export class OperatorFieldComponent {
    color: gray
    `;
 
+  private _item: QueryItem;
+
   constructor(private querySearchService: QuerySearchService,
               private operatorPipe: OperatorPipe) {
     this.operators = this.querySearchService.operators;
     this.filteredOperators = this.operators;
   }
 
-  fieldChanged(event: string) {
-    this.operatorSelected.emit(event);
+  fieldChanged(event: string, emit = true) {
+    if (emit) {
+      this.operatorSelected.emit(event);
+    }
+
+    this.querySearchService.log('Operator Field Changed', event);
 
     const displayOperator = this.operatorPipe.transform(event);
     const displaySignOperator = this.operatorPipe.transform(event, true);

@@ -4,6 +4,7 @@
          #valueInput
          [(ngModel)]="item.value"
          [matAutocomplete]="valueAutoComplete">
+  <mat-icon matSuffix class="clear-field" (click)="clear()" [class.clear-field-hidden]="!!!item.value || (isObservable && ($loading|async))">cancel</mat-icon>
   <div class="input-spinner-wrapper">
     <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
   </div>

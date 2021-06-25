@@ -5,6 +5,16 @@
   flex-direction: column;
   width: 100%;
   position: relative;
+  transition: height 150ms ease-in-out;
+
+  .group-indicator {
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+    width: 36px;
+    border-radius: 4px;
+    margin-right: 2em;
+  }
 
   .mat-list {
     width: 100%;
@@ -23,6 +33,7 @@
     .mat-button-toggle-label-content {
       font-size: 14px;
     }
+
     .mat-button-toggle-button {
       width: 55px;
     }
@@ -47,16 +58,16 @@
 }
 
 .group-item:not(.collapsed):last-child {
- ::ng-deep {
-   .notate-group {
-     height: 50% !important;
-   }
- }
+  ::ng-deep {
+    .notate-group {
+      height: 50% !important;
+    }
+  }
 }
 
-
 .group-items-list {
-  padding-top: 0!important;
+  padding-top: 0 !important;
+
   .mat-list-item {
     ::ng-deep {
       .mat-list-item-content {
@@ -73,7 +84,7 @@
     top: 0;
     width: 100%;
     right: 0;
-    left: -6px;
+    left: 9px;
     position: absolute;
     margin-bottom: 1em;
   }
@@ -89,8 +100,33 @@
 
 .group-action-buttons {
   margin-left: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .group-items-list {
   width: 100%;
+}
+
+.generate-button, .manage-button, .add-button, .clear-button {
+  .mat-icon {
+    margin-right: 8px;
+  }
+
+  ::ng-deep {
+    .mat-button-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.manage-button, .clear-button {
+  margin-left: 0.5em;
+}
+
+.add-button {
+  margin-left: 1.5em;
 }

@@ -1,28 +1,90 @@
 <mat-divider class="sub-group-divider" *ngIf="_showDivider"></mat-divider>
 <mat-toolbar [color]="toolbarColor">
+  <mat-toolbar [color]="groupColor" class="group-indicator">
+    <mat-icon>rule</mat-icon>
+  </mat-toolbar>
   <group-type-selector [disabled]="disableTypeButtons" [groupColor]="toolbarColor"
                        [(ngModel)]="groupType"></group-type-selector>
   <div class="group-action-buttons">
-    <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+    <button mat-flat-button color="accent" [matMenuTriggerFor]="actionMenu" class="add-button">
       <mat-icon>add</mat-icon>
+      <span>Add</span>
     </button>
     <mat-menu #actionMenu="matMenu">
-      <button mat-menu-item (click)="addItem()">Item</button>
-      <button mat-menu-item (click)="addGroup()">Group</button>
+      <button mat-menu-item (click)="addItem()">
+        <mat-icon>flag</mat-icon>
+        <span>Item</span>
+      </button>
+      <button mat-menu-item (click)="addGroup()">
+        <mat-icon>rule</mat-icon>
+        <span>Group</span>
+      </button>
     </mat-menu>
     <button mat-icon-button (click)="remove()" *ngIf="!isTopLevel">
       <mat-icon>delete</mat-icon>
     </button>
+    <ng-container *ngIf="isTopLevel">
+      <button mat-button [matMenuTriggerFor]="miscMenu" class="manage-button"
+              *ngIf="querySearchService.hasSavedFilters">
+        <mat-icon>more_vert</mat-icon>
+        <span>Manage</span>
+      </button>
+
+      <button mat-button class="clear-button" (click)="clear()" color="warn">
+        <mat-icon>delete_sweep</mat-icon>
+        <span>Clear</span>
+      </button>
+      <mat-menu #miscMenu="matMenu">
+        <button mat-menu-item (click)="createFilter()">
+          <mat-icon>save</mat-icon>
+          <span>Save</span>
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="filters"
+                [disabled]="!(querySearchService.savedFilters|async)?.length">
+          <mat-icon>filter_list</mat-icon>
+          <span>Filters</span>
+        </button>
+      </mat-menu>
+
+      <mat-menu #filters="matMenu">
+        <button mat-menu-item *ngFor="let filter of (querySearchService.savedFilters|async)"
+                [matMenuTriggerFor]="filterActions" [matMenuTriggerData]="filter">{{filter.name}}</button>
+      </mat-menu>
+
+      <mat-menu #filterActions="matMenu">
+        <ng-template matMenuContent let-savedFilterName="name">
+          <button mat-menu-item (click)="renameFilter(savedFilterName)">
+            <mat-icon>mode_edit</mat-icon>
+            <span>Rename</span>
+          </button>
+          <button mat-menu-item (click)="loadFilter(savedFilterName)">
+            <mat-icon>input</mat-icon>
+            <span>Load</span>
+          </button>
+          <button mat-menu-item (click)="deleteFilter(savedFilterName)">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </ng-template>
+      </mat-menu>
+    </ng-container>
   </div>
 
   <span class="group-spacer"></span>
-  <button class="generate-button" mat-flat-button color="accent" *ngIf="isTopLevel" (click)="generateClicked.emit(true)">{{generateButtonText}}</button>
+  <button class="generate-button" mat-flat-button color="accent"
+          (click)="generateClicked.emit(true)" *ngIf="isTopLevel">
+    <mat-icon>refresh</mat-icon>
+    <span>{{generateButtonText}}</span>
+  </button>
 </mat-toolbar>
-<div class="group-items-list">
-  <query-search-item class="group-item" [@inOut] *ngFor="let item of group.items" (removed)="removeItem($event)"
-                     [item]="item" [disableDelete]="group.items.length === 1"></query-search-item>
+<div class="group-items-list" [class.hidden]="loadingFilters|async" cdkDropList (cdkDropListDropped)="drop($event)">
+  <query-search-item class="group-item" [class.hidden]="loadingFilters|async" [@inOut] *ngFor="let item of group.items"
+                     (removed)="removeItem($event)"
+                     [item]="item" [disableDelete]="group.items.length === 1" cdkDrag
+                     cdkDragPreviewClass="group-item-dragging"></query-search-item>
 
-  <query-search-group *ngFor="let group of group.children" class="sub-group-item" [@inOut] [group]="group"
+  <query-search-group *ngFor="let group of group.children" class="sub-group-item" [class.hidden]="loadingFilters|async"
+                      [@inOut] [group]="group"
                       (removed)="removeChild($event)" [showDivider]="true"></query-search-group>
 </div>
 <mat-divider></mat-divider>

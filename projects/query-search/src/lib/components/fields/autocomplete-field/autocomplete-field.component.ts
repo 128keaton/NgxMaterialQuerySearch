@@ -12,7 +12,7 @@ import {QuerySearchService} from "../../../query-search.service";
 import {ProvidedValue, QueryField, QueryItem} from "../../../models";
 import {BehaviorSubject, fromEvent, Observable, of, Subscription} from "rxjs";
 import {distinctUntilChanged, filter, map, shareReplay, startWith, switchMap, tap} from "rxjs/operators";
-
+import {toggleValueSelection} from "../../../helpers/query-search.helpers";
 
 @Component({
   selector: 'autocomplete-field',
@@ -30,6 +30,13 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
   @Input()
   item: QueryItem;
+
+  @Input()
+  set operator(operator: any) {
+    this._currentOperator = operator;
+    this.selectedValues = [];
+    this.changeDetectorRef.detectChanges();
+  }
 
   @Input()
   set selectedField(field: QueryField) {
@@ -52,6 +59,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   selectedValues: any[] = [];
   currentSearchValue: string = '';
 
+  private _currentOperator: any;
   private _selectedField: QueryField;
   private _valuesObservable: Observable<any[]>;
   private _fieldValueSubscription: Subscription;
@@ -115,20 +123,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   toggleSelection(value: any | ProvidedValue) {
-    if (!this.valueSelected(value)) {
-      if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
-        this.selectedValues.push(value.value);
-      } else {
-        this.selectedValues.push(value)
-      }
-    } else {
-      if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
-        this.selectedValues = this.selectedValues.filter(v => v !== value.value);
-      } else {
-        this.selectedValues = this.selectedValues.filter(v => v !== value);
-      }
-    }
-
+    this.selectedValues = toggleValueSelection(value, this.selectedValues, this._currentOperator);
     this.item.value = this.selectedValues.join(',');
     this.changeDetectorRef.detectChanges();
   }
@@ -182,6 +177,10 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     return of([]);
   }
 
+  clear() {
+    this.item.value = null;
+  }
+
   private setupFieldValueListener(field: ElementRef) {
     if (this._fieldValueSubscription) {
       this._fieldValueSubscription.unsubscribe();
@@ -200,21 +199,27 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   private processValuesSelected(inputValue: string) {
+    this.querySearchService.log('Autocomplete Field - Process Values Selected', inputValue);
     if (!!inputValue && inputValue.length) {
       this.selectedValues = inputValue.split(',');
     } else {
       this.selectedValues = [];
     }
 
+    this.querySearchService.log('Autocomplete Field - Process Values Selected', this.selectedValues);
     this.changeDetectorRef.detectChanges();
   }
 
   private resetValues() {
-    // Set the item value to null
-    this.item.value = null;
+    this.querySearchService.log('Autocomplete Field - Reset Values Called');
 
-    // Clear our selected values array
-    this.selectedValues = [];
+    if (this.selectedField.name !== this.item.fieldName) {
+      // Set the item value to null
+      this.item.value = null;
+
+      // Clear our selected values array
+      this.selectedValues = [];
+    }
 
     // Setup our values observable
     this.values = this.getValues();

@@ -26,7 +26,10 @@ import {OperatorFieldComponent} from './components/fields/operator-field/operato
 import {NameFieldComponent} from './components/fields/name-field/name-field.component';
 import {PlainValueFieldComponent} from './components/fields/plain-value-field/plain-value-field.component';
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
-import { AutocompleteFieldComponent } from './components/fields/autocomplete-field/autocomplete-field.component';
+import {AutocompleteFieldComponent} from './components/fields/autocomplete-field/autocomplete-field.component';
+import {DragDropModule} from "@angular/cdk/drag-drop";
+import {NameDialogComponent} from './components/dialogs/name-dialog/name-dialog.component';
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -41,6 +44,7 @@ import { AutocompleteFieldComponent } from './components/fields/autocomplete-fie
     NameFieldComponent,
     PlainValueFieldComponent,
     AutocompleteFieldComponent,
+    NameDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -58,7 +62,9 @@ import { AutocompleteFieldComponent } from './components/fields/autocomplete-fie
     MatDividerModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    DragDropModule,
+    MatDialogModule
   ],
   exports: [
     QuerySearchComponent,
@@ -77,7 +83,8 @@ export class QuerySearchModule {
           provide: QUERY_SEARCH_CONFIG, useValue: configuration
         },
         OperatorPipe,
-        QuerySearchService
+        QuerySearchService,
+        MatDialog
       ]
     };
   }

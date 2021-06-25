@@ -5,7 +5,8 @@
     "entryFile": "src/public-api.ts",
     "umdModuleIds": {
       "uuid": "uuid",
-      "luxon": "luxon"
+      "luxon": "luxon",
+      "ngx-mat-select-search": "ngxMatSelectSearch"
     }
   },
   "assets": [
