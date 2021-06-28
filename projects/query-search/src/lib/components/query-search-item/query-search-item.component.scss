@@ -2,6 +2,10 @@
   overflow: hidden;
   display: flex;
   position: relative;
+  padding-left: 1em;
+  margin-left: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 
   &.double-height {
     min-height: 128px;
@@ -11,15 +15,9 @@
     display: flex;
     align-items: flex-start;
     padding-top: 10px;
-    padding-left: 1em;
     padding-bottom: 5px;
     position: relative;
-    margin-left: 15px;
     max-height: 72px;
-
-    .name-field, .operator-field, .value-field {
-      min-width: 220px;
-    }
 
     ::ng-deep {
       .mat-form-field-appearance-outline .mat-form-field-wrapper {
@@ -27,67 +25,73 @@
         padding-bottom: 5px;
       }
     }
+  }
 
-    .notate-group {
-      top: 0;
-      width: 1px;
-      height: 100%;
-      position: absolute;
-      left: 1em;
-      padding-bottom: 1px;
+  .name-field, .operator-field, .value-field {
+    min-width: 220px;
+  }
 
-      &.hide-notate-group {
-        opacity: 0;
-      }
-    }
 
-    .notate-group-after {
-      position: relative !important;
-      min-width: 30px;
-      padding-bottom: 5px;
-      margin-left: 2px;
-      align-self: center;
-    }
+  .notate-group {
+    top: 0;
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    left: 1em;
+    padding-bottom: 1px;
 
-    .separate-fields {
-      position: relative !important;
-      min-width: 100px;
-      padding-bottom: 5px;
-      align-self: center;
-
-      @media screen and (max-width: 1024px) {
-        min-width: 50px;
-      }
-    }
-
-    .separate-button {
-      position: relative !important;
-      min-width: 25px;
-      padding-bottom: 5px;
-      align-self: center;
-
-      &.between-order-delete {
-        align-self: center;
-        min-width: 10px;
-      }
-    }
-
-    .delete-button, .flag-button {
-      margin-bottom: 7px;
-      align-self: center;
-      box-shadow: none !important;
-    }
-
-    .flag-button {
-      &.flag-enabled {
-        color: #64DD17;
-      }
-
-      &.flag-disabled {
-        color: #FF5252;
-      }
+    &.hide-notate-group {
+      opacity: 0;
     }
   }
+
+  .notate-group-after {
+    position: relative !important;
+    min-width: 30px;
+    padding-bottom: 5px;
+    margin-left: 2px;
+    align-self: center;
+  }
+
+  .separate-fields {
+    position: relative !important;
+    min-width: 100px;
+    padding-bottom: 5px;
+    align-self: center;
+
+    @media screen and (max-width: 1024px) {
+      min-width: 50px;
+    }
+  }
+
+  .separate-button {
+    position: relative !important;
+    min-width: 25px;
+    padding-bottom: 5px;
+    align-self: center;
+
+    &.between-order-delete {
+      align-self: center;
+      min-width: 10px;
+    }
+  }
+
+  .delete-button, .flag-button {
+    margin-bottom: 7px;
+    align-self: center;
+    box-shadow: none !important;
+  }
+
+  .flag-button {
+    &.flag-enabled {
+      color: #64DD17;
+    }
+
+    &.flag-disabled {
+      color: #FF5252;
+    }
+  }
+
 
   .pad-dividers {
     margin-left: 1em;

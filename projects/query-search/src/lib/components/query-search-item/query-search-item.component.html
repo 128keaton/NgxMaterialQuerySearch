@@ -1,15 +1,15 @@
+<mat-divider class="notate-group vert-notate-group" [vertical]="true"></mat-divider>
 <div class="query-search-item-wrapper">
-  <mat-divider class="notate-group vert-notate-group" [vertical]="true"></mat-divider>
   <mat-divider class="notate-group-after"></mat-divider>
 
-  <button mat-icon-button class="flag-button" [class.flag-enabled]="item.active" [class.flag-disabled]="!item.active"
+  <button mat-icon-button class="flag-button mat-query-style" [class.flag-enabled]="item.active" [class.flag-disabled]="!item.active"
           (click)="item.active = !item.active" [matTooltip]="flagTooltip" matTooltipPosition="left">
     <mat-icon>{{flagType}}</mat-icon>
   </button>
 
   <mat-divider class="separate-button between-order-delete"></mat-divider>
 
-  <button mat-icon-button color="warn" class="delete-button" (click)="remove()" [disabled]="disableDelete">
+  <button mat-icon-button color="warn" class="delete-button mat-query-style" (click)="remove()" [disabled]="disableDelete">
     <mat-icon>delete</mat-icon>
   </button>
 

@@ -1,3 +1,8 @@
+# 0.4.0
+- Improved:
+  - Layout issues pertaining to double height items
+  - Improved spacing between items
+  
 # 0.3.9
 - Fixed:
   - Issues with scroll listener on autocomplete removal

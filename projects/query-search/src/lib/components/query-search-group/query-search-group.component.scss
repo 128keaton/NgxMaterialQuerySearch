@@ -63,6 +63,14 @@
       height: 50% !important;
     }
   }
+
+  &.double-height {
+    ::ng-deep {
+      .notate-group {
+        height: 34% !important;
+      }
+    }
+  }
 }
 
 .group-items-list {
