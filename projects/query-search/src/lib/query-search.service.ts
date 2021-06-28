@@ -85,7 +85,7 @@ export class QuerySearchService {
   }
 
   emitQuery(rules: QueryRuleGroup[]) {
-    const filteredRules = rules.map(ruleGroup => {
+    const filteredRules = rules.filter(ruleGroup => !!ruleGroup && !!ruleGroup.rules).map(ruleGroup => {
       ruleGroup.rules = ruleGroup.rules.filter(rule => {
         if (rule instanceof QueryRule || rule.hasOwnProperty('active')) {
           return (rule as QueryRule).active;

@@ -1,3 +1,8 @@
+# 0.3.9
+- Fixed:
+  - Issues with scroll listener on autocomplete removal
+  - Issues with emitting query with empty fields
+  
 # 0.3.8
 - Improved:
   - Layout with between date fields has been improved considerably
