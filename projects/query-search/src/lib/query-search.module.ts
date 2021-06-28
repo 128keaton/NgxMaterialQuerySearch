@@ -30,6 +30,9 @@ import {AutocompleteFieldComponent} from './components/fields/autocomplete-field
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {NameDialogComponent} from './components/dialogs/name-dialog/name-dialog.component';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {SingleDateFieldComponent} from './components/fields/single-date-field/single-date-field.component';
+import {DoubleDateFieldComponent} from './components/fields/double-date-field/double-date-field.component';
+import { OptionsScrollDirective } from './directives/options-scroll.directive';
 
 @NgModule({
   declarations: [
@@ -45,6 +48,9 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
     PlainValueFieldComponent,
     AutocompleteFieldComponent,
     NameDialogComponent,
+    SingleDateFieldComponent,
+    DoubleDateFieldComponent,
+    OptionsScrollDirective,
   ],
   imports: [
     CommonModule,
@@ -64,7 +70,7 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
     MatTooltipModule,
     NgxMatSelectSearchModule,
     DragDropModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   exports: [
     QuerySearchComponent,

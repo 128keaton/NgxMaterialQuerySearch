@@ -23,48 +23,18 @@
   <ng-container *ngIf="showValueField">
     <mat-divider class="separate-fields" [class.between-date-separator]="isBetweenDate"
                  [class.pad-dividers]="padDividers"></mat-divider>
-    <ng-container *ngIf="!isDate; else dateField">
+    <ng-container *ngIf="!isDate">
       <plain-value-field [item]="item" [isNumber]="isNumber" *ngIf="!hasValues"></plain-value-field>
 
       <autocomplete-field [item]="item" [selectedField]="selectedField" *ngIf="hasValues"
                           [operator]="operatorUpdated|async"></autocomplete-field>
     </ng-container>
-    <ng-template #dateField>
-      <div class="between-dates" *ngIf="isBetweenDate; else singleDateField">
-        <mat-divider vertical class="between-dates-outer"></mat-divider>
-        <div class="between-dates-fields" [class.show]="showBetweenDateFields">
-          <div class="between-date-field">
-            <mat-divider></mat-divider>
-            <mat-form-field [appearance]="formFieldAppearance" class="value-field">
-              <mat-label>Start Date</mat-label>
-              <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="leftDate"
-                     (ngModelChange)="betweenDateUpdated()">
-              <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
-              <mat-datepicker #valuePicker></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="between-date-field">
-            <mat-divider></mat-divider>
-            <mat-form-field [appearance]="formFieldAppearance" class="value-field" *ngIf="isBetweenDate">
-              <mat-label>End Date</mat-label>
-              <input matInput autocomplete="off" [matDatepicker]="secondValuePicker" [(ngModel)]="rightDate"
-                     (ngModelChange)="betweenDateUpdated()">
-              <mat-datepicker-toggle matSuffix [for]="secondValuePicker"></mat-datepicker-toggle>
-              <mat-datepicker #secondValuePicker></mat-datepicker>
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-      <ng-template #singleDateField>
-        <mat-form-field [appearance]="formFieldAppearance" class="value-field">
-          <mat-label>Value</mat-label>
-          <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="item.value"
-                 (ngModelChange)="dateUpdated($event)">
-          <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
-          <mat-datepicker #valuePicker></mat-datepicker>
-        </mat-form-field>
-      </ng-template>
-    </ng-template>
   </ng-container>
-
 </div>
+
+<ng-container *ngIf="showValueField">
+  <double-date-field *ngIf="isBetweenDate" [(item)]="item" [(showBetweenDateFields)]="showBetweenDateFields"
+                     [(doubleHeight)]="doubleHeight" [isBetweenDate]="isBetweenDate"></double-date-field>
+
+  <single-date-field *ngIf="isDate && !isBetweenDate" [(item)]="item"></single-date-field>
+</ng-container>

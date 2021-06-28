@@ -1,0 +1,32 @@
+.value-field {
+  min-width: 220px;
+}
+
+.between-dates {
+  position: relative;
+
+  .between-dates-outer {
+    position: absolute;
+    left: 0;
+    top: 2em;
+    bottom: 2em;
+  }
+
+  .between-dates-fields{
+    margin-top: 0.95rem;
+  }
+
+  .between-date-field {
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+      margin-bottom: 5px;
+    }
+
+    mat-divider {
+      width: 7px;
+      margin-left: 1px;
+    }
+  }
+}

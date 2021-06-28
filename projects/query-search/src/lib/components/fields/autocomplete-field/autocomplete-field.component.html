@@ -8,7 +8,7 @@
   <div class="input-spinner-wrapper">
     <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
   </div>
-  <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete">
+  <mat-autocomplete autoActiveFirstOption #valueAutoComplete="matAutocomplete" (optionsScroll)="onScroll()">
     <mat-option *ngIf="!($loading|async) && (totalValues|async)" class="ngx-mat-query-search-autocomplete-option ngx-mat-query-search-autocomplete-search-option">
       <div (click)="searchOptionClicked($event)" class="search-options-wrapper">
         <mat-form-field class="search-options-field" appearance="standard">

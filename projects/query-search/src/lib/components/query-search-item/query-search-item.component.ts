@@ -3,9 +3,9 @@ import {
   Component,
   ElementRef,
   EventEmitter, HostBinding,
-  Input,
+  Input, OnChanges,
   Output,
-  QueryList,
+  QueryList, SimpleChanges, ViewChild,
   ViewChildren
 } from '@angular/core';
 import {QueryField, QueryItem} from "../../models";
@@ -13,7 +13,7 @@ import {QuerySearchService} from "../../query-search.service";
 import {Observable} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
 import {CustomDateAdapter} from "../../adapters";
-import {transformToDate} from "../../helpers/query-search.helpers";
+import {DoubleDateFieldComponent} from "../fields/double-date-field/double-date-field.component";
 
 
 @Component({
@@ -45,11 +45,12 @@ export class QuerySearchItemComponent {
   @ViewChildren('searchInput')
   searchInputs: QueryList<ElementRef>;
 
+  @ViewChild(DoubleDateFieldComponent, {static: false})
+  doubleDateFieldComponent: DoubleDateFieldComponent;
+
   @HostBinding('class.double-height')
   doubleHeight = false;
 
-  leftDate: Date;
-  rightDate: Date;
   operators: string[];
   fields: Observable<QueryField[]>;
   selectedField: QueryField;
@@ -129,17 +130,6 @@ export class QuerySearchItemComponent {
   }
 
 
-  dateUpdated(newDate: Date) {
-    this.querySearchService.log('Date updated', newDate);
-    this.querySearchService.log('Formatted date', this.item.value);
-  }
-
-  betweenDateUpdated() {
-    this.item.value = [this.leftDate, this.rightDate];
-    this.querySearchService.log('Date updated', this.leftDate, this.rightDate);
-    this.querySearchService.log('Formatted date', this.item.value);
-  }
-
   get formFieldAppearance() {
     return this.querySearchService.formFieldAppearance;
   }
@@ -150,14 +140,6 @@ export class QuerySearchItemComponent {
 
   get item(): QueryItem {
     return this._item;
-  }
-
-  get isObservable(): boolean {
-    if (!!this.selectedField && !!this.selectedField.values) {
-      return this.selectedField.values instanceof Observable
-    }
-
-    return false;
   }
 
   get flagType() {
@@ -177,30 +159,11 @@ export class QuerySearchItemComponent {
   }
 
   private configureDateField() {
-    this.querySearchService.log('Configuring date field. Is between date:', this.isBetweenDate, this.item);
-
-    if (this.isBetweenDate) {
+    if (!!this.doubleDateFieldComponent) {
+      this.changeDetectorRef.detectChanges();
+      this.doubleDateFieldComponent.configure();
+    } else if (this.showBetweenDateFields && !this.doubleHeight) {
       this.doubleHeight = true;
-      this.showBetweenDateFields = true;
-
-      if (this.item.value) {
-        const dateStrings = transformToDate(this.item.value);
-        if (dateStrings instanceof Array) {
-          const leftDateString = dateStrings[0];
-          const rightDateString = dateStrings[1];
-
-          if (!!leftDateString) {
-            this.leftDate = new Date(leftDateString);
-          }
-
-          if (!!rightDateString) {
-            this.rightDate = new Date(rightDateString);
-          }
-        }
-      }
-    } else {
-      this.doubleHeight = false;
-      this.showBetweenDateFields = false;
     }
 
     this.changeDetectorRef.detectChanges();

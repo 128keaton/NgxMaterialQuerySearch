@@ -1,0 +1,25 @@
+<div class="between-dates">
+  <mat-divider vertical class="between-dates-outer"></mat-divider>
+  <div class="between-dates-fields">
+    <div class="between-date-field">
+      <mat-divider></mat-divider>
+      <mat-form-field [appearance]="formFieldAppearance" class="value-field">
+        <mat-label>Start Date</mat-label>
+        <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="leftDate"
+               (ngModelChange)="betweenDateUpdated()">
+        <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
+        <mat-datepicker #valuePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="between-date-field" [@bottomField]>
+      <mat-divider></mat-divider>
+      <mat-form-field [appearance]="formFieldAppearance" class="value-field">
+        <mat-label>End Date</mat-label>
+        <input matInput autocomplete="off" [matDatepicker]="secondValuePicker" [(ngModel)]="rightDate"
+               (ngModelChange)="betweenDateUpdated()">
+        <mat-datepicker-toggle matSuffix [for]="secondValuePicker"></mat-datepicker-toggle>
+        <mat-datepicker #secondValuePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

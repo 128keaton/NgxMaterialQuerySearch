@@ -1,3 +1,10 @@
+# 0.3.8
+- Improved:
+  - Layout with between date fields has been improved considerably
+  
+- New:
+  - Infinite scroll on autocomplete options
+  
 # 0.3.7
 - Fixed:
   - Inactive rules are now no longer included with the query

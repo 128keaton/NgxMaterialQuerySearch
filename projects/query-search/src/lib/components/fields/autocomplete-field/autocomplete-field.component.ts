@@ -50,7 +50,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   values: Observable<any[]>;
-
+  maxResults: number | undefined;
   $loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   totalValues: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   searchValue: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -59,6 +59,8 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   selectedValues: any[] = [];
   currentSearchValue: string = '';
 
+  private _loading = false;
+  private _totalValues = 0;
   private _currentOperator: any;
   private _selectedField: QueryField;
   private _valuesObservable: Observable<any[]>;
@@ -66,6 +68,8 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
   constructor(private querySearchService: QuerySearchService,
               private changeDetectorRef: ChangeDetectorRef) {
+    this.maxResults = this.querySearchService.resultsLimit;
+    this.$loading.subscribe(loading => this._loading = loading);
   }
 
   ngAfterViewInit() {
@@ -89,10 +93,6 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
   get formFieldAppearance() {
     return this.querySearchService.formFieldAppearance;
-  }
-
-  get maxResults() {
-    return this.querySearchService.resultsLimit;
   }
 
   searchValues(event: Event) {
@@ -181,6 +181,17 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     this.item.value = null;
   }
 
+  onScroll() {
+    if (this.maxResults && this.maxResults < this._totalValues && !this._loading) {
+      this.maxResults = this.maxResults + this.maxResults;
+      // Set loading to true so if we have an observable it works right
+      this.$loading.next(true);
+
+      // Finally, setup our visibleValues observable
+      this.setupVisibleValues();
+    }
+  }
+
   private setupFieldValueListener(field: ElementRef) {
     if (this._fieldValueSubscription) {
       this._fieldValueSubscription.unsubscribe();
@@ -251,6 +262,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
       map(values => {
         if (!!this.maxResults && values.length > this.maxResults && (!this.currentSearchValue || this.currentSearchValue.trim().length === 0)) {
           const returnedValues: any[] = [];
+          this._totalValues = values.length;
           values.forEach((value, index) => {
             if (index + 1 < (this.maxResults || 50)) {
               returnedValues.push(value);

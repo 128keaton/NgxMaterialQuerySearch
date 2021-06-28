@@ -1,20 +1,21 @@
 :host {
   overflow: hidden;
-  display: block;
+  display: flex;
   position: relative;
+
+  &.double-height {
+    min-height: 128px;
+  }
 
   .query-search-item-wrapper {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding-top: 10px;
     padding-left: 1em;
     padding-bottom: 5px;
     position: relative;
     margin-left: 15px;
-
-    &.double-height {
-      min-height: 128px;
-    }
+    max-height: 72px;
 
     .name-field, .operator-field, .value-field {
       min-width: 220px;
@@ -33,6 +34,7 @@
       height: 100%;
       position: absolute;
       left: 1em;
+      padding-bottom: 1px;
 
       &.hide-notate-group {
         opacity: 0;
@@ -44,34 +46,35 @@
       min-width: 30px;
       padding-bottom: 5px;
       margin-left: 2px;
+      align-self: center;
     }
 
     .separate-fields {
       position: relative !important;
       min-width: 100px;
       padding-bottom: 5px;
+      align-self: center;
 
       @media screen and (max-width: 1024px) {
         min-width: 50px;
       }
     }
 
-    .between-date-separator {
-      min-width: 90px !important;
-    }
-
     .separate-button {
       position: relative !important;
       min-width: 25px;
       padding-bottom: 5px;
+      align-self: center;
 
       &.between-order-delete {
+        align-self: center;
         min-width: 10px;
       }
     }
 
     .delete-button, .flag-button {
       margin-bottom: 7px;
+      align-self: center;
       box-shadow: none !important;
     }
 
@@ -101,43 +104,12 @@
     height: 27px;
   }
 
+}
 
-  .between-dates {
-    position: relative;
+.between-date-separator {
+  min-width: 90px !important;
+}
 
-    .between-dates-outer {
-      position: absolute;
-      left: 0;
-      top: 2em;
-      bottom: 2em;
-    }
-
-    .between-dates-fields {
-      &.show {
-        .between-date-field {
-          transform: translateY(0);
-        }
-      }
-    }
-
-    .between-date-field {
-      display: flex;
-      align-items: center;
-      transition: transform 300ms ease-in-out;
-
-      &:first-child {
-        transform: translateY(26px);
-        margin-bottom: 5px;
-      }
-
-      &:last-child {
-        transform: translateY(-26px);
-      }
-
-      mat-divider {
-        width: 7px;
-        margin-left: 1px;
-      }
-    }
-  }
+name-field, operator-field {
+  align-self: center;
 }
