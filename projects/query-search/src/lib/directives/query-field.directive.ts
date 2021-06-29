@@ -25,6 +25,9 @@ export class QueryFieldDirective implements OnInit {
   @Input()
   tooltip?: string;
 
+  @Input()
+  maxLength?: number;
+
   constructor() { }
 
   ngOnInit(): void {

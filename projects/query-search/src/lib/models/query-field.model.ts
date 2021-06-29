@@ -7,4 +7,5 @@ export interface QueryField {
   format?: string;
   label?: string;
   tooltip?: string;
+  maxLength?: number;
 }

@@ -27,7 +27,8 @@ export class QueryFieldsDirective {
         type: field.type,
         format: field.format,
         label: field.label,
-        tooltip: field.tooltip
+        tooltip: field.tooltip,
+        maxLength: field.maxLength
       }
     })
   }

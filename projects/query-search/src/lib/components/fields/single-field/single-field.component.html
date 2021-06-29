@@ -1,4 +1,4 @@
 <autocomplete-field *ngIf="showAutocompleteField" [multi]="multi" [item]="item" [value]="item.value" (valueChange)="valueChanged($event)"></autocomplete-field>
 <date-field *ngIf="showDateField" [value]="item.value" (valueChange)="valueChanged($event)"></date-field>
-<plain-value-field *ngIf="showPlainValueField" [isNumber]="isNumber" [value]="item.value" (valueChange)="valueChanged($event)"></plain-value-field>
+<plain-value-field *ngIf="showPlainValueField" [isNumber]="isNumber" [maxLength]="maxLength" [value]="item.value" (valueChange)="valueChanged($event)"></plain-value-field>
 

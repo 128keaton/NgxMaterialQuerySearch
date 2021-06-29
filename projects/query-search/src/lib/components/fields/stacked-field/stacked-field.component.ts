@@ -63,6 +63,7 @@ export class StackedFieldComponent {
   leftValue: any;
   rightValue: any;
 
+  maxLength: number | undefined;
   operator: ConditionOperator;
   type: string = 'string';
   hasValues: boolean = false;
@@ -120,6 +121,7 @@ export class StackedFieldComponent {
     this.setType();
     this.setOperator();
     this.setHasValues();
+    this.setMaxLength();
     this.setValues();
     this.updateValues();
     this.changeDetectorRef.detectChanges();
@@ -150,6 +152,12 @@ export class StackedFieldComponent {
     } else {
       this.leftValue = null;
       this.rightValue = null;
+    }
+  }
+
+  private setMaxLength() {
+    if (!!this.item && !!this._item.fieldName) {
+      this.maxLength = this.querySearchService.getFieldMaxLength(this._item.fieldName);
     }
   }
 

@@ -228,6 +228,21 @@ export class QuerySearchService {
   }
 
   /**
+   * Returns the max length for a field
+   * @param fieldName
+   */
+  getFieldMaxLength(fieldName: string): number | undefined {
+    const field = this.getField(fieldName);
+
+    if (!!field) {
+      return field.maxLength;
+    }
+
+    return;
+  }
+
+
+  /**
    * Check if a field has provided values
    * @param fieldName - Name of the field
    */

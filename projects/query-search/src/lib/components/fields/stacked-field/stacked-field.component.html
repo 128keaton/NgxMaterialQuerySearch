@@ -3,16 +3,20 @@
   <div class="between-value-fields">
     <div class="between-value-field">
       <mat-divider></mat-divider>
-      <autocomplete-field *ngIf="showAutocompleteField" [item]="item" [value]="leftValue" [multi]="false" (valueChange)="leftValueChanged($event)"></autocomplete-field>
+      <autocomplete-field *ngIf="showAutocompleteField" [item]="item" [value]="leftValue" [multi]="false"
+                          (valueChange)="leftValueChanged($event)"></autocomplete-field>
       <date-field *ngIf="showDateField" [(value)]="leftValue" (valueChange)="leftValueChanged($event)"></date-field>
-      <plain-value-field [value]="leftValue" (valueChange)="leftValueChanged($event)" [isNumber]="isNumber"
+      <plain-value-field [value]="leftValue" [maxLength]="maxLength" (valueChange)="leftValueChanged($event)"
+                         [isNumber]="isNumber"
                          *ngIf="showPlainValueField"></plain-value-field>
     </div>
     <div class="between-value-field" [@bottomField]>
       <mat-divider></mat-divider>
-      <autocomplete-field *ngIf="showAutocompleteField" [item]="item" [value]="rightValue"  [multi]="false" (valueChange)="rightValueChanged($event)"></autocomplete-field>
+      <autocomplete-field *ngIf="showAutocompleteField" [item]="item" [value]="rightValue" [multi]="false"
+                          (valueChange)="rightValueChanged($event)"></autocomplete-field>
       <date-field *ngIf="showDateField" [(value)]="rightValue" (valueChange)="rightValueChanged($event)"></date-field>
-      <plain-value-field [value]="rightValue" (valueChange)="rightValueChanged($event)" [isNumber]="isNumber"
+      <plain-value-field [value]="rightValue" [maxLength]="maxLength" (valueChange)="rightValueChanged($event)"
+                         [isNumber]="isNumber"
                          *ngIf="showPlainValueField"></plain-value-field>
     </div>
   </div>

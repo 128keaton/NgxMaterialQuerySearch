@@ -12,7 +12,7 @@ import {QuerySearchGroupComponent} from './components/query-search-group/query-s
 import {MatMenuModule} from "@angular/material/menu";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {GroupTypeSelectorComponent} from './components/group-type-selector/group-type-selector.component';
-import {QueryFieldDirective, QueryFieldsDirective} from "./directives/";
+import {QueryFieldDirective, QueryFieldsDirective, OptionsScrollDirective, LimitDirective} from "./directives/";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfig, QuerySearchConfiguration} from "./query-search.config";
 import {OperatorPipe} from './pipes/operator.pipe';
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
@@ -30,7 +30,6 @@ import {AutocompleteFieldComponent} from './components/fields/autocomplete-field
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {NameDialogComponent} from './components/dialogs/name-dialog/name-dialog.component';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import {OptionsScrollDirective} from './directives/options-scroll.directive';
 import {DateFieldComponent} from './components/fields/date-field/date-field.component';
 import {StackedFieldComponent} from './components/fields/stacked-field/stacked-field.component';
 import {SingleFieldComponent} from './components/fields/single-field/single-field.component';
@@ -53,6 +52,7 @@ import {SingleFieldComponent} from './components/fields/single-field/single-fiel
     DateFieldComponent,
     StackedFieldComponent,
     SingleFieldComponent,
+    LimitDirective,
   ],
   imports: [
     CommonModule,

@@ -1,3 +1,7 @@
+# 0.4.4
+- New:
+  - Adds `maxLength` option for fields to limit input
+  
 # 0.4.3
 - Fixed:
   - Inconsistent visual layout issues with stacked fields

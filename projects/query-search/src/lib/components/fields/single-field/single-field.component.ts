@@ -38,6 +38,7 @@ export class SingleFieldComponent {
   @ViewChildren(AutocompleteFieldComponent)
   autocompleteFields: QueryList<AutocompleteFieldComponent>
 
+  maxLength: number | undefined;
   operator: string;
   type: string = 'string';
   hasValues: boolean = false;
@@ -90,6 +91,7 @@ export class SingleFieldComponent {
     this.setType();
     this.setOperator();
     this.setHasValues();
+    this.setMaxLength();
     this.changeDetectorRef.detectChanges();
     this.updateFields();
   }
@@ -106,6 +108,12 @@ export class SingleFieldComponent {
 
     this.operator = this.item.condition;
     this.multi = multiValueOperators.includes(this.operator);
+  }
+
+  private setMaxLength() {
+    if (!!this.item && !!this._item.fieldName) {
+      this.maxLength = this.querySearchService.getFieldMaxLength(this._item.fieldName);
+    }
   }
 
   private setHasValues() {

@@ -1,6 +1,8 @@
 <mat-form-field [appearance]="formFieldAppearance" class="value-field">
   <mat-label>Value</mat-label>
-  <input autocomplete="off" *ngIf="!isNumber" matInput [ngModel]="value" (ngModelChange)="valueChange.emit($event)">
-  <input autocomplete="off" *ngIf="isNumber" type="number" matInput [ngModel]="value" (ngModelChange)="valueChange.emit($event)">
+  <input autocomplete="off" [limit]="maxLength" *ngIf="!isNumber" matInput [ngModel]="value" maxlength="{{maxLength}}"
+         (ngModelChange)="valueChange.emit($event)">
+  <input autocomplete="off" [limit]="maxLength" *ngIf="isNumber" type="number" matInput maxlength="{{maxLength}}" [ngModel]="value"
+         (ngModelChange)="valueChange.emit($event)">
   <mat-icon matSuffix class="clear-field" (click)="clear()" [class.clear-field-hidden]="!!!value">cancel</mat-icon>
 </mat-form-field>

@@ -17,6 +17,9 @@ export class PlainValueFieldComponent {
   @Input()
   isNumber: boolean = false;
 
+  @Input()
+  maxLength: number | undefined
+
   constructor(private querySearchService: QuerySearchService) {}
 
   get formFieldAppearance() {
