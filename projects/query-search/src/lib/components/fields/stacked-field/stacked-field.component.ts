@@ -155,7 +155,13 @@ export class StackedFieldComponent {
 
   private updateValues() {
     this.querySearchService.log('StackedField - Update Values:', [this.leftValue, this.rightValue]);
-    this._item.value = [this.leftValue, this.rightValue];
+
+    if (this.leftValue === null && this.rightValue === null) {
+      this._item.value = null;
+    } else {
+      this._item.value = [this.leftValue, this.rightValue];
+    }
+
     this.itemChange.emit(this._item);
     this.changeDetectorRef.detectChanges();
   }

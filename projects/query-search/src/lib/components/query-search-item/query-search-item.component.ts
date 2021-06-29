@@ -35,6 +35,7 @@ export class QuerySearchItemComponent {
     this._item = newValue;
     this.querySearchService.log('QuerySearchItem - Set Item', newValue);
     this.loadFieldFromItem();
+    this.doubleHeight = isBetweenOperator(newValue.condition);
   }
 
   @Input()
@@ -124,8 +125,6 @@ export class QuerySearchItemComponent {
 
           this.item.type = field.type;
           this.item.fieldName = field.name;
-
-          this.doubleHeight = isBetweenOperator(this.item.condition);
 
           this.querySearchService.log('QuerySearchItem - Field Loaded:', field);
           this.updateDateFormat(field.format);

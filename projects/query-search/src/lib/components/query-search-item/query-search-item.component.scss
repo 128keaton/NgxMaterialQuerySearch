@@ -9,8 +9,12 @@
 
   &.double-height {
     min-height: 128px;
-    .query-search-item-wrapper, .between-separator {
+    .query-search-item-wrapper {
       margin-bottom: 56px;
+    }
+
+    .between-separator {
+      margin-bottom: 50px;
     }
   }
 

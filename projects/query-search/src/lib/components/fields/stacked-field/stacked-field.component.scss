@@ -1,32 +1,39 @@
+:host {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
 .value-field {
   min-width: 220px;
 }
 
 .between-values {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   .between-values-outer {
     position: absolute;
     left: 0;
-    top: 2em;
-    bottom: 2em;
+    height: 50%;
+    margin-top: 1px;
   }
 
   .between-value-fields {
-    margin-top: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .between-value-field {
     display: flex;
     align-items: center;
 
-    &:first-child {
-      margin-bottom: 5px;
-    }
-
     mat-divider {
       width: 7px;
       margin-left: 1px;
+      margin-top: 1px;
     }
   }
 }

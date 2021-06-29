@@ -1,3 +1,8 @@
+# 0.4.3
+- Fixed:
+  - Inconsistent visual layout issues with stacked fields
+  - Stacked fields with empty values would set empty strings on the item
+  
 # 0.4.2
 - Fixed:
   - Visual layout issues with stacked fields
