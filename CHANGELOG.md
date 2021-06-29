@@ -1,3 +1,7 @@
+# 0.4.2
+- Fixed:
+  - Visual layout issues with stacked fields
+  
 # 0.4.1
 - Improved:
   - Rewrote field components to allow for more extendable use

@@ -125,6 +125,8 @@ export class QuerySearchItemComponent {
           this.item.type = field.type;
           this.item.fieldName = field.name;
 
+          this.doubleHeight = isBetweenOperator(this.item.condition);
+
           this.querySearchService.log('QuerySearchItem - Field Loaded:', field);
           this.updateDateFormat(field.format);
           this.updateFields();
