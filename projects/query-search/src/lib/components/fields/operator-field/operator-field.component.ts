@@ -26,7 +26,7 @@ export class OperatorFieldComponent {
   }
 
   @Output()
-  operatorSelected = new EventEmitter<string>(true);
+  itemChange: EventEmitter<QueryItem> = new EventEmitter<QueryItem>();
 
   operatorFieldTrigger: string;
   operators: string[];
@@ -47,7 +47,7 @@ export class OperatorFieldComponent {
 
   fieldChanged(event: string, emit = true) {
     if (emit) {
-      this.operatorSelected.emit(event);
+      this.itemChange.emit(this.item);
     }
 
     this.querySearchService.log('Operator Field Changed', event);

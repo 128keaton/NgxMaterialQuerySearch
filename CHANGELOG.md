@@ -1,3 +1,9 @@
+# 0.4.1
+- Improved:
+  - Rewrote field components to allow for more extendable use
+  - All fields now work with BETWEEN (two inputs appear)
+  - Library faster? Maybe?
+  
 # 0.4.0
 - Improved:
   - Layout issues pertaining to double height items

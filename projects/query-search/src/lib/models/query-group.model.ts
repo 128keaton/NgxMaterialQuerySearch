@@ -2,7 +2,7 @@ import {QueryItem} from "./query-item.model";
 import {QueryBase} from "./query-base.model";
 import {QueryRule, QueryRuleGroup} from "./rules";
 import {ConditionOperator} from "../enums";
-import {getEnumKeyByEnumValue} from "../helpers/query-search.helpers";
+import {getEnumKeyByEnumValue} from "../helpers/general.helpers";
 
 export class QueryGroup extends QueryBase {
   type: 'AND' | 'OR';

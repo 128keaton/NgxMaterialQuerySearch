@@ -1,4 +1,4 @@
-import {ProvidedValue, QueryField} from "../models";
+import {QueryField} from "../models";
 
 export function isEven(n: number): boolean {
   return n % 2 == 0;
@@ -77,53 +77,6 @@ export function transformToDate(value: any): string | string[] | undefined {
       return undefined;
     }
   }
-}
-
-/**
- * Toggle selection of values
- * @param value
- * @param values
- * @param operator
- */
-export function toggleValueSelection(value: any | ProvidedValue, values: any[] | ProvidedValue[], operator: any): any[] | ProvidedValue[] {
-  const doubleValueOperators = [
-    'BETWEEN'
-  ];
-
-  const multiValueOperators = [
-    'IN',
-    'NOT_IN'
-  ];
-
-  const onlyDoTwo = doubleValueOperators.includes(operator);
-  const allowMultiple = multiValueOperators.includes(operator);
-
-  // Check if the value is a ProvidedValue
-  if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
-    // Check if we're not allowed to have more than one value
-    if (!allowMultiple) {
-      // Check if we're not allowed to have more than two, and check if we already have a value in the array
-      if (onlyDoTwo && values.length == 2) {
-        // Check if the value is already in the array, and if so, remove it. Otherwise, remove the oldest value and append our value
-        return (values.includes(value.value) ? values.filter(v => v !== value.value) : [...values.slice(1), value.value])
-      } else if (!onlyDoTwo) {
-        // Check if the value is already in the array, and if so, remove it. Otherwise, return an array with a single value
-        return (values.includes(value.value) ? values.filter(v => v !== value.value) : [value.value])
-      }
-    }
-
-    // Check if the value is already in the array, and if so, remove it. Otherwise, return an array with our appended value
-    return (values.includes(value.value) ? values.filter(v => v !== value.value) : [...values, value.value])
-  }
-
-  if (!allowMultiple) {
-    if (onlyDoTwo && values.length == 2) {
-      return (values.includes(value) ? values.filter(v => v !== value) : [...values.slice(1), value])
-    } else if (!onlyDoTwo) {
-      return (values.includes(value) ? values.filter(v => v !== value) : [value])
-    }
-  }
-  return (values.includes(value) ? values.filter(v => v !== value) : [...values, value])
 }
 
 export function filterFieldNames(partialValue: string | null, fields: QueryField[]): QueryField[] {

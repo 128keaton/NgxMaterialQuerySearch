@@ -1,7 +1,7 @@
 <mat-form-field [appearance]="formFieldAppearance" class="value-field">
   <mat-label>Value</mat-label>
-  <input matInput autocomplete="off" [matDatepicker]="valuePicker" [(ngModel)]="item.value"
-         (ngModelChange)="dateUpdated($event)">
+  <input matInput autocomplete="off" [matDatepicker]="valuePicker" [ngModel]="value"
+         (ngModelChange)="valueChange.emit($event)">
   <mat-datepicker-toggle matSuffix [for]="valuePicker"></mat-datepicker-toggle>
   <mat-datepicker #valuePicker></mat-datepicker>
 </mat-form-field>

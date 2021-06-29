@@ -3,8 +3,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
-  Input,
+  ElementRef, EventEmitter,
+  Input, Output,
   QueryList,
   ViewChildren
 } from '@angular/core';
@@ -12,7 +12,13 @@ import {QuerySearchService} from "../../../query-search.service";
 import {ProvidedValue, QueryField, QueryItem} from "../../../models";
 import {BehaviorSubject, fromEvent, Observable, of, Subscription} from "rxjs";
 import {distinctUntilChanged, filter, map, shareReplay, startWith, switchMap, tap} from "rxjs/operators";
-import {toggleValueSelection} from "../../../helpers/query-search.helpers";
+import {
+  handleRawValues,
+  handleReturnValues,
+  handleValueSelected,
+  toggleValueSelection
+} from "../../../helpers/values.helper";
+import {isArray} from "rxjs/internal-compatibility";
 
 @Component({
   selector: 'autocomplete-field',
@@ -29,25 +35,23 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   valueInputs: QueryList<ElementRef>;
 
   @Input()
-  item: QueryItem;
-
-  @Input()
-  set operator(operator: any) {
-    this._currentOperator = operator;
-    this.selectedValues = [];
+  set item(newValue: QueryItem) {
+    this.querySearchService.log('AutocompleteField - Item Changed:', newValue);
+    this._item = newValue;
+    this.setField();
     this.changeDetectorRef.detectChanges();
   }
 
   @Input()
-  set selectedField(field: QueryField) {
-    this._selectedField = field;
-    this.checkForObservable();
-    this.resetValues();
+  set multi(newValue: string | boolean) {
+    this._multiSelect = `${newValue}` === 'true';
   }
 
-  get selectedField() {
-    return this._selectedField;
-  }
+  @Input()
+  value: any;
+
+  @Output()
+  valueChange: EventEmitter<any> = new EventEmitter();
 
   values: Observable<any[]>;
   maxResults: number | undefined;
@@ -59,10 +63,11 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   selectedValues: any[] = [];
   currentSearchValue: string = '';
 
+  private _multiSelect = false;
+  private _field: QueryField | null;
+  private _item: QueryItem;
   private _loading = false;
   private _totalValues = 0;
-  private _currentOperator: any;
-  private _selectedField: QueryField;
   private _valuesObservable: Observable<any[]>;
   private _fieldValueSubscription: Subscription;
 
@@ -84,8 +89,8 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   get isObservable(): boolean {
-    if (!!this.selectedField && !!this.selectedField.values) {
-      return this.selectedField.values instanceof Observable
+    if (!!this._field && !!this._field.values) {
+      return this._field.values instanceof Observable
     }
 
     return false;
@@ -95,16 +100,16 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     return this.querySearchService.formFieldAppearance;
   }
 
+  get item() {
+    return this._item;
+  }
+
   searchValues(event: Event) {
     event.stopImmediatePropagation();
   }
 
   valueSelected(value: any | ProvidedValue) {
-    if (value.hasOwnProperty('displayValue') && value.hasOwnProperty('value')) {
-      return this.selectedValues.includes(value.value);
-    }
-
-    return this.selectedValues.includes(value);
+    return handleValueSelected(value, this.selectedValues);
   }
 
   /**
@@ -113,7 +118,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
    * @param value
    */
   optionClicked(event: Event, value: any) {
-    this.querySearchService.log('Option clicked', value);
+    this.querySearchService.log('AutocompleteField - Option Clicked:', value);
     event.stopPropagation();
     this.toggleSelection(value);
   }
@@ -123,9 +128,17 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   toggleSelection(value: any | ProvidedValue) {
-    this.selectedValues = toggleValueSelection(value, this.selectedValues, this._currentOperator);
-    this.item.value = this.selectedValues.join(',');
+    this.selectedValues = toggleValueSelection(value, this.selectedValues, this.item.condition, this._multiSelect);
+
+    if (this.selectedValues.length > 0) {
+      this.value = this.selectedValues.join(',');
+    } else {
+      this.value = null;
+    }
+
     this.changeDetectorRef.detectChanges();
+    this.querySearchService.log('AutocompleteField - Toggle Selection:', this.value);
+    this.valueChange.emit(this.value);
   }
 
   searchValueChanged(partialValue: string) {
@@ -140,22 +153,24 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   getValues(): Observable<any[] | ProvidedValue[]> {
-    if (!!this.selectedField && !!this.selectedField.values) {
-      if (this.selectedField.values instanceof Observable) {
+    if (!!this._field && !!this._field.values) {
+      if (this._field.values instanceof Observable) {
         return this._valuesObservable.pipe(
           tap(values => {
             this.totalValues.next(values.length);
           })
         )
-      } else if (this.selectedField.values.length > 0) {
-        this.totalValues.next(this.selectedField.values.length);
-        return of(this.selectedField.values).pipe(
+
+      } else if (this._field.values.length > 0) {
+        this.totalValues.next(this._field.values.length);
+
+        return of(this._field.values).pipe(
           tap(() => this.$loading.next(false))
         );
       }
     }
 
-    if (this.selectedField.type === 'boolean') {
+    if (!!this._field && this._field.type === 'boolean') {
       const booleanValues = [
         {
           value: 'true',
@@ -178,7 +193,8 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   clear() {
-    this.item.value = null;
+    this.querySearchService.log('AutocompleteField - Clearing selected values');
+    this.updateValue(null);
   }
 
   onScroll() {
@@ -202,33 +218,60 @@ export class AutocompleteFieldComponent implements AfterViewInit {
         filter(Boolean),
         distinctUntilChanged(),
         map(() => field.nativeElement.value),
-        tap(inputValue => this.processValuesSelected(inputValue)),
       ).subscribe(inputValue => {
-        this.querySearchService.valueFieldChanged(this.selectedField, inputValue);
+        this.processValuesSelected(inputValue)
       });
     }
   }
 
   private processValuesSelected(inputValue: string) {
-    this.querySearchService.log('Autocomplete Field - Process Values Selected', inputValue);
+    this.querySearchService.log('AutocompleteField - Process Values Selected', inputValue);
     if (!!inputValue && inputValue.length) {
       this.selectedValues = inputValue.split(',');
     } else {
       this.selectedValues = [];
     }
 
-    this.querySearchService.log('Autocomplete Field - Process Values Selected', this.selectedValues);
+    this.querySearchService.log('AutocompleteField - Process Values Selected', this.selectedValues);
     this.changeDetectorRef.detectChanges();
   }
 
+  private setField() {
+    if (!!this.item && !!this.item.fieldName) {
+      this._field = this.querySearchService.getField(this.item.fieldName);
+
+      this.checkForObservable();
+      this.resetValues();
+    }
+  }
+
   private resetValues() {
-    this.querySearchService.log('Autocomplete Field - Reset Values Called');
+    this.querySearchService.log('AutocompleteField - Reset Values Called');
+    let didSetSelected = false;
 
-    if (this.selectedField.name !== this.item.fieldName) {
-      // Set the item value to null
-      this.item.value = null;
+    if (!!this.item && !!this.item.value) {
+      if (isArray(this.item.value)) {
+        this.querySearchService.log('AutocompleteField - Mapping values', this.item.value);
+        this.selectedValues = this.item.value;
+        didSetSelected = true;
+      } else if (typeof this.item.value === 'string') {
+        this.querySearchService.log('AutocompleteField - Mapping values', this.item.value);
+        this.selectedValues = this.item.value.split(',');
+        didSetSelected = true;
+      }
+    } else if (!!this.value && !didSetSelected) {
+      if (isArray(this.value)) {
+        this.querySearchService.log('AutocompleteField - Mapping values', this.value);
+        this.selectedValues = this.value;
+        didSetSelected = true;
+      } else if (typeof this.value === 'string') {
+        this.querySearchService.log('AutocompleteField - Mapping values', this.value);
+        this.selectedValues = this.value.split(',');
+        didSetSelected = true;
+      }
+    }
 
-      // Clear our selected values array
+    if (!didSetSelected) {
       this.selectedValues = [];
     }
 
@@ -240,6 +283,9 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
     // Finally, setup our visibleValues observable
     this.setupVisibleValues();
+
+    // Detect changes
+    this.changeDetectorRef.detectChanges();
   }
 
   private setupVisibleValues() {
@@ -247,29 +293,14 @@ export class AutocompleteFieldComponent implements AfterViewInit {
       startWith(null),
       switchMap(searchValue => {
         return this.values.pipe(
-          map(rawValues => {
-            const values = Object.assign([], rawValues);
-            const lowerValue = (searchValue || '').trim().toLowerCase();
-
-            if (lowerValue.length > 0) {
-              return this.mapSearchValues(lowerValue, values)
-            }
-
-            return values;
-          }),
+          map(rawValues => handleRawValues(rawValues, searchValue)),
         );
       }),
       map(values => {
         if (!!this.maxResults && values.length > this.maxResults && (!this.currentSearchValue || this.currentSearchValue.trim().length === 0)) {
-          const returnedValues: any[] = [];
           this._totalValues = values.length;
-          values.forEach((value, index) => {
-            if (index + 1 < (this.maxResults || 50)) {
-              returnedValues.push(value);
-            }
-          });
 
-          return [...new Set(returnedValues)];
+          return handleReturnValues(values, this.maxResults);
         }
 
         return values;
@@ -277,25 +308,6 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     )
   }
 
-  /**
-   * Filter through values to find items containing the search text
-   * @param searchValue - Values to search for
-   * @param values - Array of any or ProvidedValue
-   * @private
-   */
-  private mapSearchValues(searchValue: string, values: any[]) {
-    return values.filter(value => {
-      if (value.hasOwnProperty('displayValue')) {
-        if (value.hasOwnProperty('description') && value.description) {
-          return value.value.toLowerCase().includes(searchValue) || value.displayValue.toLowerCase().includes(searchValue) || value.description.toLowerCase().includes(searchValue)
-        }
-
-        return value.value.toLowerCase().includes(searchValue) || value.displayValue.toLowerCase().includes(searchValue)
-      }
-
-      return `${value}`.toLowerCase().includes(searchValue);
-    })
-  }
 
   private setupInputValueFields(field: ElementRef) {
     if (!!field) {
@@ -304,10 +316,15 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   }
 
   private checkForObservable() {
-    if (!!this.selectedField && !!this.selectedField.values && this.selectedField.values instanceof Observable) {
-      this._valuesObservable = this.selectedField.values.pipe(
+    if (!!this._field && !!this._field.values && this._field.values instanceof Observable) {
+      this._valuesObservable = this._field.values.pipe(
         tap(() => this.$loading.next(false))
       )
     }
+  }
+
+  private updateValue(value: any) {
+    this.value = value;
+    this.valueChange.emit(value);
   }
 }

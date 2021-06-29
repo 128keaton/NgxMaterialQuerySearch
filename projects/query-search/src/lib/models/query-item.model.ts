@@ -1,5 +1,5 @@
 import {QueryBase} from "./query-base.model";
-import {getEnumKeyByEnumValue, isDefined, transformValue} from "../helpers/query-search.helpers";
+import {isDefined, transformValue} from "../helpers/general.helpers";
 import {ConditionOperator} from "../enums";
 import {QueryRule} from "./rules";
 

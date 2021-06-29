@@ -31,7 +31,6 @@ export class AppComponent {
     this.githubRepo = packageData.repository;
 
     this.querySearchService.consumeModel(Demo, {
-      birthday: 'Birthday 2',
       count: 'Total Count',
       isActive: 'Active',
       name: 'Other Name'

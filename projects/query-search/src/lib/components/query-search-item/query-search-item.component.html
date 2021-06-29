@@ -15,26 +15,17 @@
 
   <mat-divider class="separate-button" [class.pad-dividers]="padDividers"></mat-divider>
 
-  <name-field [(selectedField)]="selectedField" (selectedFieldChange)="fieldSelected($event)"></name-field>
+  <name-field [(item)]="item"></name-field>
 
-  <operator-field *ngIf="showOperatorField" [item]="item"
-                  (operatorSelected)="operatorSelected($event)"></operator-field>
+  <operator-field *ngIf="showOperatorField" [(item)]="item"></operator-field>
 
-  <ng-container *ngIf="showValueField">
-    <mat-divider class="separate-fields" [class.between-date-separator]="isBetweenDate"
-                 [class.pad-dividers]="padDividers"></mat-divider>
-    <ng-container *ngIf="!isDate">
-      <plain-value-field [item]="item" [isNumber]="isNumber" *ngIf="!hasValues"></plain-value-field>
-
-      <autocomplete-field [item]="item" [selectedField]="selectedField" *ngIf="hasValues"
-                          [operator]="operatorUpdated|async"></autocomplete-field>
-    </ng-container>
+  <ng-container *ngIf="showValueField && !isStackedField">
+    <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
+    <single-field [(item)]="item"></single-field>
   </ng-container>
 </div>
 
-<ng-container *ngIf="showValueField">
-  <double-date-field *ngIf="isBetweenDate" [(item)]="item" [(showBetweenDateFields)]="showBetweenDateFields"
-                     [(doubleHeight)]="doubleHeight" [isBetweenDate]="isBetweenDate"></double-date-field>
-
-  <single-date-field *ngIf="isDate && !isBetweenDate" [(item)]="item"></single-date-field>
+<ng-container *ngIf="showValueField && isStackedField">
+  <mat-divider class="separate-fields between-separator" [class.pad-dividers]="padDividers"></mat-divider>
+  <stacked-field [(item)]="item"></stacked-field>
 </ng-container>

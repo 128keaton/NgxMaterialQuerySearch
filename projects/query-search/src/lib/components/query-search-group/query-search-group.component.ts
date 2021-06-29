@@ -1,11 +1,11 @@
 import {Component, EventEmitter, HostBinding, Input, Output, QueryList, ViewChildren} from '@angular/core';
 import {QueryGroup, SavedFilter} from "../../models";
-import {isEven} from "../../helpers/query-search.helpers";
 import {QuerySearchService} from "../../query-search.service";
 import {inOutAnimations} from "../../animations";
 import {QuerySearchItemComponent} from "../query-search-item/query-search-item.component";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {NameDialogComponent} from "../dialogs/name-dialog/name-dialog.component";
+import {isEven} from "../../helpers/general.helpers";
 
 @Component({
   selector: 'query-search-group',

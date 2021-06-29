@@ -1,6 +1,6 @@
 import {EventEmitter, Inject, Optional, TemplateRef} from '@angular/core';
 import {Injectable} from '@angular/core';
-import {QueryField, ValueNotification, QueryRuleGroup, SavedFilter, QueryRule} from "./models";
+import {QueryField, ValueNotification, QueryRuleGroup, SavedFilter, QueryRule, QueryItem} from "./models";
 import {BehaviorSubject, Observable} from "rxjs";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from "./query-search.config";
 import {ConditionOperator} from "./enums";
@@ -8,6 +8,7 @@ import {NameDialogData} from "./models/name-dialog-data.model";
 import {MatDialog} from "@angular/material/dialog";
 import {map} from "rxjs/operators";
 import {ComponentType} from "@angular/cdk/overlay";
+import {isArray} from "rxjs/internal-compatibility";
 
 @Injectable({
   providedIn: 'root'
@@ -205,6 +206,37 @@ export class QuerySearchService {
     this.log('Filter deleted', filter);
     this.savedFilters.next(this.savedFilters.value.filter(f => f.name !== filter.name));
     this.savedFilterDeleted.emit(filter);
+  }
+
+  /**
+   * Check if a field has provided values
+   * @param fieldName - Name of the field
+   */
+  checkForValues(fieldName: string): boolean {
+    if (!!fieldName) {
+      const field = this._fields.find(field => field.name === fieldName);
+
+      if (!!field && !!field.values) {
+        if (isArray(field.values)) {
+          return field.values.length > 0;
+        }
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if a field has provided values
+   * @param fieldName - Name of the field
+   */
+  getField(fieldName: string): QueryField | null {
+    if (!!fieldName) {
+      return this._fields.find(field => field.name === fieldName) || null;
+    }
+
+    return null;
   }
 
   get generateButtonText(): string {

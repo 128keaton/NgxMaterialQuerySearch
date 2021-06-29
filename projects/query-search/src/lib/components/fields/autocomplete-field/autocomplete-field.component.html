@@ -2,9 +2,10 @@
   <mat-label>Value</mat-label>
   <input matInput
          #valueInput
-         [(ngModel)]="item.value"
+         [ngModel]="value"
+         (ngModelChange)="valueChange.emit($event)"
          [matAutocomplete]="valueAutoComplete">
-  <mat-icon matSuffix class="clear-field" (click)="clear()" [class.clear-field-hidden]="!!!item.value || (isObservable && ($loading|async))">cancel</mat-icon>
+  <mat-icon matSuffix class="clear-field" (click)="clear()" [class.clear-field-hidden]="!!!value || (isObservable && ($loading|async))">cancel</mat-icon>
   <div class="input-spinner-wrapper">
     <mat-spinner *ngIf="isObservable && ($loading|async)" [diameter]="20" class="input-spinner"></mat-spinner>
   </div>

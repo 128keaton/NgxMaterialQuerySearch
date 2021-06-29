@@ -30,9 +30,10 @@ import {AutocompleteFieldComponent} from './components/fields/autocomplete-field
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {NameDialogComponent} from './components/dialogs/name-dialog/name-dialog.component';
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import {SingleDateFieldComponent} from './components/fields/single-date-field/single-date-field.component';
-import {DoubleDateFieldComponent} from './components/fields/double-date-field/double-date-field.component';
-import { OptionsScrollDirective } from './directives/options-scroll.directive';
+import {OptionsScrollDirective} from './directives/options-scroll.directive';
+import {DateFieldComponent} from './components/fields/date-field/date-field.component';
+import {StackedFieldComponent} from './components/fields/stacked-field/stacked-field.component';
+import {SingleFieldComponent} from './components/fields/single-field/single-field.component';
 
 @NgModule({
   declarations: [
@@ -48,9 +49,10 @@ import { OptionsScrollDirective } from './directives/options-scroll.directive';
     PlainValueFieldComponent,
     AutocompleteFieldComponent,
     NameDialogComponent,
-    SingleDateFieldComponent,
-    DoubleDateFieldComponent,
     OptionsScrollDirective,
+    DateFieldComponent,
+    StackedFieldComponent,
+    SingleFieldComponent,
   ],
   imports: [
     CommonModule,

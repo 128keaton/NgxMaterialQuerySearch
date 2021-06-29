@@ -2,21 +2,21 @@
   min-width: 220px;
 }
 
-.between-dates {
+.between-values {
   position: relative;
 
-  .between-dates-outer {
+  .between-values-outer {
     position: absolute;
     left: 0;
     top: 2em;
     bottom: 2em;
   }
 
-  .between-dates-fields{
+  .between-value-fields {
     margin-top: 0.95rem;
   }
 
-  .between-date-field {
+  .between-value-field {
     display: flex;
     align-items: center;
 

@@ -1,6 +1,5 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {QuerySearchService} from "../../../query-search.service";
-import {QueryItem} from "../../../models";
 
 @Component({
   selector: 'plain-value-field',
@@ -10,7 +9,10 @@ import {QueryItem} from "../../../models";
 export class PlainValueFieldComponent {
 
   @Input()
-  item: QueryItem;
+  value: any;
+
+  @Output()
+  valueChange: EventEmitter<any> = new EventEmitter<any>();
 
   @Input()
   isNumber: boolean = false;
@@ -22,6 +24,7 @@ export class PlainValueFieldComponent {
   }
 
   clear() {
-    this.item.value = null;
+    this.value = null;
+    this.valueChange.emit(null);
   }
 }

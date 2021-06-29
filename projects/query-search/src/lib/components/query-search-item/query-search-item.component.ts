@@ -1,11 +1,12 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
-  ElementRef,
-  EventEmitter, HostBinding,
-  Input, OnChanges,
+  EventEmitter,
+  HostBinding,
+  Input,
   Output,
-  QueryList, SimpleChanges, ViewChild,
+  QueryList,
   ViewChildren
 } from '@angular/core';
 import {QueryField, QueryItem} from "../../models";
@@ -13,7 +14,9 @@ import {QuerySearchService} from "../../query-search.service";
 import {Observable} from "rxjs";
 import {DateAdapter} from "@angular/material/core";
 import {CustomDateAdapter} from "../../adapters";
-import {DoubleDateFieldComponent} from "../fields/double-date-field/double-date-field.component";
+import {isBetweenOperator, isNullOperator} from "../../helpers/condition.helper";
+import {StackedFieldComponent} from "../fields/stacked-field/stacked-field.component";
+import {SingleFieldComponent} from "../fields/single-field/single-field.component";
 
 
 @Component({
@@ -30,6 +33,7 @@ export class QuerySearchItemComponent {
   @Input()
   set item(newValue: QueryItem) {
     this._item = newValue;
+    this.querySearchService.log('QuerySearchItem - Set Item', newValue);
     this.loadFieldFromItem();
   }
 
@@ -39,25 +43,19 @@ export class QuerySearchItemComponent {
   @Output()
   removed = new EventEmitter<string>();
 
-  @ViewChildren('valueInput')
-  valueInputs: QueryList<ElementRef>;
+  @ViewChildren(StackedFieldComponent)
+  stackedFields: QueryList<StackedFieldComponent>;
 
-  @ViewChildren('searchInput')
-  searchInputs: QueryList<ElementRef>;
-
-  @ViewChild(DoubleDateFieldComponent, {static: false})
-  doubleDateFieldComponent: DoubleDateFieldComponent;
+  @ViewChildren(SingleFieldComponent)
+  singleFields: QueryList<SingleFieldComponent>
 
   @HostBinding('class.double-height')
   doubleHeight = false;
 
   operators: string[];
   fields: Observable<QueryField[]>;
-  selectedField: QueryField;
-  showBetweenDateFields = false;
-  operatorUpdated = new EventEmitter<any>(true);
 
-  private _currentOperator: string;
+  private _currentField: QueryField;
   private _item: QueryItem;
 
   constructor(private querySearchService: QuerySearchService,
@@ -68,54 +66,21 @@ export class QuerySearchItemComponent {
   }
 
   remove() {
-    this.querySearchService.log('Removing field item', this, this.selectedField);
+    this.querySearchService.log('QuerySearchItem - Removing Self', this);
     this.removed.emit(this.item.id);
   }
 
-
-  fieldSelected(field: QueryField) {
-    this.item.fieldName = field.name;
-    this.item.type = field.type;
-    this.querySearchService.log('Field selected', field);
-
-    this.updateDateFormat();
-  }
-
-  get hasValues(): boolean {
-    if (!!this.selectedField) {
-      return !!this.selectedField.values;
-    }
-
-    return false;
-  }
-
-  get isDate(): boolean {
-    if (!!this.selectedField) {
-      return this.selectedField.type === 'date';
-    }
-
-    return false;
-  }
-
-  get isBetweenDate(): boolean {
-    if (!!this.selectedField && !!this._currentOperator) {
-      return this.isDate && this._currentOperator === 'BETWEEN';
-    }
-
-    return false;
-  }
-
-  get isNumber() {
-    if (!!this.selectedField) {
-      return this.selectedField.type === 'number';
-    }
-
-    return false;
-  }
-
   get showValueField(): boolean {
-    if (!!this.item && !!this.item.condition) {
-      return !this.item.condition.toLowerCase().includes('null');
+    if (!!this.item) {
+      return !!this._item.condition && !isNullOperator(this._item.condition) && !!this._item.fieldName;
+    }
+
+    return false;
+  }
+
+  get isStackedField() {
+    if (!!this.item) {
+      return isBetweenOperator(this.item.condition);
     }
 
     return false;
@@ -150,50 +115,39 @@ export class QuerySearchItemComponent {
     return this.item.active ? 'Active' : 'Inactive';
   }
 
-  operatorSelected(operator: any) {
-    this._currentOperator = operator;
-    this.item.value = null;
-    this.querySearchService.log('Clearing selected values for', this);
-    this.operatorUpdated.emit(operator);
-    this.configureDateField();
+  private loadFieldFromItem() {
+    if (!!this.item && !!this.item.fieldName) {
+      this.querySearchService.fields.subscribe(fields => {
+        const field = fields.find(f => f.name === this.item.fieldName);
+        if (!!field && this._currentField !== field) {
+          this._currentField = field;
+
+          this.item.type = field.type;
+          this.item.fieldName = field.name;
+
+          this.querySearchService.log('QuerySearchItem - Field Loaded:', field);
+          this.updateDateFormat(field.format);
+          this.updateFields();
+        }
+      });
+    }
   }
 
-  private configureDateField() {
-    if (!!this.doubleDateFieldComponent) {
-      this.changeDetectorRef.detectChanges();
-      this.doubleDateFieldComponent.configure();
-    } else if (this.showBetweenDateFields && !this.doubleHeight) {
-      this.doubleHeight = true;
+  private updateDateFormat(format: string | undefined) {
+    if (!!format) {
+      (this.dateAdapter as CustomDateAdapter).setFormat(format);
     }
 
     this.changeDetectorRef.detectChanges();
   }
 
-  private loadFieldFromItem() {
-    if (!!this.item && !!this.item.fieldName && !this.selectedField) {
-      this.querySearchService.fields.subscribe(fields => {
-        const field = fields.find(f => f.name === this.item.fieldName);
-        if (!!field) {
-          this.selectedField = field;
-          this.item.type = field.type;
+  private updateFields() {
+    [...(this.singleFields || []), ...(this.stackedFields || [])].forEach(field => {
+      if (field.item !== this.item || field.item.fieldName !== this.item.fieldName || field.item.type !== this.item.type) {
+        field.item = this.item;
+      }
 
-          if (this.item.condition) {
-            this._currentOperator = this.item.condition;
-            setTimeout(() => {
-              this.configureDateField();
-            }, 500);
-          }
-
-          this.querySearchService.log('Field loaded', field);
-          this.updateDateFormat();
-        }
-      })
-    }
-  }
-
-  private updateDateFormat() {
-    if (!!this.selectedField && !!this.selectedField.format) {
-      (this.dateAdapter as CustomDateAdapter).setFormat(this.selectedField.format);
-    }
+      field.itemUpdated();
+    });
   }
 }
