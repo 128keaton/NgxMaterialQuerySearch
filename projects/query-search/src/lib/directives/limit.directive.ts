@@ -7,8 +7,17 @@ export class LimitDirective {
 
   @HostListener('keypress', ['$event']) onKeyPressHandler(event: KeyboardEvent) {
     const inputElement = this.elementRef.nativeElement;
+    const selection = window.getSelection();
 
     if (!!this.limit && inputElement.value.toString().length >= this.limit) {
+      if (
+        !!selection &&
+        !!inputElement.parentNode &&
+        selection.anchorNode === inputElement.parentNode &&
+        selection.toString() === inputElement.value.toString()
+      ) {
+        return;
+      }
       event.preventDefault();
     }
   }

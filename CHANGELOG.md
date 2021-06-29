@@ -1,3 +1,7 @@
+# 0.4.5
+- Improved:
+  - You can double-click to highlight a field with a maxLength value and still type to clear it.
+  
 # 0.4.4
 - New:
   - Adds `maxLength` option for fields to limit input
