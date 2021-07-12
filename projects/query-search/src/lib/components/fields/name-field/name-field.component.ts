@@ -29,6 +29,9 @@ export class NameFieldComponent {
   @Output()
   itemChange: EventEmitter<QueryItem> = new EventEmitter<QueryItem>();
 
+  @Output()
+  nameChange: EventEmitter<string> = new EventEmitter<string>();
+
   allFields: Observable<QueryField[]>;
   visibleFields: Observable<QueryField[]>;
   searchValue: BehaviorSubject<string> = new BehaviorSubject<string>('');
@@ -71,6 +74,7 @@ export class NameFieldComponent {
       if (emit) {
         this.querySearchService.log('NameFieldComponent - Emitting Change:', field)
         this.itemChange.emit(this.item);
+        this.nameChange.emit(field.name);
       } else {
         this.querySearchService.log('NameFieldComponent - Not Emitting Change:', field);
       }

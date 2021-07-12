@@ -1,3 +1,14 @@
+# 0.4.6
+- New:
+  - Provide a filter menu to save/load/modify existing filters (just for more freedom of choice)
+  - If you have an active filter that hasn't been saved, a page reload will have to be confirmed.
+  
+- Fixed:
+  - Field widths being inconsistent
+  
+- Breaking:
+  - Removed handling of SavedFields from the QuerySearchService, please do this logic yourself <3
+  
 # 0.4.5
 - Improved:
   - You can double-click to highlight a field with a maxLength value and still type to clear it.

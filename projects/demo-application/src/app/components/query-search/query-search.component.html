@@ -1,0 +1,28 @@
+
+<mat-menu #filterMenu="matMenu">
+  <button mat-menu-item (click)="loadDemoFilter()" *ngIf="!hasFilter">Load Demo Filter</button>
+  <button mat-menu-item *ngIf="hasFilter" (click)="saveFilter()">
+    <mat-icon>save</mat-icon>
+    Save
+  </button>
+  <button mat-menu-item *ngIf="hasFilter" (click)="saveFilter()">
+    <mat-icon>save</mat-icon>
+    Save as..
+  </button>
+  <button color="warn" mat-menu-item *ngIf="hasFilter" (click)="deleteFilter()">
+    <mat-icon>delete</mat-icon>
+    Delete
+  </button>
+</mat-menu>
+
+<ngx-query-search [filterMenu]="filterMenu" (filterLoaded)="filterLoaded($event)" >
+  <query-fields>
+    <query-field name="fullName" label="Full Name" type="string" tooltip="This is a tooltip for name!"></query-field>
+    <query-field name="hasValues" label="Has Values" type="string" [values]="['a', 'b']"></query-field>
+    <query-field name="birthday" label="Birthday" type="date" format="dd/MM/yyyy"></query-field>
+    <query-field name="joinDay" label="Join Date" type="date" format="MM/dd"></query-field>
+    <query-field name="slow" label="Slow" type="string" [values]="observableValues"></query-field>
+    <query-field name="maxLength" label="Max Length" type="number" [maxLength]="2"></query-field>
+  </query-fields>
+</ngx-query-search>
+<app-output [queryObject]="queryObject"></app-output>

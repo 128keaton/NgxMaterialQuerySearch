@@ -24,49 +24,23 @@
       <mat-icon>delete</mat-icon>
     </button>
     <ng-container *ngIf="isTopLevel">
-      <button mat-button [matMenuTriggerFor]="miscMenu" class="manage-button"
-              *ngIf="querySearchService.hasSavedFilters">
-        <mat-icon>more_vert</mat-icon>
-        <span>Manage</span>
-      </button>
-
       <button mat-button class="clear-button" (click)="clear()" color="warn">
         <mat-icon>delete_sweep</mat-icon>
         <span>Clear</span>
       </button>
-      <mat-menu #miscMenu="matMenu">
-        <button mat-menu-item (click)="createFilter()">
-          <mat-icon>save</mat-icon>
-          <span>Save</span>
-        </button>
-        <button mat-menu-item [matMenuTriggerFor]="filters"
-                [disabled]="!(querySearchService.savedFilters|async)?.length">
-          <mat-icon>filter_list</mat-icon>
-          <span>Filters</span>
-        </button>
-      </mat-menu>
 
-      <mat-menu #filters="matMenu">
-        <button mat-menu-item *ngFor="let filter of (querySearchService.savedFilters|async)"
-                [matMenuTriggerFor]="filterActions" [matMenuTriggerData]="filter">{{filter.name}}</button>
-      </mat-menu>
+      <button mat-button class="manage-button"
+              [matMenuTriggerFor]="filterMenu"
+              *ngIf="filterMenu">
+        <mat-icon>filter_alt</mat-icon>
+        <span>Filters</span>
+      </button>
 
-      <mat-menu #filterActions="matMenu">
-        <ng-template matMenuContent let-savedFilterName="name">
-          <button mat-menu-item (click)="renameFilter(savedFilterName)">
-            <mat-icon>mode_edit</mat-icon>
-            <span>Rename</span>
-          </button>
-          <button mat-menu-item (click)="loadFilter(savedFilterName)">
-            <mat-icon>input</mat-icon>
-            <span>Load</span>
-          </button>
-          <button mat-menu-item (click)="deleteFilter(savedFilterName)">
-            <mat-icon>delete</mat-icon>
-            <span>Delete</span>
-          </button>
-        </ng-template>
-      </mat-menu>
+      <div class="current-filter-meta" *ngIf="currentFilter">
+        <span class="filter-name">Current Filter: <b>{{currentFilter.name}}{{currentFilterChanged ? '*' : ''}}</b></span>
+      </div>
+
+      <ng-content></ng-content>
     </ng-container>
   </div>
 
@@ -78,7 +52,7 @@
   </button>
 </mat-toolbar>
 <div class="group-items-list" [class.hidden]="loadingFilters|async" cdkDropList (cdkDropListDropped)="drop($event)">
-  <query-search-item class="group-item" [class.hidden]="loadingFilters|async" [@inOut] *ngFor="let item of group.items"
+  <query-search-item (markChanged)="markChanged($event)" class="group-item" [class.hidden]="loadingFilters|async" [@inOut] *ngFor="let item of group.items"
                      (removed)="removeItem($event)"
                      [item]="item" [disableDelete]="group.items.length === 1" cdkDrag
                      cdkDragPreviewClass="group-item-dragging"></query-search-item>

@@ -16,3 +16,6 @@ export * from './lib/directives/';
 
 // Enums
 export * from './lib/enums';
+
+// Misc
+export * from './lib/guards/pending-changes.guard';

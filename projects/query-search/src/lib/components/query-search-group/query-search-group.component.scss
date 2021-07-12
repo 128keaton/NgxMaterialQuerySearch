@@ -133,10 +133,22 @@
   }
 }
 
-.manage-button, .clear-button {
-  margin-left: 0.5em;
-}
-
 .add-button {
   margin-left: 1.5em;
+}
+
+.add-button, .clear-button, .manage-button {
+  margin-right: 0.5em;
+}
+
+.current-filter-meta {
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  span.filter-name {
+    font-size: 12px;
+    color: rgb(255 255 255 / 38%);
+  }
 }

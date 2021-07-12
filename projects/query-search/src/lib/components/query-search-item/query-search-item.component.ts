@@ -30,12 +30,16 @@ import {SingleFieldComponent} from "../fields/single-field/single-field.componen
 })
 export class QuerySearchItemComponent {
 
+  @Output()
+  markChanged = new EventEmitter<QueryItem>();
+
   @Input()
   set item(newValue: QueryItem) {
     this._item = newValue;
     this.querySearchService.log('QuerySearchItem - Set Item', newValue);
     this.loadFieldFromItem();
     this.doubleHeight = isBetweenOperator(newValue.condition);
+    this.changeDetectorRef.detectChanges();
   }
 
   @Input()
@@ -66,9 +70,11 @@ export class QuerySearchItemComponent {
     this.fields = querySearchService.fields;
   }
 
-  remove() {
+  remove(emit: boolean = true) {
     this.querySearchService.log('QuerySearchItem - Removing Self', this);
-    this.removed.emit(this.item.id);
+    if (emit) {
+      this.removed.emit(this.item.id);
+    }
   }
 
   get showValueField(): boolean {
@@ -116,6 +122,10 @@ export class QuerySearchItemComponent {
     return this.item.active ? 'Active' : 'Inactive';
   }
 
+  fieldChanged() {
+    this.markChanged.emit(this._item);
+  }
+
   private loadFieldFromItem() {
     if (!!this.item && !!this.item.fieldName) {
       this.querySearchService.fields.subscribe(fields => {
@@ -128,7 +138,7 @@ export class QuerySearchItemComponent {
 
           this.querySearchService.log('QuerySearchItem - Field Loaded:', field);
           this.updateDateFormat(field.format);
-          this.updateFields();
+          this.updateFields(false);
         }
       });
     }
@@ -142,13 +152,13 @@ export class QuerySearchItemComponent {
     this.changeDetectorRef.detectChanges();
   }
 
-  private updateFields() {
+  private updateFields(emit: boolean = true) {
     [...(this.singleFields || []), ...(this.stackedFields || [])].forEach(field => {
       if (field.item !== this.item || field.item.fieldName !== this.item.fieldName || field.item.type !== this.item.type) {
         field.item = this.item;
       }
 
-      field.itemUpdated();
+      field.itemUpdated(emit);
     });
   }
 }

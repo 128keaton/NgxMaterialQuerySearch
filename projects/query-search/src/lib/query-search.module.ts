@@ -28,11 +28,10 @@ import {PlainValueFieldComponent} from './components/fields/plain-value-field/pl
 import {NgxMatSelectSearchModule} from "ngx-mat-select-search";
 import {AutocompleteFieldComponent} from './components/fields/autocomplete-field/autocomplete-field.component';
 import {DragDropModule} from "@angular/cdk/drag-drop";
-import {NameDialogComponent} from './components/dialogs/name-dialog/name-dialog.component';
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {DateFieldComponent} from './components/fields/date-field/date-field.component';
 import {StackedFieldComponent} from './components/fields/stacked-field/stacked-field.component';
 import {SingleFieldComponent} from './components/fields/single-field/single-field.component';
+import {PendingChangesGuard} from "./guards/pending-changes.guard";
 
 @NgModule({
   declarations: [
@@ -47,7 +46,6 @@ import {SingleFieldComponent} from './components/fields/single-field/single-fiel
     NameFieldComponent,
     PlainValueFieldComponent,
     AutocompleteFieldComponent,
-    NameDialogComponent,
     OptionsScrollDirective,
     DateFieldComponent,
     StackedFieldComponent,
@@ -72,7 +70,6 @@ import {SingleFieldComponent} from './components/fields/single-field/single-fiel
     MatTooltipModule,
     NgxMatSelectSearchModule,
     DragDropModule,
-    MatDialogModule,
   ],
   exports: [
     QuerySearchComponent,
@@ -92,7 +89,7 @@ export class QuerySearchModule {
         },
         OperatorPipe,
         QuerySearchService,
-        MatDialog
+        PendingChangesGuard
       ]
     };
   }

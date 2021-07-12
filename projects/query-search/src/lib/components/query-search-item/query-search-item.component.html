@@ -15,17 +15,17 @@
 
   <mat-divider class="separate-button" [class.pad-dividers]="padDividers"></mat-divider>
 
-  <name-field [(item)]="item"></name-field>
+  <name-field [(item)]="item" (nameChange)="fieldChanged()"></name-field>
 
-  <operator-field *ngIf="showOperatorField" [(item)]="item"></operator-field>
+  <operator-field *ngIf="showOperatorField" [(item)]="item" (operatorChange)="fieldChanged()"></operator-field>
 
   <ng-container *ngIf="showValueField && !isStackedField">
     <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
-    <single-field [(item)]="item"></single-field>
+    <single-field [(item)]="item" (valueChange)="fieldChanged()"></single-field>
   </ng-container>
 </div>
 
 <ng-container *ngIf="showValueField && isStackedField">
   <mat-divider class="separate-fields between-separator" [class.pad-dividers]="padDividers"></mat-divider>
-  <stacked-field [(item)]="item"></stacked-field>
+  <stacked-field [(item)]="item" (valueChange)="fieldChanged()"></stacked-field>
 </ng-container>

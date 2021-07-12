@@ -1,13 +1,9 @@
-import {EventEmitter, Inject, Optional, TemplateRef} from '@angular/core';
+import {EventEmitter, Inject, Optional} from '@angular/core';
 import {Injectable} from '@angular/core';
-import {QueryField, ValueNotification, QueryRuleGroup, SavedFilter, QueryRule, QueryItem} from "./models";
-import {BehaviorSubject, Observable} from "rxjs";
+import {QueryField, QueryRuleGroup, QueryRule} from "./models";
+import {BehaviorSubject} from "rxjs";
 import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from "./query-search.config";
 import {ConditionOperator} from "./enums";
-import {NameDialogData} from "./models/name-dialog-data.model";
-import {MatDialog} from "@angular/material/dialog";
-import {map} from "rxjs/operators";
-import {ComponentType} from "@angular/cdk/overlay";
 import {isArray} from "rxjs/internal-compatibility";
 
 @Injectable({
@@ -15,17 +11,10 @@ import {isArray} from "rxjs/internal-compatibility";
 })
 export class QuerySearchService {
 
-  savedFilters = new BehaviorSubject<SavedFilter[]>([]);
   queryUpdated = new EventEmitter<any>();
   operators: string[] = [];
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
-  valueFieldDidChange: EventEmitter<ValueNotification> = new EventEmitter<ValueNotification>(true);
-  searchValueFieldDidChange: EventEmitter<ValueNotification> = new EventEmitter<ValueNotification>(true);
-  savedFilterUpdated: EventEmitter<SavedFilter> = new EventEmitter<SavedFilter>(true);
-  savedFilterCreated: EventEmitter<SavedFilter> = new EventEmitter<SavedFilter>(true);
-  savedFilterDeleted: EventEmitter<SavedFilter> = new EventEmitter<SavedFilter>(true);
 
-  private _hasSavedFilters = false;
   private _fields: QueryField[] = [];
   private readonly _loggingCallback: (...args: any[]) => void = () => {
   };
@@ -39,8 +28,7 @@ export class QuerySearchService {
   private readonly _showFieldNameSuffix: boolean = true;
   private readonly _showOperatorSuffix: boolean = true;
 
-  constructor(@Optional() @Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfiguration,
-              private matDialog: MatDialog) {
+  constructor(@Optional() @Inject(QUERY_SEARCH_CONFIG) configuration: QuerySearchConfiguration) {
     this.operators = Object.keys(ConditionOperator).filter(k => !k.includes('LOW'));
     this._loggingCallback = configuration.loggingCallback;
     this._debug = configuration.debug;
@@ -51,10 +39,6 @@ export class QuerySearchService {
     this._limitResults = configuration.limitResults;
     this._showFieldNameSuffix = configuration.showFieldNameSuffix;
     this._showOperatorSuffix = configuration.showOperatorSuffix;
-
-    this.valueFieldDidChange.subscribe(value => {
-      this.log('Value field changed', value);
-    })
   }
 
   addFields(fields: QueryField[]) {
@@ -75,14 +59,6 @@ export class QuerySearchService {
     }
 
     this._loggingCallback(...args);
-  }
-
-  valueFieldChanged(field: QueryField, partialValue: string) {
-    this.valueFieldDidChange.emit({field, partialValue: partialValue.toLowerCase()});
-  }
-
-  searchValueFieldChanged(field: QueryField, partialValue: string) {
-    this.searchValueFieldDidChange.emit({field, partialValue: partialValue.toLowerCase()});
   }
 
   emitQuery(rules: QueryRuleGroup[]) {
@@ -147,65 +123,6 @@ export class QuerySearchService {
     });
 
     this.addFields(fields);
-  }
-
-  /**
-   * Provide saved filters to use for later
-   * @param filters
-   */
-  provideSavedFilters(filters: SavedFilter[] | Observable<SavedFilter[]>) {
-    if (filters instanceof Observable) {
-      filters.subscribe(this.savedFilters);
-    } else {
-      this.savedFilters.next(filters);
-    }
-
-    this._hasSavedFilters = true;
-  }
-
-  /**
-   * Edit a saved filter
-   * @param componentOrTemplateRef
-   * @param filter
-   * @param action
-   */
-  openFilterNameDialog<T>(componentOrTemplateRef: ComponentType<T> | TemplateRef<T>, filter: SavedFilter, action: 'EDIT' | 'CREATE') {
-    const previousFilterName = filter.name;
-    const data: NameDialogData = {
-      filter,
-      action
-    };
-
-    return this.matDialog.open(componentOrTemplateRef, {
-      data,
-      height: '225px',
-      width: '400px',
-    }).afterClosed().pipe(
-      map(result => {
-        if (action === 'EDIT' && !!result && previousFilterName !== filter.name) {
-          this.log('Saved filter updated', filter);
-          this.savedFilterUpdated.emit(filter);
-          return filter;
-        } else if (action === 'CREATE' && !!result && previousFilterName !== filter.name) {
-          this.log('New filter saved', filter);
-          this.savedFilters.next([filter, ...this.savedFilters.value]);
-          this.savedFilterCreated.emit(filter);
-          return filter;
-        }
-
-        return null;
-      })
-    )
-  }
-
-  /**
-   * Delete a saved filter
-   * @param filter
-   */
-  deleteFilter(filter: SavedFilter) {
-    this.log('Filter deleted', filter);
-    this.savedFilters.next(this.savedFilters.value.filter(f => f.name !== filter.name));
-    this.savedFilterDeleted.emit(filter);
   }
 
   /**
@@ -276,9 +193,5 @@ export class QuerySearchService {
 
   get showOperatorSuffix() {
     return this._showOperatorSuffix;
-  }
-
-  get hasSavedFilters() {
-    return this._hasSavedFilters;
   }
 }

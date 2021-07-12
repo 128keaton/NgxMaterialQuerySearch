@@ -4,5 +4,4 @@ export * from './query-field.model';
 export * from './query-group.model';
 export * from './rules';
 export * from './provided-value.model';
-export * from './value-notification.model';
 export * from './saved-filter.model';

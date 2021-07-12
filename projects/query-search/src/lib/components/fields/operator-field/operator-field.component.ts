@@ -28,6 +28,9 @@ export class OperatorFieldComponent {
   @Output()
   itemChange: EventEmitter<QueryItem> = new EventEmitter<QueryItem>();
 
+  @Output()
+  operatorChange: EventEmitter<string> = new EventEmitter<string>();
+
   operatorFieldTrigger: string;
   operators: string[];
   filteredOperators: string[];
@@ -64,6 +67,10 @@ export class OperatorFieldComponent {
       this.operatorFieldTrigger = `
         <span class="field-name">${displayOperator}</span>
     `;
+    }
+
+    if (emit) {
+      this.operatorChange.emit(event);
     }
   }
 

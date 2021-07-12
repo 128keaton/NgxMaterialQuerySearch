@@ -42,7 +42,7 @@ export class StackedFieldComponent {
     if (!!newValue) {
       this.querySearchService.log('StackedFieldComponent - Item Updated', newValue);
       this._item = newValue;
-      this.itemUpdated();
+      this.itemUpdated(false);
     }
   }
 
@@ -52,6 +52,9 @@ export class StackedFieldComponent {
 
   @Output()
   itemChange: EventEmitter<QueryItem> = new EventEmitter<QueryItem>();
+
+  @Output()
+  valueChange: EventEmitter<any> = new EventEmitter();
 
   @ViewChildren(AutocompleteFieldComponent)
   autocompleteFields: QueryList<AutocompleteFieldComponent>
@@ -117,13 +120,13 @@ export class StackedFieldComponent {
     return this.isDate && !this.hasValues;
   }
 
-  public itemUpdated() {
+  public itemUpdated(emit: boolean = true) {
     this.setType();
     this.setOperator();
     this.setHasValues();
     this.setMaxLength();
     this.setValues();
-    this.updateValues();
+    this.updateValues(emit);
     this.changeDetectorRef.detectChanges();
     this.updateFields();
   }
@@ -161,7 +164,7 @@ export class StackedFieldComponent {
     }
   }
 
-  private updateValues() {
+  private updateValues(emit: boolean = true) {
     this.querySearchService.log('StackedField - Update Values:', [this.leftValue, this.rightValue]);
 
     if (this.leftValue === null && this.rightValue === null) {
@@ -171,6 +174,11 @@ export class StackedFieldComponent {
     }
 
     this.itemChange.emit(this._item);
+
+    if (emit) {
+      this.valueChange.emit(this._item.value);
+    }
+
     this.changeDetectorRef.detectChanges();
   }
 

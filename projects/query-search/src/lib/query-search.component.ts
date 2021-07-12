@@ -1,10 +1,23 @@
-import {AfterContentInit, Component, ContentChild, ViewContainerRef} from '@angular/core';
-import {QueryGroup} from "./models";
+import {
+  AfterContentInit,
+  Component,
+  ContentChild,
+  EventEmitter, HostListener,
+  Input,
+  Output,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
+import {QueryGroup, SavedFilter} from "./models";
 import {QueryFieldsDirective} from "./directives";
 import {QuerySearchService} from "./query-search.service";
 import {inOutAnimations} from "./animations";
 import {ConditionOperator} from "./enums";
 import {VCRefInjector} from "./helpers/parent.helper";
+import {MatMenu} from "@angular/material/menu";
+import {QuerySearchGroupComponent} from "./components/query-search-group/query-search-group.component";
+import {Observable} from "rxjs";
+import {ComponentCanDeactivate} from "./guards/pending-changes.guard";
 
 @Component({
   selector: 'ngx-query-search',
@@ -14,7 +27,13 @@ import {VCRefInjector} from "./helpers/parent.helper";
     ...inOutAnimations
   ]
 })
-export class QuerySearchComponent implements AfterContentInit {
+export class QuerySearchComponent implements AfterContentInit, ComponentCanDeactivate {
+
+  @Output() filterLoaded: EventEmitter<SavedFilter> = new EventEmitter<SavedFilter>();
+
+  @Input() filterMenu?: MatMenu;
+
+  @ViewChild('topGroup') topGroup: QuerySearchGroupComponent;
 
   @ContentChild(QueryFieldsDirective) queryFields: QueryFieldsDirective;
 
@@ -46,6 +65,20 @@ export class QuerySearchComponent implements AfterContentInit {
     this.querySearchService.emitQuery(this.groups.map(g => g.filterValue));
   }
 
+  filterCleared() {
+    this.filterLoaded.emit(undefined);
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.topGroup.currentFilterChanged;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (!this.canDeactivate()) {
+      $event.returnValue = false;
+    }
+  }
 
   /**
    * Load a saved rule
@@ -56,6 +89,49 @@ export class QuerySearchComponent implements AfterContentInit {
   load(fieldName: string, operator: ConditionOperator, value: any) {
     this.querySearchService.log('Loading pre-selected filter', {fieldName, operator, value});
     this.groups[0].loadItem(fieldName, operator, value);
+  }
+
+  /**
+   * Notify the component that the current SavedFilter has been saved in some way
+   */
+  public filterSaved() {
+    this.topGroup.currentFilterChanged = false;
+  }
+
+  /**
+   * Clear the current SavedFilter
+   */
+  public clearSavedFilter() {
+    this.topGroup.clear();
+  }
+
+  /**
+   * Load a SavedFilter
+   * @param filter - SavedFilter to load
+   */
+  public loadSavedFilter(filter: SavedFilter) {
+    this.topGroup.loadFilter(filter);
+
+    setTimeout(() => {
+      this.filterLoaded.emit(filter)
+    }, 150);
+  }
+
+  /**
+   * Get the current filter as a SavedFilter
+   */
+  public generateSavedFilter(): SavedFilter | null {
+    const queryRuleGroup = this.topGroup.group.filterValue;
+
+    if (Object.keys(queryRuleGroup).length === 0) {
+      this.querySearchService.log('Refusing to make filter from empty QueryRuleGroup', queryRuleGroup);
+      return null;
+    }
+
+    return {
+      name: '',
+      ruleGroup: queryRuleGroup
+    }
   }
 
   get identity(): string {

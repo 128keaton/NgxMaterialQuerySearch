@@ -35,6 +35,9 @@ export class SingleFieldComponent {
   @Output()
   itemChange: EventEmitter<QueryItem> = new EventEmitter<QueryItem>();
 
+  @Output()
+  valueChange: EventEmitter<any> = new EventEmitter();
+
   @ViewChildren(AutocompleteFieldComponent)
   autocompleteFields: QueryList<AutocompleteFieldComponent>
 
@@ -85,6 +88,7 @@ export class SingleFieldComponent {
   valueChanged(value: any) {
     this._item.value = value;
     this.itemChange.emit(this._item);
+    this.valueChange.emit(this._item.value);
   }
 
   public itemUpdated() {

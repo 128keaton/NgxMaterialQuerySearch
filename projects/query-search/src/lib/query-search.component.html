@@ -1,3 +1,5 @@
 <div class="rules-list">
-  <query-search-group (generateClicked)="generate()" *ngFor="let group of groups" [@inOut] [group]="group" (removed)="remove($event)"></query-search-group>
+  <query-search-group #topGroup (filterCleared)="filterCleared()" [filterMenu]="filterMenu" (generateClicked)="generate()" *ngFor="let group of groups" [@inOut] [group]="group" (removed)="remove($event)">
+    <ng-content></ng-content>
+  </query-search-group>
 </div>
