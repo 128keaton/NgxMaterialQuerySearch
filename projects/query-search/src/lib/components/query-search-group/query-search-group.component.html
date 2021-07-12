@@ -37,7 +37,12 @@
       </button>
 
       <div class="current-filter-meta" *ngIf="currentFilter">
-        <span class="filter-name">Current Filter: <b>{{currentFilter.name}}{{currentFilterChanged ? '*' : ''}}</b></span>
+        <span class="filter-name" *ngIf="currentFilterChanged" matTooltip="Unsaved Changes" matTooltipPosition="above">
+          Current Filter: <b>{{currentFilter.name}}*</b>
+        </span>
+        <span class="filter-name" *ngIf="!currentFilterChanged">
+          Current Filter: <b>{{currentFilter.name}}</b>
+        </span>
       </div>
 
       <ng-content></ng-content>

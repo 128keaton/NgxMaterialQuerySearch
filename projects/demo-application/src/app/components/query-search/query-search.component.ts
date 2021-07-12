@@ -10,6 +10,7 @@ import {
   ConditionOperator,
   SavedFilter,
 } from "ngx-mat-query-search";
+import * as generate from 'project-name-generator';
 
 @Component({
   selector: 'app-query-search',
@@ -88,8 +89,11 @@ export class QuerySearchComponent {
 
   saveFilter() {
     // This is where you would do your saving logic, saving the filter from the generation method
-    console.log(this.querySearchComponent.generateSavedFilter());
-    this.querySearchComponent.filterSaved();
+    const newFilter = this.querySearchComponent.generateSavedFilter(generate().spaced + ' Filter');
+
+    if (!!newFilter) {
+      this.querySearchComponent.filterSaved(newFilter);
+    }
   }
 
   get hasFilter() {

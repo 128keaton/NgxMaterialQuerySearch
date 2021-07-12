@@ -1,3 +1,13 @@
+# 0.4.7
+- New:
+  - Tooltip above the filter name to show that there are unsaved changes
+  
+- Fixed:
+  - Could not save a new filter and set as the current filter properly
+  
+- Improved:
+  - Better clear button for value fields
+  
 # 0.4.6
 - New:
   - Provide a filter menu to save/load/modify existing filters (just for more freedom of choice)

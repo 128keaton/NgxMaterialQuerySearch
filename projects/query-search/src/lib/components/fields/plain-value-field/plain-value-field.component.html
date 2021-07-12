@@ -4,5 +4,7 @@
          (ngModelChange)="valueChange.emit($event)">
   <input autocomplete="off" [limit]="maxLength" *ngIf="isNumber" type="number" matInput maxlength="{{maxLength}}" [ngModel]="value"
          (ngModelChange)="valueChange.emit($event)">
-  <mat-icon matSuffix class="clear-field" (click)="clear()" [class.clear-field-hidden]="!!!value">cancel</mat-icon>
+  <button mat-icon-button matSuffix class="clear-field" (click)="clear()" [class.clear-field-hidden]="!!!value">
+    <mat-icon>close</mat-icon>
+  </button>
 </mat-form-field>

@@ -1,11 +1,14 @@
 
 <mat-menu #filterMenu="matMenu">
-  <button mat-menu-item (click)="loadDemoFilter()" *ngIf="!hasFilter">Load Demo Filter</button>
-  <button mat-menu-item *ngIf="hasFilter" (click)="saveFilter()">
+  <button mat-menu-item (click)="loadDemoFilter()" *ngIf="!hasFilter">
+    <mat-icon>file_upload</mat-icon>
+    Load Demo Filter
+  </button>
+  <button mat-menu-item (click)="saveFilter()">
     <mat-icon>save</mat-icon>
     Save
   </button>
-  <button mat-menu-item *ngIf="hasFilter" (click)="saveFilter()">
+  <button mat-menu-item (click)="saveFilter()">
     <mat-icon>save</mat-icon>
     Save as..
   </button>

@@ -70,7 +70,11 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
   }
 
   canDeactivate(): Observable<boolean> | boolean {
-    return !this.topGroup.currentFilterChanged;
+    if (!!this.topGroup.currentFilter) {
+      return !this.topGroup.currentFilterChanged;
+    }
+
+    return true;
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -93,8 +97,13 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
 
   /**
    * Notify the component that the current SavedFilter has been saved in some way
+   * @param filter - The new SavedFilter or null if the filter is pre-existing
    */
-  public filterSaved() {
+  public filterSaved(filter: SavedFilter | null = null) {
+    if (!!filter) {
+      this.topGroup.currentFilter = filter;
+    }
+
     this.topGroup.currentFilterChanged = false;
   }
 
@@ -119,8 +128,9 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
 
   /**
    * Get the current filter as a SavedFilter
+   * @param name - Name of the SavedFilter
    */
-  public generateSavedFilter(): SavedFilter | null {
+  public generateSavedFilter(name: string): SavedFilter | null {
     const queryRuleGroup = this.topGroup.group.filterValue;
 
     if (Object.keys(queryRuleGroup).length === 0) {
@@ -129,7 +139,7 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
     }
 
     return {
-      name: '',
+      name,
       ruleGroup: queryRuleGroup
     }
   }
