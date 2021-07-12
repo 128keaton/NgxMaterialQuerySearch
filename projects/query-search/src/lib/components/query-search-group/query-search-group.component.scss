@@ -67,7 +67,7 @@
   &.double-height {
     ::ng-deep {
       .notate-group {
-        height: 34% !important;
+        height: 31.5% !important;
       }
     }
   }
@@ -115,6 +115,13 @@
 
 .group-items-list {
   width: 100%;
+
+  h1.no-items {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
 }
 
 .generate-button, .manage-button, .add-button, .clear-button {

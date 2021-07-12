@@ -11,6 +11,7 @@ import {isArray} from "rxjs/internal-compatibility";
 })
 export class QuerySearchService {
 
+  listIDs: string[] = ['drop-list-1'];
   queryUpdated = new EventEmitter<any>();
   operators: string[] = [];
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);

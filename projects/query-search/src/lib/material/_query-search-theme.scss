@@ -11,8 +11,15 @@
   $primary-palette: map.get($color-config, 'primary');
   $accent-palette: map.get($color-config, 'accent');
 
+  $foreground: map.get($theme, 'foreground');
+  $text-secondary: map.get($foreground, 'secondary-text');
+
   .ngx-mat-query-search-style.option-description {
     color: if($is-dark-theme, mat.get-contrast-color-from-palette($primary-palette, A100), mat.get-contrast-color-from-palette($primary-palette, A900));
+  }
+
+  .group-items-list h1.no-items {
+    color: $text-secondary;
   }
 }
 

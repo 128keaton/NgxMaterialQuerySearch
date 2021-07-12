@@ -56,14 +56,23 @@
     <span>{{generateButtonText}}</span>
   </button>
 </mat-toolbar>
-<div class="group-items-list" [class.hidden]="loadingFilters|async" cdkDropList (cdkDropListDropped)="drop($event)">
-  <query-search-item (markChanged)="markChanged($event)" class="group-item" [class.hidden]="loadingFilters|async" [@inOut] *ngFor="let item of group.items"
+<div class="group-items-list" [class.hidden]="loadingFilters|async" cdkDropList
+     [id]="dropListID"
+     cdkDropListGroup
+     [cdkDropListConnectedTo]="querySearchService.listIDs"
+     [cdkDropListData]="group.items"
+     (cdkDropListDropped)="drop($event)">
+  <query-search-item (markChanged)="markChanged($event)" class="group-item" [class.hidden]="loadingFilters|async"
+                     [@inOut] *ngFor="let item of group.items"
                      (removed)="removeItem($event)"
                      [item]="item" [disableDelete]="group.items.length === 1" cdkDrag
                      cdkDragPreviewClass="group-item-dragging"></query-search-item>
 
   <query-search-group *ngFor="let group of group.children" class="sub-group-item" [class.hidden]="loadingFilters|async"
+                      [parent]="this"
                       [@inOut] [group]="group"
                       (removed)="removeChild($event)" [showDivider]="true"></query-search-group>
+
+  <h1 class="no-items" *ngIf="noItems">No items</h1>
 </div>
 <mat-divider></mat-divider>

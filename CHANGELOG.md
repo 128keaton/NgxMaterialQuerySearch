@@ -1,3 +1,10 @@
+# 0.4.8
+- New:
+  - Drag and drop items between groups!
+  
+- Fixed:
+  - Weird border issue on double-height fields
+  
 # 0.4.7
 - New:
   - Tooltip above the filter name to show that there are unsaved changes

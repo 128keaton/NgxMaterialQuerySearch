@@ -1,4 +1,5 @@
 import {
+  AfterViewInit, ChangeDetectorRef,
   Component,
   EventEmitter,
   HostBinding,
@@ -11,9 +12,10 @@ import {QueryGroup, QueryItem, SavedFilter} from "../../models";
 import {QuerySearchService} from "../../query-search.service";
 import {inOutAnimations} from "../../animations";
 import {QuerySearchItemComponent} from "../query-search-item/query-search-item.component";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
 import {isEven} from "../../helpers/general.helpers";
 import {MatMenu} from "@angular/material/menu";
+import {tap} from "rxjs/operators";
 
 @Component({
   selector: 'query-search-group',
@@ -23,7 +25,9 @@ import {MatMenu} from "@angular/material/menu";
     ...inOutAnimations
   ]
 })
-export class QuerySearchGroupComponent {
+export class QuerySearchGroupComponent implements AfterViewInit {
+
+  @Input() parent: QuerySearchGroupComponent;
 
   @Input() filterMenu?: MatMenu;
 
@@ -72,7 +76,21 @@ export class QuerySearchGroupComponent {
   _showDivider = false;
   private _group: QueryGroup;
 
-  constructor(public querySearchService: QuerySearchService) {
+  constructor(public querySearchService: QuerySearchService,
+              private changeDetectorRef: ChangeDetectorRef) {
+  }
+
+  ngAfterViewInit() {
+    this.querySearchService.listIDs.push(this.dropListID);
+
+    this.children.changes.pipe(
+      tap(() => {
+        setTimeout(() => {
+          this.changeDetectorRef.markForCheck();
+          this.changeDetectorRef.detectChanges();
+        }, 100)
+      }),
+    ).subscribe();
   }
 
   addItem() {
@@ -118,8 +136,13 @@ export class QuerySearchGroupComponent {
     this.filterCleared.emit(undefined);
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.group.items, event.previousIndex, event.currentIndex);
+  drop(event: CdkDragDrop<QueryItem[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(this.group.items, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+    }
+
     this.currentFilterChanged = true;
   }
 
@@ -176,5 +199,13 @@ export class QuerySearchGroupComponent {
 
   get isTopLevel(): boolean {
     return this.group.depth === 0;
+  }
+
+  get dropListID(): string {
+    return `drop-list-${this.group.depth}`
+  }
+
+  get noItems(): boolean {
+    return this.group.children.length === 0 && this.group.items.length === 0;
   }
 }
