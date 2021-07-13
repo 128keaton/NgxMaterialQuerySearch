@@ -29,6 +29,7 @@ import {ComponentCanDeactivate} from "./guards/pending-changes.guard";
 })
 export class QuerySearchComponent implements AfterContentInit, ComponentCanDeactivate {
 
+  @Output() filterValid: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() filterLoaded: EventEmitter<SavedFilter> = new EventEmitter<SavedFilter>();
 
   @Input() filterMenu?: MatMenu;
@@ -54,10 +55,12 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
   addGroup() {
     const newGroup = new QueryGroup('AND');
     this.groups.push(newGroup);
+    this.filterValid.emit(this.canGenerateFilter);
   }
 
   remove(id: string) {
     this.groups = this.groups.filter(g => g.id !== id);
+    this.filterValid.emit(this.canGenerateFilter);
   }
 
   generate() {
@@ -67,6 +70,7 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
 
   filterCleared() {
     this.filterLoaded.emit(undefined);
+    this.filterValid.emit(this.canGenerateFilter);
   }
 
   canDeactivate(): Observable<boolean> | boolean {
@@ -144,14 +148,18 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
     }
   }
 
+  get identity(): string {
+    return `${this.injectorRef.parentIdentifier}-query-search`;
+  }
+
   /**
    * Returns true if we can generate a filter
    */
-  get canGenerateFilter(): boolean {
-    return Object.keys(this.topGroup.group.filterValue).length > 0;
-  }
+  private get canGenerateFilter(): boolean {
+    if (!!this.topGroup && !!this.topGroup.group && !!this.topGroup.group.filterValue) {
+      return Object.keys(this.topGroup.group.filterValue).length > 0;
+    }
 
-  get identity(): string {
-    return `${this.injectorRef.parentIdentifier}-query-search`;
+    return false;
   }
 }

@@ -1,3 +1,10 @@
+# 0.5.2
+- Improved:
+  - Fixed widths on name and operator fields for a more consistent layout
+  
+- Breaking:
+  - Set `canGenerateFilter` to private, please use the new EventEmitter, `filterValid`
+  
 # 0.5.1
 - New:
   - A getter property is available to check if filter generation is available
