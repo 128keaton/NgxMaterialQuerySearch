@@ -130,7 +130,7 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
    * Get the current filter as a SavedFilter
    * @param name - Name of the SavedFilter
    */
-  public generateSavedFilter(name: string): SavedFilter | null {
+  public generateSavedFilter(name: string | undefined = undefined): SavedFilter | null {
     const queryRuleGroup = this.topGroup.group.filterValue;
 
     if (Object.keys(queryRuleGroup).length === 0) {

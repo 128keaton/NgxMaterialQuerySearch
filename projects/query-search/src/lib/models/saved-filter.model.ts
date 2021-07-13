@@ -1,6 +1,6 @@
 import {QueryRuleGroup} from "./rules";
 
 export interface SavedFilter {
-  name: string;
+  name?: string;
   ruleGroup: QueryRuleGroup
 }

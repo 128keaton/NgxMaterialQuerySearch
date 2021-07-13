@@ -1,3 +1,7 @@
+# 0.5.0
+- Improved:
+  - The name parameter is optional when passing to `generateSavedFilter`
+  
 # 0.4.9
 - Fixed:
   - Angular peer dependencies
