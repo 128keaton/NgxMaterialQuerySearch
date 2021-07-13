@@ -35,6 +35,8 @@ export class QuerySearchGroupComponent implements AfterViewInit {
 
   @Output() filterCleared = new EventEmitter();
 
+  @Output() filterChanged = new EventEmitter<boolean>();
+
   @Input()
   set group(newValue: QueryGroup) {
     if (!!newValue) {
@@ -162,6 +164,7 @@ export class QuerySearchGroupComponent implements AfterViewInit {
 
   markChanged(item: QueryItem) {
     this.currentFilterChanged = true;
+    this.filterChanged.emit(true);
   }
 
 

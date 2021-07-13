@@ -1,3 +1,7 @@
+# 0.5.3
+- Fixed:
+  - Hopefully fixes `filterValid` not emitting
+  
 # 0.5.2
 - Improved:
   - Fixed widths on name and operator fields for a more consistent layout

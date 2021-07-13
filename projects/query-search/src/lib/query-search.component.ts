@@ -153,6 +153,13 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
   }
 
   /**
+   * Called when the filter has been changed
+   */
+  filterChanged() {
+    this.filterValid.emit(this.canGenerateFilter);
+  }
+
+  /**
    * Returns true if we can generate a filter
    */
   private get canGenerateFilter(): boolean {

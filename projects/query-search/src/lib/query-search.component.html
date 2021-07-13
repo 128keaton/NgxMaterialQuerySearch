@@ -1,6 +1,12 @@
 <div class="rules-list" cdkDropListGroup>
-  <query-search-group #topGroup (filterCleared)="filterCleared()" [filterMenu]="filterMenu"
-                      (generateClicked)="generate()" *ngFor="let group of groups" [@inOut] [group]="group"
+  <query-search-group #topGroup
+                      (filterCleared)="filterCleared()"
+                      [filterMenu]="filterMenu"
+                      (filterChanged)="filterChanged()"
+                      (generateClicked)="generate()"
+                      *ngFor="let group of groups"
+                      [@inOut]
+                      [group]="group"
                       (removed)="remove($event)">
     <ng-content></ng-content>
   </query-search-group>
