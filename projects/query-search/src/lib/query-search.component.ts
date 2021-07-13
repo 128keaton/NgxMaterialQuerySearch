@@ -126,7 +126,8 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
     this.topGroup.loadFilter(filter);
 
     setTimeout(() => {
-      this.filterLoaded.emit(filter)
+      this.filterLoaded.emit(filter);
+      this.filterChanged();
     }, 150);
   }
 

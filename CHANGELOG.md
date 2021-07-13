@@ -1,5 +1,9 @@
 # 0.5.3
 - Fixed:
+  - Fixes `filterValid` not emitting on a loaded filter
+  
+# 0.5.3
+- Fixed:
   - Hopefully fixes `filterValid` not emitting
   
 # 0.5.2
