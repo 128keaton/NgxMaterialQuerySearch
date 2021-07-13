@@ -1,3 +1,7 @@
+# 0.4.9
+- Fixed:
+  - Angular peer dependencies
+  
 # 0.4.8
 - New:
   - Drag and drop items between groups!
