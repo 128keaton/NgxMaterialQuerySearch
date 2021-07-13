@@ -1,3 +1,7 @@
+# 0.5.1
+- New:
+  - A getter property is available to check if filter generation is available
+  
 # 0.5.0
 - Improved:
   - The name parameter is optional when passing to `generateSavedFilter`

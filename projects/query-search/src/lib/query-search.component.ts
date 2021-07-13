@@ -144,6 +144,13 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
     }
   }
 
+  /**
+   * Returns true if we can generate a filter
+   */
+  get canGenerateFilter(): boolean {
+    return Object.keys(this.topGroup.group.filterValue).length > 0;
+  }
+
   get identity(): string {
     return `${this.injectorRef.parentIdentifier}-query-search`;
   }
