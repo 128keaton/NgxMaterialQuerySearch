@@ -1,6 +1,6 @@
 import {forwardRef, Input} from '@angular/core';
 import {Component} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
   selector: 'group-type-selector',
@@ -15,7 +15,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 export class GroupTypeSelectorComponent implements ControlValueAccessor {
 
   @Input()
-  groupColor: string = 'primary';
+  groupColor = 'primary';
 
   @Input()
   set disabled(newValue: any) {
@@ -31,7 +31,9 @@ export class GroupTypeSelectorComponent implements ControlValueAccessor {
   /**
    * Holds the current value of the slider
    */
-  value: string = 'AND';
+  value = 'AND';
+
+  constructor() {}
 
   /**
    * Invoked when the model has been changed
@@ -42,8 +44,6 @@ export class GroupTypeSelectorComponent implements ControlValueAccessor {
    * Invoked when the model has been touched
    */
   onTouched: () => void = () => {};
-
-  constructor() {}
 
   /**
    * Method that is invoked on an update of a model.
@@ -58,6 +58,7 @@ export class GroupTypeSelectorComponent implements ControlValueAccessor {
 
   /**
    * Writes a new item to the element.
+   *
    * @param value the value
    */
   writeValue(value: string): void {
@@ -67,6 +68,7 @@ export class GroupTypeSelectorComponent implements ControlValueAccessor {
 
   /**
    * Registers a callback function that should be called when the control's value changes in the UI.
+   *
    * @param fn
    */
   registerOnChange(fn: any): void {
@@ -75,6 +77,7 @@ export class GroupTypeSelectorComponent implements ControlValueAccessor {
 
   /**
    * Registers a callback function that should be called when the control receives a blur event.
+   *
    * @param fn
    */
   registerOnTouched(fn: any): void {
@@ -83,7 +86,7 @@ export class GroupTypeSelectorComponent implements ControlValueAccessor {
 
   setType(type: string) {
     if (type === 'AND') {
-      this.writeValue('AND')
+      this.writeValue('AND');
     } else {
       this.writeValue('OR');
     }

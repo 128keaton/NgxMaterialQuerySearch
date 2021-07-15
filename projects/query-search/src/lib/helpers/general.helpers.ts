@@ -1,15 +1,13 @@
-import {QueryField} from "../models";
+import {QueryField} from '../models';
 
-export function isEven(n: number): boolean {
-  return n % 2 == 0;
-}
+export const isEven = (n: number): boolean => n % 2 === 0;
 
-export function getEnumKeyByEnumValue(myEnum: any, enumValue: string) {
-  let keys = Object.keys(myEnum).filter(x => myEnum[x] == enumValue);
+export const getEnumKeyByEnumValue = (myEnum: any, enumValue: string) => {
+  const keys = Object.keys(myEnum).filter(x => myEnum[x] === enumValue);
   return keys.length > 0 ? keys[0] : null;
-}
+};
 
-export function transformValue(value: any, type: string) {
+export const transformValue = (value: any, type: string) => {
   let returnValue;
 
   switch (type) {
@@ -24,7 +22,7 @@ export function transformValue(value: any, type: string) {
       break;
     default:
       if (`${value}`.includes(',')) {
-        returnValue = `${value}`.split(',')
+        returnValue = `${value}`.split(',');
       } else {
         returnValue = `${value}`;
       }
@@ -33,17 +31,15 @@ export function transformValue(value: any, type: string) {
   }
 
   return returnValue;
-}
+};
 
-export function isDefined(value: any): boolean {
-  return value !== undefined;
-}
+export const isDefined = (value: any): boolean => value !== undefined;
 
-export function transformToNumber(value: any) {
+export const transformToNumber = (value: any) => {
   if (`${value}`.includes(',')) {
     return `${value}`.split(',').map(v => {
       if (v !== null) {
-        return Number(v.trim())
+        return Number(v.trim());
       }
 
       return v;
@@ -51,13 +47,13 @@ export function transformToNumber(value: any) {
   } else {
     return Number(value);
   }
-}
+};
 
-export function transformToBoolean(value: any) {
+export const transformToBoolean = (value: any) => {
   if (`${value}`.includes(',')) {
     return `${value}`.split(',').map(v => {
       if (v !== null) {
-        return (`${v}`.trim() === 'true')
+        return (`${v}`.trim() === 'true');
       }
 
       return v;
@@ -65,9 +61,9 @@ export function transformToBoolean(value: any) {
   } else {
     return (`${value}` === 'true');
   }
-}
+};
 
-export function transformToDate(value: any): string | string[] | undefined {
+export const transformToDate = (value: any): string | string[] | undefined => {
   if (value instanceof Array) {
     return value.map(v => transformToDate(v)) as string[];
   } else {
@@ -77,36 +73,34 @@ export function transformToDate(value: any): string | string[] | undefined {
       return undefined;
     }
   }
-}
+};
 
-export function filterFieldNames(partialValue: string | null, fields: QueryField[]): QueryField[] {
+export const filterFieldNames = (partialValue: string | null, fields: QueryField[]): QueryField[] => {
   if (!!partialValue && partialValue.trim().length > 0) {
     const lowerValue = partialValue.toLowerCase();
 
     return fields.filter(f => {
       if (!!f.label) {
-        return f.label.toLowerCase().includes(lowerValue)
+        return f.label.toLowerCase().includes(lowerValue);
       }
 
-      return f.name.toLowerCase().includes(lowerValue)
-    })
+      return f.name.toLowerCase().includes(lowerValue);
+    });
   }
 
   return fields;
-}
+};
 
-export function getFieldType(field: QueryField): string {
+export const getFieldType = (field: QueryField): string => {
   if (!!field && field.type) {
     return titleCase(field.type);
   }
 
   return 'String';
-}
+};
 
-export function titleCase(phrase: string): string {
-  return phrase
+export const titleCase = (phrase: string): string => phrase
     .toLowerCase()
     .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
-}

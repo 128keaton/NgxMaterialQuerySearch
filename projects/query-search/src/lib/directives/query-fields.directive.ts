@@ -1,8 +1,8 @@
 import {ContentChildren, Directive, QueryList} from '@angular/core';
-import {QueryFieldDirective} from "./query-field.directive";
-import {QueryField} from "../models";
-import {Observable} from "rxjs";
-import {shareReplay} from "rxjs/operators";
+import {QueryFieldDirective} from './query-field.directive';
+import {QueryField} from '../models';
+import {Observable} from 'rxjs';
+import {shareReplay} from 'rxjs/operators';
 
 @Directive({
   selector: 'query-fields',
@@ -18,7 +18,7 @@ export class QueryFieldsDirective {
       if (fieldValues instanceof Observable) {
         fieldValues = (fieldValues as Observable<any>).pipe(
           shareReplay(1)
-        )
+        );
       }
 
       return {
@@ -29,8 +29,8 @@ export class QueryFieldsDirective {
         label: field.label,
         tooltip: field.tooltip,
         maxLength: field.maxLength
-      }
-    })
+      };
+    });
   }
 
 }

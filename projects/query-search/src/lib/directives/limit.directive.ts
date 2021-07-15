@@ -5,6 +5,11 @@ import {Directive, ElementRef, HostListener, Input} from '@angular/core';
 })
 export class LimitDirective {
 
+  private _limit: number | undefined;
+
+  constructor(private elementRef: ElementRef) {
+  }
+
   @HostListener('keypress', ['$event']) onKeyPressHandler(event: KeyboardEvent) {
     const inputElement = this.elementRef.nativeElement;
     const selection = window.getSelection();
@@ -30,10 +35,4 @@ export class LimitDirective {
   get limit() {
     return this._limit;
   }
-
-  private _limit: number | undefined;
-
-  constructor(private elementRef: ElementRef) {
-  }
-
 }

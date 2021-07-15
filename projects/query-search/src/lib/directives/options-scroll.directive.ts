@@ -1,8 +1,8 @@
-import {MatAutocomplete} from "@angular/material/autocomplete";
-import {Directive, Input, OnDestroy, Output} from "@angular/core";
-import {takeUntil, tap} from "rxjs/operators";
-import {Subject} from "rxjs";
-import {EventEmitter} from "@angular/core";
+import {MatAutocomplete} from '@angular/material/autocomplete';
+import {Directive, Input, OnDestroy, Output} from '@angular/core';
+import {takeUntil, tap} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {EventEmitter} from '@angular/core';
 
 export interface IAutoCompleteScrollEvent {
   autoComplete: MatAutocomplete;
@@ -15,7 +15,7 @@ export interface IAutoCompleteScrollEvent {
 export class OptionsScrollDirective implements OnDestroy {
 
   @Input() thresholdPercent = .8;
-  @Output('optionsScroll') scroll = new EventEmitter<IAutoCompleteScrollEvent>();
+  @Output() optionsScroll = new EventEmitter<IAutoCompleteScrollEvent>();
   _onDestroy = new Subject();
 
   constructor(public autoComplete: MatAutocomplete) {
@@ -24,7 +24,7 @@ export class OptionsScrollDirective implements OnDestroy {
         setTimeout(() => {
           this.removeScrollEventListener();
           if (!!this.autoComplete.panel && !!this.autoComplete.panel.nativeElement) {
-            this.autoComplete.panel.nativeElement.addEventListener('scroll', this.onScroll.bind(this))
+            this.autoComplete.panel.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
           }
         });
       }),
@@ -37,12 +37,6 @@ export class OptionsScrollDirective implements OnDestroy {
     ).subscribe();
   }
 
-  private removeScrollEventListener() {
-    if (!!this.autoComplete.panel && !!this.autoComplete.panel.nativeElement) {
-      this.autoComplete.panel.nativeElement.removeEventListener('scroll', this.onScroll);
-    }
-  }
-
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
@@ -52,15 +46,21 @@ export class OptionsScrollDirective implements OnDestroy {
 
   onScroll(event: Event) {
     if (this.thresholdPercent === undefined) {
-      this.scroll.next({autoComplete: this.autoComplete, scrollEvent: event});
+      this.optionsScroll.next({autoComplete: this.autoComplete, scrollEvent: event});
     } else if (!!event && !!event.target) {
-      const target: { scrollHeight: number, scrollTop: number, clientHeight: number } = event.target as unknown as any;
+      const target: { scrollHeight: number; scrollTop: number; clientHeight: number } = event.target as unknown as any;
       const threshold = this.thresholdPercent * 100 * target.scrollHeight / 100;
       const current = target.scrollTop + target.clientHeight;
 
       if (current > threshold) {
-        this.scroll.next({autoComplete: this.autoComplete, scrollEvent: event});
+        this.optionsScroll.next({autoComplete: this.autoComplete, scrollEvent: event});
       }
+    }
+  }
+
+  private removeScrollEventListener() {
+    if (!!this.autoComplete.panel && !!this.autoComplete.panel.nativeElement) {
+      this.autoComplete.panel.nativeElement.removeEventListener('scroll', this.onScroll);
     }
   }
 }

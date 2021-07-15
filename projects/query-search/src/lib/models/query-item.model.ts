@@ -1,7 +1,7 @@
-import {QueryBase} from "./query-base.model";
-import {isDefined, transformValue} from "../helpers/general.helpers";
-import {ConditionOperator} from "../enums";
-import {QueryRule} from "./rules";
+import {QueryBase} from './query-base.model';
+import {isDefined, transformValue} from '../helpers/general.helpers';
+import {ConditionOperator} from '../enums';
+import {QueryRule} from './rules';
 
 export class QueryItem extends QueryBase {
   fieldName: string;
@@ -32,7 +32,7 @@ export class QueryItem extends QueryBase {
         type: this.type,
         active: this.active,
         valid: true
-      }
+      };
     }
     return {
       active: false,

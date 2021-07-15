@@ -1,3 +1,13 @@
+# 0.5.5
+- Fixed:
+  - Large filters with nested groups only not loading properly
+  
+- New:
+  - Demo now works as a debug tool, allowing for viewing filters/queries in a tree
+  - Loading indicator when a saved filter is being loaded
+  - `eslint` corrections across the board
+  - Warning in console when a field is not matched to a field name
+  
 # 0.5.3
 - Fixed:
   - Fixes `filterValid` not emitting on a loaded filter

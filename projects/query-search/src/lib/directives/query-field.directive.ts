@@ -1,11 +1,11 @@
-import {Directive, Input, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
-import {ProvidedValue} from "../models";
+import {Directive, Input} from '@angular/core';
+import {Observable} from 'rxjs';
+import {ProvidedValue} from '../models';
 
 @Directive({
   selector: 'query-field',
 })
-export class QueryFieldDirective implements OnInit {
+export class QueryFieldDirective {
 
   @Input()
   name: string;
@@ -27,10 +27,4 @@ export class QueryFieldDirective implements OnInit {
 
   @Input()
   maxLength?: number;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

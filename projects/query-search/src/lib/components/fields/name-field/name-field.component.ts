@@ -1,9 +1,9 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
-import {QuerySearchService} from "../../../query-search.service";
-import {BehaviorSubject, Observable} from "rxjs";
-import {QueryField, QueryItem} from "../../../models";
-import {map, startWith, switchMap} from "rxjs/operators";
-import {filterFieldNames, getFieldType} from "../../../helpers/general.helpers";
+import {QuerySearchService} from '../../../query-search.service';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {QueryField, QueryItem} from '../../../models';
+import {map, startWith, switchMap} from 'rxjs/operators';
+import {filterFieldNames, getFieldType} from '../../../helpers/general.helpers';
 
 @Component({
   selector: 'name-field',
@@ -44,12 +44,10 @@ export class NameFieldComponent {
     this.allFields = querySearchService.fields;
     this.visibleFields = this.searchValue.pipe(
       startWith(null),
-      switchMap(searchValue => {
-        return this.allFields.pipe(
-          map(fields => filterFieldNames(searchValue, fields))
-        )
-      })
-    )
+      switchMap(searchValue => this.allFields.pipe(
+        map(fields => filterFieldNames(searchValue, fields))
+      ))
+    );
   }
 
   get formFieldAppearance() {
@@ -72,7 +70,7 @@ export class NameFieldComponent {
       this.item.fieldName = field.name;
 
       if (emit) {
-        this.querySearchService.log('NameFieldComponent - Emitting Change:', field)
+        this.querySearchService.log('NameFieldComponent - Emitting Change:', field);
         this.itemChange.emit(this.item);
         this.nameChange.emit(field.name);
       } else {
@@ -80,7 +78,8 @@ export class NameFieldComponent {
       }
 
       if (this.querySearchService.showFieldNameSuffix) {
-        this.nameFieldTrigger = `<span class="field-name">${field.label || field.name}</span><span class="field-suffix">${getFieldType(field)}</span>`;
+        this.nameFieldTrigger = `<span class="field-name">${field.label || field.name}</span>
+<span class="field-suffix">${getFieldType(field)}</span>`;
       } else {
         this.nameFieldTrigger = `<span class="field-name">${field.label || field.name}</span>`;
       }

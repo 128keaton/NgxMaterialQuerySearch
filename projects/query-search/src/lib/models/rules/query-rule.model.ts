@@ -1,4 +1,4 @@
-import {ConditionOperator} from "../../enums";
+import {ConditionOperator} from '../../enums';
 
 export class QueryRule {
   label?: string;
