@@ -1,5 +1,9 @@
-<mat-form-field appearance="fill">
+<mat-form-field appearance="outline">
   <mat-label>Raw Filter JSON</mat-label>
   <textarea matInput [(ngModel)]="rawFilterJSON"></textarea>
+  <mat-hint *ngIf="parseError" class="mat-error">{{parseError}}</mat-hint>
 </mat-form-field>
+
 <button mat-stroked-button (click)="emitFilter()">Parse</button>
+
+<ngx-json-viewer [expanded]="false" [json]="currentObject" *ngIf="currentObject"></ngx-json-viewer>

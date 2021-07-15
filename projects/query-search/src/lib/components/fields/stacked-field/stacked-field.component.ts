@@ -8,14 +8,14 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import {QueryItem} from "../../../models";
-import {QuerySearchService} from "../../../query-search.service";
-import {ConditionOperator} from "../../../enums";
-import {getEnumKeyByEnumValue} from "../../../helpers/general.helpers";
-import {animate, state, style, transition, trigger} from "@angular/animations";
-import {isArray} from "rxjs/internal-compatibility";
-import {AutocompleteFieldComponent} from "../autocomplete-field/autocomplete-field.component";
-import {DateFieldComponent} from "../date-field/date-field.component";
+import {QueryItem} from '../../../models';
+import {QuerySearchService} from '../../../query-search.service';
+import {ConditionOperator} from '../../../enums';
+import {getEnumKeyByEnumValue} from '../../../helpers/general.helpers';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {isArray} from 'rxjs/internal-compatibility';
+import {AutocompleteFieldComponent} from '../autocomplete-field/autocomplete-field.component';
+import {DateFieldComponent} from '../date-field/date-field.component';
 
 @Component({
   selector: 'stacked-field',
@@ -57,10 +57,10 @@ export class StackedFieldComponent {
   valueChange: EventEmitter<any> = new EventEmitter();
 
   @ViewChildren(AutocompleteFieldComponent)
-  autocompleteFields: QueryList<AutocompleteFieldComponent>
+  autocompleteFields: QueryList<AutocompleteFieldComponent>;
 
   @ViewChildren(DateFieldComponent)
-  dateFields: QueryList<DateFieldComponent>
+  dateFields: QueryList<DateFieldComponent>;
 
 
   leftValue: any;
@@ -68,8 +68,8 @@ export class StackedFieldComponent {
 
   maxLength: number | undefined;
   operator: ConditionOperator;
-  type: string = 'string';
-  hasValues: boolean = false;
+  type = 'string';
+  hasValues = false;
 
   private _item: QueryItem;
 
@@ -142,7 +142,7 @@ export class StackedFieldComponent {
 
   private setHasValues() {
     if (!!this._item && !!this._item.fieldName) {
-      this.hasValues = this.querySearchService.checkForValues(this._item.fieldName)
+      this.hasValues = this.querySearchService.checkForValues(this._item.fieldName);
     } else {
       this.hasValues = false;
     }

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {QuerySearchService} from "../../../query-search.service";
+import {QuerySearchService} from '../../../query-search.service';
 
 @Component({
   selector: 'plain-value-field',
@@ -15,10 +15,10 @@ export class PlainValueFieldComponent {
   valueChange: EventEmitter<any> = new EventEmitter<any>();
 
   @Input()
-  isNumber: boolean = false;
+  isNumber = false;
 
   @Input()
-  maxLength: number | undefined
+  maxLength: number | undefined;
 
   constructor(private querySearchService: QuerySearchService) {}
 

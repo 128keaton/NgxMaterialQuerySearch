@@ -8,16 +8,16 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import {QueryGroup, SavedFilter} from "./models";
-import {QueryFieldsDirective} from "./directives";
-import {QuerySearchService} from "./query-search.service";
-import {inOutAnimations} from "./animations";
-import {ConditionOperator} from "./enums";
-import {VCRefInjector} from "./helpers/parent.helper";
-import {MatMenu} from "@angular/material/menu";
-import {QuerySearchGroupComponent} from "./components/query-search-group/query-search-group.component";
-import {Observable} from "rxjs";
-import {ComponentCanDeactivate} from "./guards/pending-changes.guard";
+import {QueryGroup, SavedFilter} from './models';
+import {QueryFieldsDirective} from './directives';
+import {QuerySearchService} from './query-search.service';
+import {inOutAnimations} from './animations';
+import {ConditionOperator} from './enums';
+import {VCRefInjector} from './helpers/parent.helper';
+import {MatMenu} from '@angular/material/menu';
+import {QuerySearchGroupComponent} from './components/query-search-group/query-search-group.component';
+import {Observable} from 'rxjs';
+import {ComponentCanDeactivate} from './guards/pending-changes.guard';
 
 @Component({
   selector: 'ngx-query-search',
@@ -39,12 +39,20 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
   @ContentChild(QueryFieldsDirective) queryFields: QueryFieldsDirective;
 
   groups: QueryGroup[] = [];
+  filterLoading = false;
 
   private injectorRef: VCRefInjector;
 
   constructor(private querySearchService: QuerySearchService,
               private vcRef: ViewContainerRef) {
     this.injectorRef = new VCRefInjector(this.vcRef.injector);
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (!this.canDeactivate()) {
+      $event.returnValue = false;
+    }
   }
 
   ngAfterContentInit() {
@@ -73,6 +81,10 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
     this.filterValid.emit(this.canGenerateFilter);
   }
 
+  filterLoadingChanged(loading: boolean) {
+    this.filterLoading = loading;
+  }
+
   canDeactivate(): Observable<boolean> | boolean {
     if (!!this.topGroup.currentFilter) {
       return !this.topGroup.currentFilterChanged;
@@ -81,15 +93,9 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
     return true;
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any) {
-    if (!this.canDeactivate()) {
-      $event.returnValue = false;
-    }
-  }
-
   /**
    * Load a saved rule
+   *
    * @param fieldName - Field name
    * @param operator - ConditionOperator
    * @param value - Any sort of dumb value you want
@@ -101,6 +107,7 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
 
   /**
    * Notify the component that the current SavedFilter has been saved in some way
+   *
    * @param filter - The new SavedFilter or null if the filter is pre-existing
    */
   public filterSaved(filter: SavedFilter | null = null) {
@@ -120,19 +127,22 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
 
   /**
    * Load a SavedFilter
+   *
    * @param filter - SavedFilter to load
    */
   public loadSavedFilter(filter: SavedFilter) {
-    this.topGroup.loadFilter(filter);
-
+    this.filterLoading = true;
     setTimeout(() => {
-      this.filterLoaded.emit(filter);
-      this.filterChanged();
-    }, 150);
+      this.topGroup.loadFilter(filter, () => {
+        this.filterLoaded.emit(filter);
+        this.filterChanged();
+      });
+    }, 100);
   }
 
   /**
    * Get the current filter as a SavedFilter
+   *
    * @param name - Name of the SavedFilter
    */
   public generateSavedFilter(name: string | undefined = undefined): SavedFilter | null {
@@ -146,7 +156,7 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
     return {
       name,
       ruleGroup: queryRuleGroup
-    }
+    };
   }
 
   get identity(): string {

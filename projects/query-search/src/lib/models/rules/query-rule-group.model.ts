@@ -1,4 +1,4 @@
-import {QueryRule} from "./query-rule.model";
+import {QueryRule} from './query-rule.model';
 
 export class QueryRuleGroup {
   condition: 'AND' | 'OR' = 'AND';

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angular/core';
-import {QuerySearchService} from "../../../query-search.service";
-import {QueryItem} from "../../../models";
-import {OperatorPipe} from "../../../pipes/operator.pipe";
+import {QuerySearchService} from '../../../query-search.service';
+import {QueryItem} from '../../../models';
+import {OperatorPipe} from '../../../pipes/operator.pipe';
 
 @Component({
   selector: 'operator-field',
@@ -76,9 +76,7 @@ export class OperatorFieldComponent {
 
   searchValueChanged(searchValue: string) {
     if (!!searchValue && searchValue.trim().length > 0) {
-      this.filteredOperators = this.operators.filter(operator => {
-        return this.operatorPipe.transform(operator)?.toLowerCase().includes(searchValue)
-      })
+      this.filteredOperators = this.operators.filter(o => this.operatorPipe.transform(o)?.toLowerCase().includes(searchValue));
     } else {
       this.filteredOperators = this.operators;
     }

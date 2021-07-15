@@ -3,6 +3,7 @@
                       (filterCleared)="filterCleared()"
                       [filterMenu]="filterMenu"
                       (filterChanged)="filterChanged()"
+                      (filterLoading)="filterLoadingChanged($event)"
                       (generateClicked)="generate()"
                       *ngFor="let group of groups"
                       [@inOut]
@@ -10,4 +11,8 @@
                       (removed)="remove($event)">
     <ng-content></ng-content>
   </query-search-group>
+
+  <div class="loading-shade" *ngIf="filterLoading">
+    <mat-spinner diameter="30"></mat-spinner>
+  </div>
 </div>

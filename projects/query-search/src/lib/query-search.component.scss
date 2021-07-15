@@ -1,4 +1,7 @@
 :host {
+  min-height: 225px;
+  position: relative;
+
   .global-actions {
     padding: 1.2em;
     display: flex;
@@ -93,4 +96,20 @@
       color: gray;
     }
   }
+}
+
+.loading-shade {
+  position: absolute;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rules-list {
+  position: relative;
+  min-height: 160px;
 }

@@ -1,10 +1,10 @@
 import {EventEmitter, Inject, Optional} from '@angular/core';
 import {Injectable} from '@angular/core';
-import {QueryField, QueryRuleGroup, QueryRule} from "./models";
-import {BehaviorSubject} from "rxjs";
-import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from "./query-search.config";
-import {ConditionOperator} from "./enums";
-import {isArray} from "rxjs/internal-compatibility";
+import {QueryField, QueryRuleGroup, QueryRule} from './models';
+import {BehaviorSubject} from 'rxjs';
+import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from './query-search.config';
+import {ConditionOperator} from './enums';
+import {isArray} from 'rxjs/internal-compatibility';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,6 @@ export class QuerySearchService {
   fields: BehaviorSubject<QueryField[]> = new BehaviorSubject<QueryField[]>([]);
 
   private _fields: QueryField[] = [];
-  private readonly _loggingCallback: (...args: any[]) => void = () => {
-  };
 
   private readonly _debug: boolean = false;
   private readonly _sortFields: boolean = true;
@@ -49,7 +47,7 @@ export class QuerySearchService {
       if (!existingField) {
         this._fields.push(field);
       }
-    })
+    });
 
     this.fields.next(this._fields);
   }
@@ -85,10 +83,11 @@ export class QuerySearchService {
 
   /**
    * Consume a Class/Model statically which provides fields and their information to the component
+   *
    * @param instance - Class
    * @param labels - Labels in a key/value object
    */
-  consumeModel<T>(instance: any, labels: {} = {}) {
+  consumeModel<T>(instance: any, labels: Record<string, unknown> = {}) {
     const toConsume: T = new instance();
 
     return this.consumeObject(toConsume, labels);
@@ -96,13 +95,14 @@ export class QuerySearchService {
 
   /**
    * Consume an object which provides fields and their information to the component
+   *
    * @param instance - Class
    * @param labels - Labels in a key/value object
    */
-  consumeObject<T>(instance: any, labels: {} = {}) {
+  consumeObject<T>(instance: any, labels: Record<string, unknown> = {}) {
     const fields = Object.getOwnPropertyNames(instance).map((propName: string) => {
       let fieldType: any = typeof (instance as any)[propName];
-      let label = undefined;
+      let label;
 
       if (fieldType === 'object') {
         if (Object.prototype.toString.call((instance as any)[propName]) === '[object Date]') {
@@ -120,7 +120,7 @@ export class QuerySearchService {
         type: fieldType as 'boolean' | 'date' | 'number' | 'string' | 'array',
         values: [],
         label
-      }
+      };
     });
 
     this.addFields(fields);
@@ -128,11 +128,12 @@ export class QuerySearchService {
 
   /**
    * Check if a field has provided values
+   *
    * @param fieldName - Name of the field
    */
   checkForValues(fieldName: string): boolean {
     if (!!fieldName) {
-      const field = this._fields.find(field => field.name === fieldName);
+      const field = this._fields.find(f => f.name === fieldName);
 
       if (!!field && !!field.values) {
         if (isArray(field.values)) {
@@ -147,6 +148,7 @@ export class QuerySearchService {
 
   /**
    * Returns the max length for a field
+   *
    * @param fieldName
    */
   getFieldMaxLength(fieldName: string): number | undefined {
@@ -162,6 +164,7 @@ export class QuerySearchService {
 
   /**
    * Check if a field has provided values
+   *
    * @param fieldName - Name of the field
    */
   getField(fieldName: string): QueryField | null {
@@ -195,4 +198,7 @@ export class QuerySearchService {
   get showOperatorSuffix() {
     return this._showOperatorSuffix;
   }
+
+  private readonly _loggingCallback: (...args: any[]) => void = () => {
+  };
 }

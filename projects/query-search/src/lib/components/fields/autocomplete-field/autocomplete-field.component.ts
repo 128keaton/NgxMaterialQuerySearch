@@ -8,17 +8,17 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import {QuerySearchService} from "../../../query-search.service";
-import {ProvidedValue, QueryField, QueryItem} from "../../../models";
-import {BehaviorSubject, fromEvent, Observable, of, Subscription} from "rxjs";
-import {distinctUntilChanged, filter, map, shareReplay, startWith, switchMap, tap} from "rxjs/operators";
+import {QuerySearchService} from '../../../query-search.service';
+import {ProvidedValue, QueryField, QueryItem} from '../../../models';
+import {BehaviorSubject, fromEvent, Observable, of, Subscription} from 'rxjs';
+import {distinctUntilChanged, filter, map, shareReplay, startWith, switchMap, tap} from 'rxjs/operators';
 import {
   handleRawValues,
   handleReturnValues,
   handleValueSelected,
   toggleValueSelection
-} from "../../../helpers/values.helper";
-import {isArray} from "rxjs/internal-compatibility";
+} from '../../../helpers/values.helper';
+import {isArray} from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'autocomplete-field',
@@ -61,7 +61,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
   visibleValues: Observable<any[]>;
   selectedValues: any[] = [];
-  currentSearchValue: string = '';
+  currentSearchValue = '';
 
   private _multiSelect = false;
   private _field: QueryField | null;
@@ -83,14 +83,14 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     // Listen for input changes on an autocomplete input
     this.valueInputs.changes.subscribe((changes: QueryList<ElementRef>) => {
       if (!!changes) {
-        this.setupInputValueFields(changes.first)
+        this.setupInputValueFields(changes.first);
       }
     });
   }
 
   get isObservable(): boolean {
     if (!!this._field && !!this._field.values) {
-      return this._field.values instanceof Observable
+      return this._field.values instanceof Observable;
     }
 
     return false;
@@ -114,6 +114,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
   /**
    * Handles mat-option div click
+   *
    * @param event
    * @param value
    */
@@ -159,7 +160,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
           tap(values => {
             this.totalValues.next(values.length);
           })
-        )
+        );
 
       } else if (this._field.values.length > 0) {
         this.totalValues.next(this._field.values.length);
@@ -185,7 +186,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
       this.totalValues.next(2);
       return of(booleanValues).pipe(
         shareReplay(1)
-      )
+      );
     }
 
     this.totalValues.next(0);
@@ -219,7 +220,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
         distinctUntilChanged(),
         map(() => field.nativeElement.value),
       ).subscribe(inputValue => {
-        this.processValuesSelected(inputValue)
+        this.processValuesSelected(inputValue);
       });
     }
   }
@@ -291,13 +292,13 @@ export class AutocompleteFieldComponent implements AfterViewInit {
   private setupVisibleValues() {
     this.visibleValues = this.searchValue.pipe(
       startWith(null),
-      switchMap(searchValue => {
-        return this.values.pipe(
+      switchMap(searchValue => this.values.pipe(
           map(rawValues => handleRawValues(rawValues, searchValue)),
-        );
-      }),
+        )),
       map(values => {
-        if (!!this.maxResults && values.length > this.maxResults && (!this.currentSearchValue || this.currentSearchValue.trim().length === 0)) {
+        if (!!this.maxResults &&
+          values.length > this.maxResults &&
+          (!this.currentSearchValue || this.currentSearchValue.trim().length === 0)) {
           this._totalValues = values.length;
 
           return handleReturnValues(values, this.maxResults);
@@ -305,7 +306,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
         return values;
       })
-    )
+    );
   }
 
 
@@ -319,7 +320,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     if (!!this._field && !!this._field.values && this._field.values instanceof Observable) {
       this._valuesObservable = this._field.values.pipe(
         tap(() => this.$loading.next(false))
-      )
+      );
     }
   }
 

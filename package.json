@@ -27,12 +27,16 @@
     "tslib": "^2.1.0",
     "uuid": "^8.3.2",
     "zone.js": "~0.11.4",
-    "project-name-generator": "^2.1.9"
+    "project-name-generator": "~2.1.9",
+    "ngx-json-viewer": "~3.0.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.0.4",
     "@angular/cli": "~12.0.4",
     "@angular/compiler-cli": "~12.0.4",
+    "@angular-eslint/eslint-plugin": "~12.3.1",
+    "@angular-eslint/eslint-plugin-template": "~12.3.1",
+    "@angular-eslint/template-parser": "~12.3.1",
     "@types/jasmine": "~3.6.0",
     "@types/luxon": "^1.27.0",
     "@types/node": "^12.11.1",
@@ -45,6 +49,12 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "ng-packagr": "^12.0.0",
-    "typescript": "~4.2.3"
+    "typescript": "~4.2.3",
+    "@typescript-eslint/eslint-plugin": "4.16.1",
+    "@typescript-eslint/parser": "4.16.1",
+    "eslint": "^7.24.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsdoc": "^32.3.0",
+    "eslint-plugin-prefer-arrow": "^1.2.3"
   }
 }

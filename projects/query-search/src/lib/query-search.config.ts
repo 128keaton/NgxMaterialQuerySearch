@@ -1,5 +1,5 @@
-import {QueryRuleGroup} from "./models";
-import {InjectionToken} from "@angular/core";
+import {QueryRuleGroup} from './models';
+import {InjectionToken} from '@angular/core';
 
 export const QUERY_SEARCH_CONFIG = new InjectionToken<QuerySearchConfiguration>('QUERY_SEARCH_CONFIG');
 
@@ -13,9 +13,7 @@ const querySearchDefaultConfig: QuerySearchConfig = {
   limitResults: 50,
   showFieldNameSuffix: true,
   showOperatorSuffix: true,
-  transform: (rules: QueryRuleGroup[]) => {
-    return rules;
-  }
+  transform: (rules: QueryRuleGroup[]) => rules
 };
 
 
@@ -44,9 +42,7 @@ export class QuerySearchConfiguration implements QuerySearchConfig {
 
   constructor(config?: QuerySearchConfig) {
     const correctedConfig = {...querySearchDefaultConfig, ...config};
-    const defaultTransform =  (rules: QueryRuleGroup[]) => {
-      return rules;
-    };
+    const defaultTransform =  (rules: QueryRuleGroup[]) => rules;
 
     this.appearance = correctedConfig.appearance || 'outline';
     this.debug = correctedConfig.debug;

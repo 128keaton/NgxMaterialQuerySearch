@@ -4,3 +4,10 @@
     min-height: 225px;
   }
 }
+
+.split-view {
+  display: flex;
+  .left, .right {
+    flex: 1;
+  }
+}

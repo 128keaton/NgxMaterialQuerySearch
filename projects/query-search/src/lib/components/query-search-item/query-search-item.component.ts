@@ -9,15 +9,14 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import {QueryField, QueryItem} from "../../models";
-import {QuerySearchService} from "../../query-search.service";
-import {Observable} from "rxjs";
-import {DateAdapter} from "@angular/material/core";
-import {CustomDateAdapter} from "../../adapters";
-import {isBetweenOperator, isNullOperator} from "../../helpers/condition.helper";
-import {StackedFieldComponent} from "../fields/stacked-field/stacked-field.component";
-import {SingleFieldComponent} from "../fields/single-field/single-field.component";
-
+import {QueryField, QueryItem} from '../../models';
+import {QuerySearchService} from '../../query-search.service';
+import {Observable} from 'rxjs';
+import {DateAdapter} from '@angular/material/core';
+import {CustomDateAdapter} from '../../adapters';
+import {isBetweenOperator, isNullOperator} from '../../helpers/condition.helper';
+import {StackedFieldComponent} from '../fields/stacked-field/stacked-field.component';
+import {SingleFieldComponent} from '../fields/single-field/single-field.component';
 
 @Component({
   selector: 'query-search-item',
@@ -42,6 +41,10 @@ export class QuerySearchItemComponent {
     this.changeDetectorRef.detectChanges();
   }
 
+  get item(): QueryItem {
+    return this._item;
+  }
+
   @Input()
   disableDelete = false;
 
@@ -52,7 +55,7 @@ export class QuerySearchItemComponent {
   stackedFields: QueryList<StackedFieldComponent>;
 
   @ViewChildren(SingleFieldComponent)
-  singleFields: QueryList<SingleFieldComponent>
+  singleFields: QueryList<SingleFieldComponent>;
 
   @HostBinding('class.double-height')
   doubleHeight = false;
@@ -110,10 +113,6 @@ export class QuerySearchItemComponent {
     return this.querySearchService.formFieldAppearance !== 'outline';
   }
 
-  get item(): QueryItem {
-    return this._item;
-  }
-
   get flagType() {
     return this.item.active ? 'flag' : 'outlined_flag';
   }
@@ -139,6 +138,9 @@ export class QuerySearchItemComponent {
           this.querySearchService.log('QuerySearchItem - Field Loaded:', field);
           this.updateDateFormat(field.format);
           this.updateFields(false);
+        } else {
+          // I know I'm using console here, but its for a good reason
+          console.warn(`Could not find field with fieldName '${this.item.fieldName}'`, this);
         }
       });
     }

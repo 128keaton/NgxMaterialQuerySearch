@@ -7,9 +7,9 @@ import {
   Output, QueryList,
   ViewChildren
 } from '@angular/core';
-import {QueryItem} from "../../../models";
-import {QuerySearchService} from "../../../query-search.service";
-import {AutocompleteFieldComponent} from "../autocomplete-field/autocomplete-field.component";
+import {QueryItem} from '../../../models';
+import {QuerySearchService} from '../../../query-search.service';
+import {AutocompleteFieldComponent} from '../autocomplete-field/autocomplete-field.component';
 
 @Component({
   selector: 'single-field',
@@ -39,12 +39,12 @@ export class SingleFieldComponent {
   valueChange: EventEmitter<any> = new EventEmitter();
 
   @ViewChildren(AutocompleteFieldComponent)
-  autocompleteFields: QueryList<AutocompleteFieldComponent>
+  autocompleteFields: QueryList<AutocompleteFieldComponent>;
 
   maxLength: number | undefined;
   operator: string;
-  type: string = 'string';
-  hasValues: boolean = false;
+  type = 'string';
+  hasValues = false;
   multi = false;
 
   private _item: QueryItem;
@@ -122,7 +122,7 @@ export class SingleFieldComponent {
 
   private setHasValues() {
     if (!!this._item && !!this._item.fieldName) {
-      this.hasValues = this.querySearchService.checkForValues(this._item.fieldName)
+      this.hasValues = this.querySearchService.checkForValues(this._item.fieldName);
     } else {
       this.hasValues = false;
     }
@@ -133,6 +133,6 @@ export class SingleFieldComponent {
   private updateFields() {
     (this.autocompleteFields || []).forEach(field => {
         field.item = this.item;
-    })
+    });
   }
 }

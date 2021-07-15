@@ -8,14 +8,14 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import {QueryGroup, QueryItem, SavedFilter} from "../../models";
-import {QuerySearchService} from "../../query-search.service";
-import {inOutAnimations} from "../../animations";
-import {QuerySearchItemComponent} from "../query-search-item/query-search-item.component";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
-import {isEven} from "../../helpers/general.helpers";
-import {MatMenu} from "@angular/material/menu";
-import {tap} from "rxjs/operators";
+import {QueryGroup, QueryItem, SavedFilter} from '../../models';
+import {QuerySearchService} from '../../query-search.service';
+import {inOutAnimations} from '../../animations';
+import {QuerySearchItemComponent} from '../query-search-item/query-search-item.component';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {isEven} from '../../helpers/general.helpers';
+import {MatMenu} from '@angular/material/menu';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'query-search-group',
@@ -27,9 +27,10 @@ import {tap} from "rxjs/operators";
 })
 export class QuerySearchGroupComponent implements AfterViewInit {
 
-  @Input() parent: QuerySearchGroupComponent;
+  @Output()
+  removed = new EventEmitter<string>();
 
-  @Input() filterMenu?: MatMenu;
+  @HostBinding('class') class = 'depth-0';
 
   @Output() generateClicked = new EventEmitter<boolean>(true);
 
@@ -37,12 +38,26 @@ export class QuerySearchGroupComponent implements AfterViewInit {
 
   @Output() filterChanged = new EventEmitter<boolean>();
 
-  @Input()
-  set group(newValue: QueryGroup) {
+  @Output() filterLoading = new EventEmitter<boolean>(true);
+
+  @Input() parent: QuerySearchGroupComponent;
+
+  @Input() filterMenu?: MatMenu;
+
+  @Input() set group(newValue: QueryGroup) {
     if (!!newValue) {
       this._group = newValue;
       this.class = `depth-${this._group.depth}`;
     }
+  }
+
+  get group() {
+    return this._group;
+  }
+
+  @Input()
+  set showDivider(newValue: any) {
+    this._showDivider = `${newValue}` === 'true';
   }
 
   @ViewChildren(QuerySearchItemComponent) items: QueryList<QuerySearchItemComponent>;
@@ -50,11 +65,6 @@ export class QuerySearchGroupComponent implements AfterViewInit {
 
   currentFilter?: SavedFilter;
   currentFilterChanged = false;
-  loadingFilters = new EventEmitter<boolean>(true);
-
-  get group() {
-    return this._group;
-  }
 
   set groupType(newValue: 'AND' | 'OR') {
     this._group.type = newValue;
@@ -65,15 +75,6 @@ export class QuerySearchGroupComponent implements AfterViewInit {
     return this._group.type;
   }
 
-  @Output()
-  removed = new EventEmitter<string>();
-
-  @HostBinding('class') class = 'depth-0';
-
-  @Input()
-  set showDivider(newValue: any) {
-    this._showDivider = `${newValue}` === 'true';
-  }
 
   _showDivider = false;
   private _group: QueryGroup;
@@ -90,7 +91,7 @@ export class QuerySearchGroupComponent implements AfterViewInit {
         setTimeout(() => {
           this.changeDetectorRef.markForCheck();
           this.changeDetectorRef.detectChanges();
-        }, 100)
+        }, 100);
       }),
     ).subscribe();
   }
@@ -148,24 +149,26 @@ export class QuerySearchGroupComponent implements AfterViewInit {
     this.currentFilterChanged = true;
   }
 
-  loadFilter(filter: SavedFilter | null) {
-    this.loadingFilters.emit(true);
+  loadFilter(filter: SavedFilter | null, callback: () => void) {
+    this.filterLoading.emit(true);
     this.currentFilterChanged = false;
 
     if (!!filter) {
-     // this.children.forEach(child => child.remove(false));
-     // this.items.forEach(item => item.remove(false));
-      this.group.apply(filter.ruleGroup);
+      this.children.forEach(child => child.remove(false));
+      this.items.forEach(item => item.remove(false));
+      this.group.apply(filter.ruleGroup, () => {
+        this.filterLoading.emit(false);
+        callback();
+      });
       this.currentFilter = filter;
     } else {
-      console.log('No filter', filter);
+      this.querySearchService.log('No filter', filter);
+      this.filterLoading.emit(false);
+      callback();
     }
-
-
-    this.loadingFilters.emit(false);
   }
 
-  markChanged(item: QueryItem) {
+  markChanged() {
     this.currentFilterChanged = true;
     this.filterChanged.emit(true);
   }
@@ -208,7 +211,7 @@ export class QuerySearchGroupComponent implements AfterViewInit {
   }
 
   get dropListID(): string {
-    return `drop-list-${this.group.depth}`
+    return `drop-list-${this.group.depth}`;
   }
 
   get noItems(): boolean {

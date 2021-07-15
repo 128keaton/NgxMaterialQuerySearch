@@ -1,8 +1,8 @@
-import {QueryItem} from "./query-item.model";
-import {QueryBase} from "./query-base.model";
-import {QueryRule, QueryRuleGroup} from "./rules";
-import {ConditionOperator} from "../enums";
-import {getEnumKeyByEnumValue} from "../helpers/general.helpers";
+import {QueryItem} from './query-item.model';
+import {QueryBase} from './query-base.model';
+import {QueryRule, QueryRuleGroup} from './rules';
+import {ConditionOperator} from '../enums';
+import {getEnumKeyByEnumValue} from '../helpers/general.helpers';
 
 export class QueryGroup extends QueryBase {
   type: 'AND' | 'OR';
@@ -32,33 +32,32 @@ export class QueryGroup extends QueryBase {
   }
 
   applyRule(rule: QueryRule) {
-   if (!!rule.operator) {
-     const newItem = new QueryItem();
-     newItem.condition = getEnumKeyByEnumValue(ConditionOperator, rule.operator) as ConditionOperator
-     newItem.fieldName = rule.field || 'unknown';
-     newItem.type = rule.type || 'string';
-     newItem.value = rule.value;
-     this.items.push(newItem);
-   }
+    if (!!rule.operator) {
+      const newItem = new QueryItem();
+      newItem.condition = getEnumKeyByEnumValue(ConditionOperator, rule.operator) as ConditionOperator;
+      newItem.fieldName = rule.field || 'unknown';
+      newItem.type = rule.type || 'string';
+      newItem.value = rule.value;
+      this.items.push(newItem);
+    }
   }
 
-  apply(group: QueryRuleGroup) {
+  apply(group: QueryRuleGroup, callback: () => void) {
     this.type = group.condition;
     this.children = [];
     this.items = [];
-    console.log('GROUP', group);
 
     group.rules.forEach(ruleOrGroup => {
-      console.log('RULEORGROUP', ruleOrGroup);
-      if (ruleOrGroup instanceof QueryRuleGroup || ruleOrGroup.hasOwnProperty('children')) {
+      if (ruleOrGroup.hasOwnProperty('condition')) {
         const typedGroup: QueryRuleGroup = ruleOrGroup as QueryRuleGroup;
         const subGroup = new QueryGroup(typedGroup.condition, this.depth + 1, false);
-        subGroup.apply(typedGroup);
-        this.children.push(subGroup)
+        subGroup.apply(typedGroup, callback);
+        this.children.push(subGroup);
       } else {
         this.applyRule(ruleOrGroup as QueryRule);
+        callback();
       }
-    })
+    });
   }
 
   removeItem(id: string) {
@@ -80,7 +79,7 @@ export class QueryGroup extends QueryBase {
     const ruleGroup = new QueryRuleGroup(this.type, [...itemRules, ...childRules]);
 
     if (ruleGroup.rules.length === 0) {
-      return {}
+      return {};
     }
 
     return ruleGroup;

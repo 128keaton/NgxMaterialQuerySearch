@@ -1,4 +1,4 @@
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 export const inOutAnimations = [
   trigger('inOut', [
@@ -11,4 +11,4 @@ export const inOutAnimations = [
       animate(100, style({ height: 0 }))
     ])
   ]),
-]
+];
