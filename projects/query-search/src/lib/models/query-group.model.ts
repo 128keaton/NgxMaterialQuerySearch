@@ -46,14 +46,17 @@ export class QueryGroup extends QueryBase {
     this.type = group.condition;
     this.children = [];
     this.items = [];
+    console.log('GROUP', group);
 
     group.rules.forEach(ruleOrGroup => {
-      if (ruleOrGroup instanceof QueryRuleGroup) {
-        const subGroup = new QueryGroup(ruleOrGroup.condition, this.depth + 1, false);
-        subGroup.apply(ruleOrGroup);
+      console.log('RULEORGROUP', ruleOrGroup);
+      if (ruleOrGroup instanceof QueryRuleGroup || ruleOrGroup.hasOwnProperty('children')) {
+        const typedGroup: QueryRuleGroup = ruleOrGroup as QueryRuleGroup;
+        const subGroup = new QueryGroup(typedGroup.condition, this.depth + 1, false);
+        subGroup.apply(typedGroup);
         this.children.push(subGroup)
       } else {
-        this.applyRule(ruleOrGroup);
+        this.applyRule(ruleOrGroup as QueryRule);
       }
     })
   }

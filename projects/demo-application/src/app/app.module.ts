@@ -12,12 +12,18 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
 import { QuerySearchComponent } from './components/query-search/query-search.component';
 import {MatIconModule} from "@angular/material/icon";
+import { InputRawFilterComponent } from './components/input-raw-filter/input-raw-filter.component';
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     AppComponent,
     OutputComponent,
-    QuerySearchComponent
+    QuerySearchComponent,
+    InputRawFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +46,11 @@ import {MatIconModule} from "@angular/material/icon";
     MatNativeDateModule,
     MatButtonModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule
   ],
   bootstrap: [AppComponent],
 })

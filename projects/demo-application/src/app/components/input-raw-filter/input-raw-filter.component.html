@@ -1,0 +1,5 @@
+<mat-form-field appearance="fill">
+  <mat-label>Raw Filter JSON</mat-label>
+  <textarea matInput [(ngModel)]="rawFilterJSON"></textarea>
+</mat-form-field>
+<button mat-stroked-button (click)="emitFilter()">Parse</button>

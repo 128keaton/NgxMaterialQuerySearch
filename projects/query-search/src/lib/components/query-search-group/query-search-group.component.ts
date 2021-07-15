@@ -153,11 +153,14 @@ export class QuerySearchGroupComponent implements AfterViewInit {
     this.currentFilterChanged = false;
 
     if (!!filter) {
-      this.children.forEach(child => child.remove(false));
-      this.items.forEach(item => item.remove(false));
+     // this.children.forEach(child => child.remove(false));
+     // this.items.forEach(item => item.remove(false));
       this.group.apply(filter.ruleGroup);
       this.currentFilter = filter;
+    } else {
+      console.log('No filter', filter);
     }
+
 
     this.loadingFilters.emit(false);
   }

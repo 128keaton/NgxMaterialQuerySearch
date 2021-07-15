@@ -99,4 +99,8 @@ export class QuerySearchComponent {
   get hasFilter() {
     return !!this.currentFilter
   }
+
+  provideParsedFilter(filter: SavedFilter) {
+    this.querySearchComponent.loadSavedFilter(filter);
+  }
 }

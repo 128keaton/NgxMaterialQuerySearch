@@ -28,4 +28,23 @@
     <query-field name="maxLength" label="Max Length" type="number" [maxLength]="2"></query-field>
   </query-fields>
 </ngx-query-search>
-<app-output [queryObject]="queryObject"></app-output>
+
+<mat-accordion>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Query Output
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-output [queryObject]="queryObject"></app-output>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Input Raw Filter
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-input-raw-filter (generatedFilter)="provideParsedFilter($event)"></app-input-raw-filter>
+  </mat-expansion-panel>
+</mat-accordion>
+
