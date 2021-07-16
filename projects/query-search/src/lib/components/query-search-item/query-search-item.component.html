@@ -1,31 +1,34 @@
-<mat-divider class="notate-group vert-notate-group" [vertical]="true"></mat-divider>
-<div class="query-search-item-wrapper">
-  <mat-divider class="notate-group-after"></mat-divider>
+<div class="container">
+  <mat-divider class="notate-group vert-notate-group" [vertical]="true"></mat-divider>
+  <div class="query-search-item-wrapper">
+    <mat-divider class="notate-group-after"></mat-divider>
 
-  <button mat-icon-button class="flag-button mat-query-style" [class.flag-enabled]="item.active" [class.flag-disabled]="!item.active"
-          (click)="item.active = !item.active" [matTooltip]="flagTooltip" matTooltipPosition="left">
-    <mat-icon>{{flagType}}</mat-icon>
-  </button>
+    <button mat-icon-button class="flag-button mat-query-style" [class.flag-enabled]="item.active" [class.flag-disabled]="!item.active"
+            (click)="item.active = !item.active" [matTooltip]="flagTooltip" matTooltipPosition="left">
+      <mat-icon>{{flagType}}</mat-icon>
+    </button>
 
-  <mat-divider class="separate-button between-order-delete"></mat-divider>
+    <mat-divider class="separate-button between-order-delete"></mat-divider>
 
-  <button mat-icon-button color="warn" class="delete-button mat-query-style" (click)="remove()" [disabled]="disableDelete">
-    <mat-icon>delete</mat-icon>
-  </button>
+    <button mat-icon-button color="warn" class="delete-button mat-query-style" (click)="remove()" [disabled]="disableDelete">
+      <mat-icon>delete</mat-icon>
+    </button>
 
-  <mat-divider class="separate-button" [class.pad-dividers]="padDividers"></mat-divider>
+    <mat-divider class="separate-button" [class.pad-dividers]="padDividers"></mat-divider>
 
-  <name-field [(item)]="item" (nameChange)="fieldChanged()"></name-field>
+    <name-field [(item)]="item" (nameChange)="fieldChanged()"></name-field>
 
-  <operator-field *ngIf="showOperatorField" [(item)]="item" (operatorChange)="fieldChanged()"></operator-field>
+    <operator-field *ngIf="showOperatorField" [(item)]="item" (operatorChange)="fieldChanged()"></operator-field>
 
-  <ng-container *ngIf="showValueField && !isStackedField">
-    <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
-    <single-field [(item)]="item" (valueChange)="fieldChanged()"></single-field>
+    <mat-divider *ngIf="showValueField && isStackedField" class="separate-fields between-separator" [class.pad-dividers]="padDividers"></mat-divider>
+    <ng-container *ngIf="showValueField && !isStackedField">
+      <mat-divider class="separate-fields" [class.pad-dividers]="padDividers"></mat-divider>
+      <single-field [(item)]="item" (valueChange)="fieldChanged()"></single-field>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="showValueField && isStackedField">
+    <stacked-field [(item)]="item" (valueChange)="fieldChanged()"></stacked-field>
   </ng-container>
-</div>
 
-<ng-container *ngIf="showValueField && isStackedField">
-  <mat-divider class="separate-fields between-separator" [class.pad-dividers]="padDividers"></mat-divider>
-  <stacked-field [(item)]="item" (valueChange)="fieldChanged()"></stacked-field>
-</ng-container>
+</div>

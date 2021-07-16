@@ -1,3 +1,7 @@
+# 0.5.6
+- Improved:
+  - Animation performance
+  
 # 0.5.5
 - Fixed:
   - Large filters with nested groups only not loading properly

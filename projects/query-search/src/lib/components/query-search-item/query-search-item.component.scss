@@ -1,4 +1,6 @@
-:host {
+:host { display: block; }
+
+.container {
   overflow: hidden;
   display: flex;
   position: relative;
@@ -6,6 +8,7 @@
   margin-left: 15px;
   padding-top: 10px;
   padding-bottom: 10px;
+  align-items: start;
 
   &.double-height {
     min-height: 128px;
@@ -62,7 +65,6 @@
   .separate-fields {
     position: relative !important;
     min-width: 100px;
-    padding-bottom: 5px;
     align-self: center;
 
     @media screen and (max-width: 1024px) {

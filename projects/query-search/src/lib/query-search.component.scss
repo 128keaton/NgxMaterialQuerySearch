@@ -107,6 +107,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 150px;
+  z-index: 100;
 }
 
 .rules-list {

@@ -42,6 +42,7 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
   filterLoading = false;
 
   private injectorRef: VCRefInjector;
+  private currentFilter: SavedFilter;
 
   constructor(private querySearchService: QuerySearchService,
               private vcRef: ViewContainerRef) {
@@ -132,12 +133,25 @@ export class QuerySearchComponent implements AfterContentInit, ComponentCanDeact
    */
   public loadSavedFilter(filter: SavedFilter) {
     this.filterLoading = true;
+    this.currentFilter = filter;
+
+    this.topGroup.clear();
+
     setTimeout(() => {
       this.topGroup.loadFilter(filter, () => {
         this.filterLoaded.emit(filter);
         this.filterChanged();
       });
     }, 100);
+  }
+
+  /**
+   * Reload the current SavedFilter
+   */
+  public reload() {
+    if (!!this.currentFilter) {
+      this.loadSavedFilter(this.currentFilter);
+    }
   }
 
   /**

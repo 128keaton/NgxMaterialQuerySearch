@@ -1,18 +1,18 @@
-<div class="rules-list" cdkDropListGroup>
+<div class="rules-list" cdkDropListGroup [@inOut]="groups.length">
   <query-search-group #topGroup
+                      (iconClick)="reload()"
                       (filterCleared)="filterCleared()"
                       [filterMenu]="filterMenu"
                       (filterChanged)="filterChanged()"
                       (filterLoading)="filterLoadingChanged($event)"
                       (generateClicked)="generate()"
                       *ngFor="let group of groups"
-                      [@inOut]
                       [group]="group"
                       (removed)="remove($event)">
     <ng-content></ng-content>
   </query-search-group>
 
-  <div class="loading-shade" *ngIf="filterLoading">
+  <div class="loading-shade" *ngIf="filterLoading" [@inOut]>
     <mat-spinner diameter="30"></mat-spinner>
   </div>
 </div>

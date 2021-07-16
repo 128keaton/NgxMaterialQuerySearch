@@ -1,4 +1,6 @@
-:host {
+:host { display: block; }
+
+.container {
   display: flex;
   align-items: center;
   padding-top: 5px;
@@ -115,13 +117,6 @@
 
 .group-items-list {
   width: 100%;
-
-  h1.no-items {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 1em;
-    margin-bottom: 1em;
-  }
 }
 
 .generate-button, .manage-button, .add-button, .clear-button {

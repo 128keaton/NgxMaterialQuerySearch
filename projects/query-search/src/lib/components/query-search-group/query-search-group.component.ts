@@ -17,6 +17,7 @@ import {isEven} from '../../helpers/general.helpers';
 import {MatMenu} from '@angular/material/menu';
 import {tap} from 'rxjs/operators';
 
+
 @Component({
   selector: 'query-search-group',
   templateUrl: './query-search-group.component.html',
@@ -39,6 +40,8 @@ export class QuerySearchGroupComponent implements AfterViewInit {
   @Output() filterChanged = new EventEmitter<boolean>();
 
   @Output() filterLoading = new EventEmitter<boolean>(true);
+
+  @Output() iconClick = new EventEmitter(true);
 
   @Input() parent: QuerySearchGroupComponent;
 
@@ -133,10 +136,23 @@ export class QuerySearchGroupComponent implements AfterViewInit {
     this.querySearchService.log('Clearing group', this.group.id, this);
     this.children.forEach(child => child.remove());
     this.items.forEach(item => item.remove());
+  }
+
+postClear() {
+  if (this.group.items.length === 0) {
     this.group.addItem();
-    this.currentFilter = undefined;
-    this.currentFilterChanged = false;
-    this.filterCleared.emit(undefined);
+  }
+
+  this.currentFilter = undefined;
+  this.currentFilterChanged = false;
+  this.filterCleared.emit(undefined);
+}
+
+  animationDone(event: { fromState: any, toState: any }) {
+    console.log('ANIMATION DONE', event)
+    if (event.toState.length === 0 && event.fromState.length > 0) {
+      this.postClear();
+    }
   }
 
   drop(event: CdkDragDrop<QueryItem[]>) {
@@ -214,7 +230,11 @@ export class QuerySearchGroupComponent implements AfterViewInit {
     return `drop-list-${this.group.depth}`;
   }
 
-  get noItems(): boolean {
-    return this.group.children.length === 0 && this.group.items.length === 0;
+  identifyItem(index: number, item: QueryItem) {
+    return item.id;
+  }
+
+  identifyGroup(index: number, group: QueryGroup) {
+    return group.id;
   }
 }
