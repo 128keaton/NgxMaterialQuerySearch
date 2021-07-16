@@ -1,3 +1,7 @@
+# 0.5.7
+- Fixed:
+  - Empty item being added to SavedFilter when it had no top level items
+  
 # 0.5.6
 - Improved:
   - Animation performance

@@ -139,7 +139,7 @@ export class QuerySearchGroupComponent implements AfterViewInit {
   }
 
 postClear() {
-  if (this.group.items.length === 0) {
+  if (this.group.items.length === 0 && this.group.children.length === 0) {
     this.group.addItem();
   }
 
@@ -149,7 +149,6 @@ postClear() {
 }
 
   animationDone(event: { fromState: any, toState: any }) {
-    console.log('ANIMATION DONE', event)
     if (event.toState.length === 0 && event.fromState.length > 0) {
       this.postClear();
     }
