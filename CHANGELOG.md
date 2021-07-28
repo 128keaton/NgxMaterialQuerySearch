@@ -1,3 +1,7 @@
+# 0.5.8
+- Fixed:
+  - Active filters still being included for some reason
+  
 # 0.5.7
 - Fixed:
   - Empty item being added to SavedFilter when it had no top level items

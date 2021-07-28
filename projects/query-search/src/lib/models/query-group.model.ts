@@ -73,7 +73,7 @@ export class QueryGroup extends QueryBase {
   }
 
   get filterValue(): QueryRuleGroup | any {
-    const itemRules = this.items.map(i => i.filterValue).filter(i => i.valid);
+    const itemRules = this.items.map(i => i.filterValue).filter(i => i.valid && i.active);
     const childRules = this.children.map(i => i.filterValue).filter(i => !!i);
 
     const ruleGroup = new QueryRuleGroup(this.type, [...itemRules, ...childRules]);
