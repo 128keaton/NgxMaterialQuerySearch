@@ -18,7 +18,6 @@ import {
   handleValueSelected,
   toggleValueSelection
 } from '../../../helpers/values.helper';
-import {isArray} from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'autocomplete-field',
@@ -40,6 +39,10 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     this._item = newValue;
     this.setField();
     this.changeDetectorRef.detectChanges();
+  }
+
+  get item() {
+    return this._item;
   }
 
   @Input()
@@ -98,10 +101,6 @@ export class AutocompleteFieldComponent implements AfterViewInit {
 
   get formFieldAppearance() {
     return this.querySearchService.formFieldAppearance;
-  }
-
-  get item() {
-    return this._item;
   }
 
   searchValues(event: Event) {
@@ -251,7 +250,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
     let didSetSelected = false;
 
     if (!!this.item && !!this.item.value) {
-      if (isArray(this.item.value)) {
+      if (Array.isArray(this.item.value)) {
         this.querySearchService.log('AutocompleteField - Mapping values', this.item.value);
         this.selectedValues = this.item.value;
         didSetSelected = true;
@@ -261,7 +260,7 @@ export class AutocompleteFieldComponent implements AfterViewInit {
         didSetSelected = true;
       }
     } else if (!!this.value && !didSetSelected) {
-      if (isArray(this.value)) {
+      if (Array.isArray(this.value)) {
         this.querySearchService.log('AutocompleteField - Mapping values', this.value);
         this.selectedValues = this.value;
         didSetSelected = true;

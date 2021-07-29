@@ -4,7 +4,6 @@ import {QueryField, QueryRuleGroup, QueryRule} from './models';
 import {BehaviorSubject} from 'rxjs';
 import {QUERY_SEARCH_CONFIG, QuerySearchConfiguration} from './query-search.config';
 import {ConditionOperator} from './enums';
-import {isArray} from 'rxjs/internal-compatibility';
 
 @Injectable({
   providedIn: 'root'
@@ -136,7 +135,7 @@ export class QuerySearchService {
       const field = this._fields.find(f => f.name === fieldName);
 
       if (!!field && !!field.values) {
-        if (isArray(field.values)) {
+        if (Array.isArray(field.values)) {
           return field.values.length > 0;
         }
         return true;

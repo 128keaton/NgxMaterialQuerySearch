@@ -1,3 +1,6 @@
+# 0.5.9
+- Fixed:
+  - Was using `isArray` from RxJS instead of the internal `Array.isArray`, that is no longer the case
 # 0.5.8
 - Fixed:
   - Active filters still being included for some reason

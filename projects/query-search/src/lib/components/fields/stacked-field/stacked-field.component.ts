@@ -13,7 +13,6 @@ import {QuerySearchService} from '../../../query-search.service';
 import {ConditionOperator} from '../../../enums';
 import {getEnumKeyByEnumValue} from '../../../helpers/general.helpers';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {isArray} from 'rxjs/internal-compatibility';
 import {AutocompleteFieldComponent} from '../autocomplete-field/autocomplete-field.component';
 import {DateFieldComponent} from '../date-field/date-field.component';
 
@@ -149,7 +148,7 @@ export class StackedFieldComponent {
   }
 
   private setValues() {
-    if (!!this._item.value && isArray(this._item.value)) {
+    if (!!this._item.value && Array.isArray(this._item.value)) {
       this.leftValue = this.isDate ? new Date(this._item.value[0]) : this._item.value[0];
       this.rightValue = this.isDate ? new Date(this._item.value[1]) : this._item.value[1];
     } else {
