@@ -2,12 +2,7 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ngx-query-search",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "uuid": "uuid",
-      "luxon": "luxon",
-      "ngx-mat-select-search": "ngxMatSelectSearch"
-    }
+    "entryFile": "src/public-api.ts"
   },
   "assets": [
     "src/lib/material/_query-search-theme.scss"
