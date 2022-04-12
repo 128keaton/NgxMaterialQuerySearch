@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 @use '@angular/material' as mat;
-@use '~ngx-mat-query-search/src/lib/material/query-search-theme' as query-search;
+@use 'projects/query-search/src/lib/material/query-search-theme' as query-search;
 
 @include mat.core();
 
